@@ -33,7 +33,19 @@
 		{/each}
 		{/if}
 	</div>
+
+
+	<div id="embedded-viewer-container">
+		<embed src="https://sogelink.beta.geodan.nl/" id="embedded-viewer">
+	</div>
+
+
+	<div id="footer">
+		Created by Sogelink Group
+	</div>
 </div>
+
+
 
 
 <CustomStyle />
@@ -95,7 +107,27 @@
 		justify-content: space-between;
 		padding: 0 50px;
 		max-width: 1400px;
-		margin: 50px auto 30px;
+		margin: 50px auto 50px;
+	}
+
+
+	#embedded-viewer-container {
+		overflow: hidden;
+		box-shadow: 0 0 8px 8px rgba(0,0,0,.3);
+	}
+	#embedded-viewer {
+		width: 100%;
+		height: 700px;
+		position: relative;
+		top: -3rem;
+		margin-bottom: -3rem;
+	}
+
+	#footer {
+		height: 100px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 
 </style>
