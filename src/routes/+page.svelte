@@ -1,7 +1,11 @@
 <script lang="ts">
 	import content from "$lib/files/steps-content.json";
-	import Step from "$lib/components/Step.svelte";
+	import Item from "$lib/components/Item.svelte";
     import CustomStyle from "$lib/style/CustomStyle.svelte";
+    import ContentModal from "$lib/components/ContentModal.svelte";
+	import type { ItemInterface } from "$lib/components/interfaces";
+
+	let selectedItem: ItemInterface | undefined;
 
 </script>
 
@@ -20,20 +24,17 @@
 		<img id="top-logo" src="https://bim-w.com/wp-content/uploads/SOGELINK_Logo_Responsive_01_Bleu.png" alt="Sogelink" />
 	</div>
 
-
-	<div id="top-banner">
-
-
-	</div>
+	<div id="top-banner"></div>
 
 	<div id="steps-overview">
-		{#if content.steps}
-		{#each content.steps as step, index}
-			<Step {step} {index} />
+		{#if content.items}
+		{#each content.items as item, index}
+			<Item {item} {index} on:select={() => selectedItem = item}/>
 		{/each}
 		{/if}
 	</div>
 
+	<ContentModal bind:selectedItem />
 
 	<div id="embedded-viewer-container">
 		<embed src="https://sogelink.beta.geodan.nl/" id="embedded-viewer">
@@ -54,6 +55,7 @@
 
 	#dt-concept-body {
 		background-color: #fcfcfa;
+		position: relative;
 	}
 
 	#top-intro {
