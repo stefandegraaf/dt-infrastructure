@@ -20,7 +20,13 @@
 		},
 		{
 			"title": "Data Curation",
-			"content": "This is step 1",
+			"content": [
+				{
+					"title": "Block 1",
+					"text": "Description of the block",
+					"icon": "url"
+				}
+			],
 			"persons": ["Architect", "Developer"],
 			"image": "https://fileserv.beta.geodan.nl/images/kea_droogtestress.PNG"
 		},

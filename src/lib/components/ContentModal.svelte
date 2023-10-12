@@ -1,72 +1,137 @@
 <script lang="ts">
-    import { Modal } from "carbon-components-svelte";
+    import { Button, Modal } from "carbon-components-svelte";
 	import type { ItemInterface } from "$lib/components/interfaces";
+	import { Person, Close, IbmCloudDirectLink_2Connect } from "carbon-icons-svelte";
 
 	export let selectedItem: ItemInterface | undefined;
 
 </script>
 
-
-
-<div class="modal-container" class:modal-open={selectedItem !== undefined}>
-	{#if selectedItem}
-	<Modal
-		open={selectedItem !== undefined}
-		modalHeading={selectedItem?.title}
-		primaryButtonText={"Back to overview"}
-		preventCloseOnClickOutside={false}
-		size="lg"
-		on:click:button--primary={() => selectedItem = undefined}
-		on:close={() => selectedItem = undefined}
-	>
-		<div class="modal-inner">
+{#if selectedItem}
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
+	<div class="modal-container">
+		<div class="modal-inner modal-text">
+			<div class="modal-close-button">
+				<Button
+					kind="secondary"
+					size="small"
+					iconDescription="CloseLarge"
+					icon={Close}
+					on:click={() => {selectedItem = undefined}}
+				/>
+			</div>
 			<div class="modal-content">
-				{@html selectedItem?.content}
+				<div class="modal-header">{selectedItem.title}</div>
+				<div class="content-blocks">
+					{#each selectedItem.content as block}
+						<div class="content-block">	
+							<div class="block-icon">
+								<IbmCloudDirectLink_2Connect />
+							</div>
+							<div class="block-content">
+								<div class="block">{block.subtitle}</div>
+								<div class="block">{block.text}</div>
+							</div>
+						</div>
+					{/each}
+				</div>
 			</div>
 			<div class="modal-info">
 				<div class="modal-info-persons">
+					<div class="modal-header-02">Team</div>
 					{#each selectedItem?.persons as person}
 					<div class="modal-info-person">
-						<img class="person-image" src="https://secure.gravatar.com/avatar/51a6f4a083cd24d0ac88aacd90e31f1c?s=800&d=identicon" alt="img"/>
+						<Person size={32} />
 						<div class="modal-info-person-name">{person}</div>
 					</div>
 					{/each}
 				</div>
 			</div>
 		</div>
-	</Modal>
-	{/if}
-</div>
-
+		<div class="modal-overlay" class:modal-open={selectedItem !== undefined} on:click={() => {selectedItem = undefined}}></div>
+	</div>
+{/if}
 
 
  <style>
 
 	.modal-container {
+		position: fixed;
+		width: 100vw;
+		height: 100vh;
+		left: 0;
+		top: 0;
+		z-index: 1;
+	}
+	.modal-overlay {
 		width: 100%;
 		height: 100%;
 		left: 0;
 		top: 0;
 		background-color: transparent;
-		z-index: 999;
+		z-index: 1;
 		transition: background-color 0.4s;
 	}
 
-	.modal-container.modal-open {
-		position: fixed;
+	.modal-overlay.modal-open {
 		background-color: rgba(0, 0, 0, 0.5);
 		backdrop-filter: blur(5px);
 	}
 
 	.modal-inner {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 80%;
+		height: 80%;
+		z-index: 1;
 		display: grid;
 		grid-template-columns: 3fr 2fr;
 		column-gap: 50px;
+		background-color: rgba(10, 10, 10, 0.9);
+		color: #fff;
+		backdrop-filter: blur(5px);
+		border-radius: 8px;
+		padding: 30px;
+	}
+	.modal-close-button {
+		position: absolute;
+		top: 10px;
+		right: 10px;
 	}
 
+	.modal-header {
+		font-size: 3rem;
+		font-weight: 600;
+		margin-bottom: 20px;
+	}
+	.modal-header-02 {
+		font-size: 2rem;
+		font-weight: 600;
+	}
+	.modal-text {
+		font-size: 1.5rem;
+		font-weight: 300;
+	}
+
+	.modal-info-person {
+		display: flex;
+		align-items: center;
+		column-gap: 20px;
+		margin-top: 10px;
+		
+	}
 	.person-image {
 		width: 30px;
 		height: 30px;
+
+	}
+
+	.content-block {
+		display: grid;
+		grid-template-columns: 50px 1fr;
+		align-items: center;
 	}
 
  </style>

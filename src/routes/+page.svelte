@@ -11,7 +11,7 @@
 	loadConfig();
 	async function loadConfig(): Promise<void> {
 		try {
-			const fileservConfig = await fetch("https://fileserv.beta.geodan.nl/dtconfigs/concept-dt-config.json");
+			const fileservConfig = await fetch("https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/backup-1419concept-dt-config.json");
 			config = await fileservConfig.json();
 		} catch (e) {
 			config = content;
@@ -41,9 +41,9 @@
 
 	<div id="steps-overview">
 		{#if config && config.items}
-		{#each config.items as item, index}
-			<Item {item} {index} on:select={() => selectedItem = item}/>
-		{/each}
+			{#each config.items as item, index}
+				<Item {item} {index} on:select={() => selectedItem = item}/>
+			{/each}
 		{/if}
 	</div>
 
@@ -108,7 +108,7 @@
 
 
 	#top-banner {
-		background-image: url(https://fileserv.beta.geodan.nl/images/digital_twin_render.webp);
+		background-image: url(https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/banner2.jpg);
 		height: 500px;
 		background-size: cover;
 		background-position: center;
