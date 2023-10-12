@@ -12,7 +12,7 @@
 
 
 <div class="step-container">
-	<button class="step-image" style="background-image:url('{item.image}')" on:click={() => dispatch("select")}></button>
+	<div class="step-image" style="background-image:url('{item.image}')" on:click={() => dispatch("select")}></div>
 	<div class="step-title">
 		0{index + 1}. {item.title}
 	</div>

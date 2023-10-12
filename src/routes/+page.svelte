@@ -1,11 +1,22 @@
 <script lang="ts">
-	import content from "$lib/files/steps-content.json";
+	import content from "$lib/files/concept-dt-config.json";
 	import Item from "$lib/components/Item.svelte";
     import CustomStyle from "$lib/style/CustomStyle.svelte";
     import ContentModal from "$lib/components/ContentModal.svelte";
 	import type { ItemInterface } from "$lib/components/interfaces";
 
 	let selectedItem: ItemInterface | undefined;
+
+	let config: any;
+	loadConfig();
+	async function loadConfig(): Promise<void> {
+		try {
+			const fileservConfig = await fetch("https://fileserv.beta.geodan.nl/dtconfigs/concept-dt-config.json");
+			config = await fileservConfig.json();
+		} catch (e) {
+			config = content;
+		}
+	}
 
 </script>
 
@@ -24,11 +35,13 @@
 		<img id="top-logo" src="https://bim-w.com/wp-content/uploads/SOGELINK_Logo_Responsive_01_Bleu.png" alt="Sogelink" />
 	</div>
 
-	<div id="top-banner"></div>
+	<div id="top-banner">
+		<div id="top-banner-overlay"></div>
+	</div>
 
 	<div id="steps-overview">
-		{#if content.items}
-		{#each content.items as item, index}
+		{#if config && config.items}
+		{#each config.items as item, index}
 			<Item {item} {index} on:select={() => selectedItem = item}/>
 		{/each}
 		{/if}
@@ -95,10 +108,19 @@
 
 
 	#top-banner {
-		background-image: url(https://fileserv.beta.geodan.nl/images/andijk_pointcloud.PNG);
+		background-image: url(https://fileserv.beta.geodan.nl/images/digital_twin_render.webp);
 		height: 500px;
 		background-size: cover;
 		background-position: center;
+		position: relative;
+	}
+	#top-banner-overlay {
+		/*background: linear-gradient(45deg, transparent 70%, rgba(252, 252, 250, 100%) 90%);*/
+		height: 100%;
+		width: 100%;
+		position: absolute;
+		top: 0;
+		right: 0;
 	}
 
 
@@ -106,10 +128,11 @@
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		column-gap: 50px;
+		row-gap: 30px;
 		justify-content: space-between;
 		padding: 0 50px;
 		max-width: 1400px;
-		margin: 50px auto 50px;
+		margin: 70px auto;
 	}
 
 

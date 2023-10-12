@@ -1,0 +1,58 @@
+{
+	"items": [
+		{
+			"title": "Requirements Analysis 123",
+			"content": "This is step 1",
+			"persons": ["Architect", "Developer"],
+			"image": "https://fileserv.beta.geodan.nl/circulaire-grondstromen/images/windmolens-flevoland.png"
+		},
+		{
+			"title": "Data Collection",
+			"content": "This is step 1",
+			"persons": ["Architect", "Developer"],
+			"image": "https://fileserv.beta.geodan.nl/images/andijk_pointcloud.PNG"
+		},
+		{
+			"title": "Technical Platform",
+			"content": "<div>Tussen deze componenten moet een goede samenhang zijn. Zo dient het DMS gekoppeld te zijn aan de 3D-omgeving en moet alles makkelijk vindbaar zijn vanaf de landingspagina. De componenten zijn zo veel mogelijk uitgewerkt binnen een PoC om inzicht te creëren in de gewenste functionaliteiten en de haalbaarheid van de implementatie ervan.</div><div>Het cloudplatform GeodanMaps wordt gebruikt als centraal platform om zaken als beveiliging, administratie en hosting te organiseren. Indien gewenst is het hierdoor ook mogelijk om privacygevoelige of vertrouwelijke data veilig af te schermen via een inlogscherm. Het platform heeft de ISO-certificaten die door de Nederlandse overheid worden gevraagd.</div>",
+			"persons": ["Architect", "Developer"],
+			"image": "https://fileserv.beta.geodan.nl/images/kea_droogtestress.PNG"
+		},
+		{
+			"title": "Data Curation",
+			"content": "This is step 1",
+			"persons": ["Architect", "Developer"],
+			"image": "https://fileserv.beta.geodan.nl/images/kea_droogtestress.PNG"
+		},
+		{
+			"title": "Data Enrichment",
+			"content": "This is step 1",
+			"persons": ["Architect", "Developer"],
+			"image": "https://fileserv.beta.geodan.nl/images/kea_droogtestress.PNG"
+		},
+		{
+			"title": "3D Data Processing",
+			"content": "This is step 1",
+			"persons": ["Architect", "Developer"],
+			"image": "https://fileserv.beta.geodan.nl/images/groenbeekduiker.png"
+		},
+		{
+			"title": "Data Exposure",
+			"content": "This is step 1",
+			"persons": ["Architect", "Developer"],
+			"image": "https://fileserv.beta.geodan.nl/images/kea_droogtestress.PNG"
+		},
+		{
+			"title": "Digital Twin",
+			"content": "This is step 1",
+			"persons": ["Architect", "Developer"],
+			"image": "https://fileserv.beta.geodan.nl/images/digital_twin_render.webp"
+		},
+		{
+			"title": "Feedback and Use",
+			"content": "This is step 1",
+			"persons": ["Architect", "Developer"],
+			"image": "https://fileserv.beta.geodan.nl/images/kea_droogtestress.PNG"
+		}
+	]
+}
