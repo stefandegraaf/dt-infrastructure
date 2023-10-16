@@ -3,6 +3,8 @@ import { vitePreprocess } from '@sveltejs/kit/vite';
 import preprocess from "svelte-preprocess";
 import { optimizeImports } from "carbon-preprocess-svelte";
 
+const dev = process.argv.includes('dev');
+
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	// Consult https://kit.svelte.dev/docs/integrations#preprocessors
@@ -24,7 +26,7 @@ const config = {
 		// See https://kit.svelte.dev/docs/adapters for more information about adapters.
 		adapter: adapter(),
 		paths: {
-            base: process.env.NODE_ENV === 'dev' ? '' : '/dt-infrastructure',
+            base: dev ? '' : process.env.BASE_PATH,
         }
 	}
 };
