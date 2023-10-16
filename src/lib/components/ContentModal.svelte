@@ -15,7 +15,7 @@
 				<Button
 					kind="secondary"
 					size="lg"
-					iconDescription="CloseLarge"
+					iconDescription="Close"
 					icon={Close}
 					on:click={() => {selectedItem = undefined}}
 				/>
@@ -23,17 +23,24 @@
 			<div class="modal-content">
 				<div class="modal-header">{selectedItem.title}</div>
 				<div class="content-blocks">
-					{#each selectedItem.content as block}
-						<div class="content-block">	
-							<div class="block-icon">
-								<IbmCloudDirectLink_2Connect size={32} />
+					{@html selectedItem.content}
+					{#if selectedItem.components}
+						{#each selectedItem.components as block}
+							<div class="content-block">	
+								<div class="block-icon">
+								{#if block.icon}
+									<img src={block.icon} alt="icon" />
+								{:else}
+										<IbmCloudDirectLink_2Connect size={32} />
+								{/if}
+								</div>
+								<div class="block-content">
+									<div class="block-header">{block.subtitle}</div>
+									<div class="block">{@html block.text}</div>
+								</div>
 							</div>
-							<div class="block-content">
-								<div class="block-header">{block.subtitle}</div>
-								<div class="block">{block.text}</div>
-							</div>
-						</div>
-					{/each}
+						{/each}
+					{/if}
 				</div>
 			</div>
 			<div class="modal-info">
@@ -89,11 +96,17 @@
 		display: grid;
 		grid-template-columns: 3fr 2fr;
 		column-gap: 100px;
-		background-color: rgba(10, 10, 10, 0.9);
+		background-color: rgba(22, 22, 28, 0.92);
 		color: #fff;
 		backdrop-filter: blur(5px);
 		border-radius: 8px;
 		padding: 30px;
+		overflow-x: hidden;
+		-ms-overflow-style: none;  /* IE and Edge */
+		scrollbar-width: none;  /* Firefox */
+	}
+	.modal-inner::-webkit-scrollbar {
+		display: none;
 	}
 	.modal-close-button {
 		position: absolute;
@@ -104,7 +117,7 @@
 	.modal-header {
 		font-size: 2rem;
 		font-weight: 600;
-		margin-bottom: 60px;
+		margin-bottom: 30px;
 	}
 	.modal-header-02 {
 		font-size: 1.5rem;
@@ -131,12 +144,18 @@
 		width: 30px;
 		height: 30px;
 	}
-
+	
 	.content-block {
 		display: grid;
 		grid-template-columns: 100px 1fr;
 		align-items: center;
 		margin-top: 30px;
+	}
+	.block-icon {
+		width: 80%;
+	}
+	.block-icon img {
+		width: 100%;
 	}
 	.block-header {
 		font-size: 1.5rem;

@@ -4,6 +4,7 @@
     import CustomStyle from "$lib/style/CustomStyle.svelte";
     import ContentModal from "$lib/components/ContentModal.svelte";
 	import type { ItemInterface } from "$lib/components/interfaces";
+    import { CaretDown } from "carbon-icons-svelte";
 
 	let selectedItem: ItemInterface | undefined;
 
@@ -18,6 +19,8 @@
 		}
 		config = content;
 	}
+
+	let idx = 1;
 
 </script>
 
@@ -40,13 +43,19 @@
 		<div id="top-banner-overlay"></div>
 	</div>
 
-	<div id="steps-overview">
-		{#if config && config.items}
-			{#each config.items as item, index}
-				<Item {item} {index} on:select={() => selectedItem = item}/>
-			{/each}
-		{/if}
-	</div>
+	{#if config && config.phases}
+		{#each config.phases as phase}
+			<div class="phase-header">
+				<div class="phase-header-title">{phase.phase}</div>
+				<CaretDown size={32} />
+			</div>
+			<div class="block-overview">
+				{#each phase.blocks as item }
+					<Item {item} index={item.number} on:select={() => selectedItem = item}/>
+				{/each}
+			</div>
+		{/each}
+	{/if}
 
 	<ContentModal bind:selectedItem />
 
@@ -125,15 +134,26 @@
 	}
 
 
-	#steps-overview {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
+	.phase-header {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin: 60px 0 30px 0;
+	}
+	.phase-header-title {
+		font-size: 2.5rem;
+		font-weight: 600;
+	}
+
+	.block-overview {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-evenly;
 		column-gap: 50px;
-		row-gap: 50px;
-		justify-content: space-between;
+		row-gap: 40px;
 		padding: 0 50px;
 		max-width: 1600px;
-		margin: 70px auto;
+		margin: 0 auto 70px;
 	}
 
 

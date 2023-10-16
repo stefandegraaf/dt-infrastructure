@@ -1,6 +1,7 @@
 export interface ItemInterface {
 	title: string,
-	content: [
+	content: string,
+	components: [
 		{
 			subtitle: string,
 			text: string,
