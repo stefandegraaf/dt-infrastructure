@@ -25,7 +25,7 @@
 	.step-image {
 		background-size: cover;
 		background-position: center;
-		height: 200px;
+		height: 260px;
 		width: 100%;
 		cursor: pointer;
 	}

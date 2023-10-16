@@ -16,6 +16,7 @@
 		} catch (e) {
 			config = content;
 		}
+		config = content;
 	}
 
 </script>
@@ -128,10 +129,10 @@
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		column-gap: 50px;
-		row-gap: 30px;
+		row-gap: 50px;
 		justify-content: space-between;
 		padding: 0 50px;
-		max-width: 1400px;
+		max-width: 1600px;
 		margin: 70px auto;
 	}
 

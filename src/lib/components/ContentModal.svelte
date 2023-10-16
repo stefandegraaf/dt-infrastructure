@@ -1,7 +1,7 @@
 <script lang="ts">
     import { Button, Modal } from "carbon-components-svelte";
 	import type { ItemInterface } from "$lib/components/interfaces";
-	import { Person, Close, IbmCloudDirectLink_2Connect } from "carbon-icons-svelte";
+	import { Person, Close, IbmCloudDirectLink_2Connect, Add } from "carbon-icons-svelte";
 
 	export let selectedItem: ItemInterface | undefined;
 
@@ -14,7 +14,7 @@
 			<div class="modal-close-button">
 				<Button
 					kind="secondary"
-					size="small"
+					size="lg"
 					iconDescription="CloseLarge"
 					icon={Close}
 					on:click={() => {selectedItem = undefined}}
@@ -26,10 +26,10 @@
 					{#each selectedItem.content as block}
 						<div class="content-block">	
 							<div class="block-icon">
-								<IbmCloudDirectLink_2Connect />
+								<IbmCloudDirectLink_2Connect size={32} />
 							</div>
 							<div class="block-content">
-								<div class="block">{block.subtitle}</div>
+								<div class="block-header">{block.subtitle}</div>
 								<div class="block">{block.text}</div>
 							</div>
 						</div>
@@ -88,7 +88,7 @@
 		z-index: 1;
 		display: grid;
 		grid-template-columns: 3fr 2fr;
-		column-gap: 50px;
+		column-gap: 100px;
 		background-color: rgba(10, 10, 10, 0.9);
 		color: #fff;
 		backdrop-filter: blur(5px);
@@ -102,36 +102,46 @@
 	}
 
 	.modal-header {
-		font-size: 3rem;
+		font-size: 2rem;
 		font-weight: 600;
-		margin-bottom: 20px;
+		margin-bottom: 60px;
 	}
 	.modal-header-02 {
-		font-size: 2rem;
+		font-size: 1.5rem;
 		font-weight: 600;
 	}
 	.modal-text {
-		font-size: 1.5rem;
+		font-size: 1.1rem;
 		font-weight: 300;
+		line-height: 1.5;
 	}
 
+
+	.modal-info {
+		margin-top: 60px;
+	}
 	.modal-info-person {
 		display: flex;
 		align-items: center;
-		column-gap: 20px;
+		column-gap: 30px;
 		margin-top: 10px;
 		
 	}
 	.person-image {
 		width: 30px;
 		height: 30px;
-
 	}
 
 	.content-block {
 		display: grid;
-		grid-template-columns: 50px 1fr;
+		grid-template-columns: 100px 1fr;
 		align-items: center;
+		margin-top: 30px;
+	}
+	.block-header {
+		font-size: 1.5rem;
+		font-weight: 600;
+		margin-bottom: 10px;
 	}
 
  </style>

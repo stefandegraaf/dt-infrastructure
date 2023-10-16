@@ -1,64 +1,175 @@
 {
 	"items": [
 		{
-			"title": "Requirements Analysis 123",
-			"content": "This is step 1",
-			"persons": ["Architect", "Developer"],
-			"image": "https://fileserv.beta.geodan.nl/circulaire-grondstromen/images/windmolens-flevoland.png"
+			"title": "Requirements Analysis",
+			"content": "The concept of a digital twin is very broad. Therefore, when developing new digital twin applications, it is always important to pay attention to relevant user stories. This primarily revolves around the question of which processes the digital twin should support. Through requirements analysis of the various use cases, it is determined what data and information are required and what functionalities and tools may need to be developed.",
+			"persons": ["Consultant", "User Experience Designer", "Stakeholder"],
+			"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/requirementanalyse.jpg"
 		},
 		{
 			"title": "Data Collection",
-			"content": "This is step 1",
-			"persons": ["Architect", "Developer"],
-			"image": "https://fileserv.beta.geodan.nl/images/andijk_pointcloud.PNG"
+			"content": [
+				{
+					"subtitle": "Data collection",
+					"text": "In a geoinformation project, the data collection phase is a critical component that involves gathering, acquiring, and recording spatial and attribute data related to the geographical area of interest. This phase is essential for creating accurate and up-to-date geospatial databases. This can involve using GPS devices, survey instruments, remote sensing equipment, or other specialized tools. Field surveys may be necessary to collect attribute data, such as land use information, infrastructure details, or environmental characteristics.",
+					"icon": "plaatje"
+				},
+				{
+					"subtitle": "Open data",
+					"text": "esides gathering new data, gathering open source datasets plays an important role. Using open geodata, also known as open geospatial data, involves accessing and leveraging geographic information that is freely available to the public without restrictions or cost. These datasets are typically made available by governments, research institutions, and organizations for various purposes, such as research, analysis, application development, and community engagement",				
+					"icon": "plaatje"
+				}
+			],
+			"persons": ["Data analist", "Data manager", "Researcher"],
+			"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/datacollectieLekdijk_geotop_boringen_druk-1.png"
 		},
 		{
 			"title": "Technical Platform",
-			"content": "<div>Tussen deze componenten moet een goede samenhang zijn. Zo dient het DMS gekoppeld te zijn aan de 3D-omgeving en moet alles makkelijk vindbaar zijn vanaf de landingspagina. De componenten zijn zo veel mogelijk uitgewerkt binnen een PoC om inzicht te creëren in de gewenste functionaliteiten en de haalbaarheid van de implementatie ervan.</div><div>Het cloudplatform GeodanMaps wordt gebruikt als centraal platform om zaken als beveiliging, administratie en hosting te organiseren. Indien gewenst is het hierdoor ook mogelijk om privacygevoelige of vertrouwelijke data veilig af te schermen via een inlogscherm. Het platform heeft de ISO-certificaten die door de Nederlandse overheid worden gevraagd.</div>",
-			"persons": ["Architect", "Developer"],
-			"image": "https://fileserv.beta.geodan.nl/images/kea_droogtestress.PNG"
-		},
-		{
-			"title": "Data Curation",
 			"content": [
 				{
-					"title": "Block 1",
-					"text": "Description of the block",
-					"icon": "url"
+					"subtitle": "Storage databases, deployment and hosting",
+					"text": "The technical platform in a digital twin of the physical environment plays a crucial role in enabling the creation, operation, and effectiveness of the digital twin. The technical platform supports the user interface and visualization components of the digital twin. It should enable the creation of 2D and 3D visual representations of the physical environment, providing an intuitive way for users to interact with and understand the twin.",
+					"icon": "plaatje"
+				},
+				{
+					"subtitle": "Security",
+					"text": "Protecting the data and ensuring the security and privacy of sensitive information are paramount. The platform must include robust security features to safeguard the digital twin against cyber threats and unauthorized access.",
+					"icon": "plaatje"
+				},
+				{
+					"subtitle": "Cesium as technical platform",
+					"text": "The technical plaform of this digital twin is Cesium. Cesium is an open-source geospatial platform and a 3D visualization engine that enables the creation of interactive, high-performance 3D maps and geospatial applications. It is primarily known for its capabilities in rendering geospatial data in 3D, making it a powerful tool for creating digital twins, virtual globes, and other geospatial applications.",
+					"icon": "plaatje"
 				}
-			],
-			"persons": ["Architect", "Developer"],
-			"image": "https://fileserv.beta.geodan.nl/images/kea_droogtestress.PNG"
+			],	
+			"persons": ["Platform admin", "Architect", "Back-end eveloper"],
+			"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/technicalplatform-cesium.jpg"
+		},
+		{
+			"title": "Data Curation and data management",
+			"content": [
+				{
+					"subtitle": "Modelling",
+					"text": "Data curation is the process of collecting, organizing, and managing data to ensure its quality, reliability, and usability over time. It involves various activities aimed at maintaining and enhancing the value of data assets, making them accessible, and preserving them for current and future use. Data curation often involves standardizing data formats, units, and terminology. This ensures that data can be easily understood and used by different people and systems. Ensuring data quality is a fundamental aspect of data curation. This involves checking data for accuracy, completeness, consistency, and reliability. Data quality issues may be identified and corrected during this stage.",
+					"icon": "plaatje"
+				},
+				{
+					"subtitle": "Machine learning",
+					"text": "Machine learning plays a significant role in data curation by automating and improving the process of collecting, cleaning, organizing, and maintaining data. Data curation is essential for ensuring that data is reliable, accurate, and ready for analysis and decision-making. Machine learning techniques are applied to various aspects of data curation to enhance efficiency and data quality. Machine learning algorithms can analyze the statistical properties of data, helping to identify anomalies, missing values, and inconsistencies. For instance, machine learning models can detect outliers or data that deviates from expected patterns. Natural language processing (NLP) techniques and machine learning can standardize and transform text data, ensuring consistency in format and terminology.",
+					"icon": "plaatje"
+				},
+				{
+					"subtitle": "Data fusion",
+					"text": "Data fusion involves bringing together data from different sources, which may include databases, sensors, external APIs, spreadsheets, and various file formats. This can include data in different structures, formats, and levels of granularity. Data from multiple sources may require transformation to ensure that it can be merged effectively. For example, text data may need to be tokenized, and numeric data might require scaling or normalization. In GIS and geospatial data curation, spatial alignment is crucial. This involves aligning data points on maps, reconciling coordinate systems, and handling overlaps or gaps in geographic data. Machine learning algorithms, such as ensemble methods, can be used to learn how to optimally combine data from multiple sources. These models can capture patterns and relationships in the data to make fusion decisions.",
+					"icon": "plaatje"
+				}
+			],	
+			"persons": ["Modelleur", "AI/ML expert"],
+			"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/data-processing-geoinformatie.jpg"
 		},
 		{
 			"title": "Data Enrichment",
-			"content": "This is step 1",
-			"persons": ["Architect", "Developer"],
-			"image": "https://fileserv.beta.geodan.nl/images/kea_droogtestress.PNG"
+			"content": "Data enrichment is the process of enhancing existing data by adding valuable, relevant, and supplementary information to it. This additional data can provide greater context, depth, and insights into the existing dataset, making it more valuable for analysis, decision-making, and other purposes. Data enrichment can be applied to various types of data, including appending demographic information (e.g., age, gender, education) or geospatial data (e.g.,geographic boundaries). Data enrichment should be conducted in compliance with data protection and privacy regulations. It's crucial to ensure that the enrichment process adheres to legal and ethical standards.",
+			"persons": ["Information analyst", "Data manager", "Modelleur", "AI/ML expert"],
+			"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/google3dtiles.PNG"
 		},
 		{
-			"title": "3D Data Processing",
-			"content": "This is step 1",
-			"persons": ["Architect", "Developer"],
-			"image": "https://fileserv.beta.geodan.nl/images/groenbeekduiker.png"
+			"title": "3D Spatial Data Processing",
+			"content": [
+				{
+					"subtitle": "3D spatial data processing",
+					"text": "3D data processing refers to the techniques and methodologies used to analyze, manipulate, visualize, and derive insights from three-dimensional data. This type of data often represents objects or scenes in the physical world with height, width, and depth, making it particularly useful in various fields, including geospatial analysis. 3D data can be stored in various formats, such as point clouds, mesh models, voxel grids, or volumetric representations.",
+					"icon": "plaatje"
+				},
+				{
+					"subtitle": "3D tiles",
+					"text": "3D Tiles is an open standard for streaming massive 3D geospatial datasets, primarily used for visualizing and interacting with 3D content in web and mobile applications. It's an initiative developed by the Cesium team and supported by the OGC (Open Geospatial Consortium). 3D Tiles is designed to efficiently organize and transmit large 3D datasets, such as 3D models of cities, terrain data, or any complex 3D content.",
+					"icon": "plaatje"
+				},
+				{
+					"subtitle": "BIM to GIS",
+					"text": "Building Information Modeling (BIM) and Geographic Information Systems (GIS) are two distinct technologies used in the architecture, engineering, and construction (AEC) industry, as well as in urban planning and facility management. They serve different purposes but are often integrated to combine the detailed building information of BIM with the geospatial context of GIS. ",
+					"icon": "plaatje"
+				},
+				{
+					"subtitle": "3D terrain",
+					"text": "3D terrain data formats are used to represent the elevation and shape of the Earth's surface in three dimensions. Digital Elevation Model (DEM) is one of the most common formats for 3D terrain data. It represents the elevation of the Earth's surface as a grid of regularly spaced points (pixels) or as a continuous elevation model. Digital Surface Model (DSM) represents the top surface of the Earth, including buildings, vegetation, and other surface features. LiDAR Point Clouds: LiDAR (Light Detection and Ranging) technology generates point cloud data, representing the Earth's surface as a collection of 3D points. In some cases, 3D terrain is represented as a 3D mesh, typically used in computer graphics and virtual simulations.",
+					"icon": "plaatje"
+				},
+				{
+					"subtitle": "GLB/glTF",
+					"text": "GLB (GL Binary) and glTF (GL Transmission Format) are open standard file formats designed for 3D models and scenes. They are often used in computer graphics, 3D modeling, virtual reality, augmented reality, and web-based applications. Both formats are developed and maintained by the Khronos Group, a consortium of companies that create open standards for 3D graphics and media.",
+					"icon": "plaatje"
+				},
+				{
+					"subtitle": "OGC Web Map Services",
+					"text": "OGC Web Map Services (WMS) is a standard protocol developed by the Open Geospatial Consortium (OGC) for sharing geospatial map data and images over the internet. WMS is widely used in the field of Geographic Information Systems (GIS) and web mapping to provide a standardized way for clients to request and receive map images from remote servers. ",
+					"icon": "plaatje"
+				},
+				{
+					"subtitle": "Custom APIs",
+					"text": "Custom APIs, or Custom Application Programming Interfaces, are software interfaces developed for specific applications, systems, or services to enable communication, data exchange, and functionality between different components of a software ecosystem. These APIs are tailored to the unique requirements of a particular application or organization.",
+					"icon": "plaatje"
+				}
+			],
+			"persons": ["Data analist", "Data manager", "ETL expert"],
+			"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/artificial-intelligence-3382507_1280.jpg"
 		},
 		{
 			"title": "Data Exposure",
-			"content": "This is step 1",
-			"persons": ["Architect", "Developer"],
-			"image": "https://fileserv.beta.geodan.nl/images/kea_droogtestress.PNG"
+			"content": "<div>Data exposure in the GIS (Geographic Information Systems) field refers to making geospatial data accessible, often to a wide audience or specific users, for various purposes. Data exposure involves sharing, publishing, and providing access to geographic information in a manner that enables data consumers to view, analyze, and utilize the data. GIS professionals and organizations publish geospatial data to make it available to others. This data can include maps, aerial imagery, satellite data, geospatial layers (e.g., land use, transportation networks, environmental data), and more. Data publishing involves making data accessible through online platforms, databases, web services, or public repositories.</div><div>Data exposure often comes with licensing terms and conditions. Organizations may specify how the data can be used, whether it can be redistributed, and any attribution requirements. Clear licensing and usage terms promote responsible data consumption.</div>",
+			"persons": ["Architect", "Developer", "User Experience Designer"],
+			"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/dataexposureduisburgsmartcity.PNG"
 		},
 		{
-			"title": "Digital Twin",
+			"title": "Digital Twin visualisation",
+			"content": [
+				{
+					"subtitle": "Web viewer (CesiumJS/MapLibre)",
+					"text": "Both CesiumJS and MapLibre are valuable tools for creating web viewers that present digital twin visualizations, geospatial data, and 3D models in an interactive and user-friendly manner. They provide an accessible foundation for a wide range of applications, from urban planning and architecture to virtual tourism and environmental monitoring. The choice between the two often depends on specific project requirements and development preferences.",
+					"icon": "plaatje"
+				},
+				{
+					"subtitle": "Photoreal viewer (Unity/Unreal/NVIDIA)",
+					"text": "Photoreal viewers like Unity, Unreal Engine, and NVIDIA Omniverse are instrumental in creating visually stunning and interactive digital twin experiences. They are used in various industries, including architecture, engineering, gaming, film production, and virtual training, to provide immersive and realistic simulations of complex 3D environments and models. The choice of platform often depends on the specific requirements of a project, such as the level of graphical fidelity, interactivity, and the target platform (e.g., desktop, VR, AR).",
+					"icon": "plaatje"
+				},
+				{
+					"subtitle": "Analyis dashboards",
+					"text": "An analysis dashboard in the context of digital twin visualization is a user interface that provides tools and features for monitoring, analyzing, and making data-driven decisions based on the data and simulations of a digital twin. These dashboards are designed to facilitate real-time insights, visualization of complex data, and interactive analysis of a physical or digital system's behavior. ",
+					"icon": "plaatje"
+				},
+				{
+					"subtitle": "Real-time (IoT) data visualization",
+					"text": "Real-time IoT data visualization in a digital twin is the process of presenting and analyzing data from Internet of Things (IoT) devices, sensors, and other sources within a digital twin environment. It enables users to monitor and understand the current state of a physical system, asset, or environment in real-time. This capability is crucial for gaining insights, making informed decisions, and responding to changes as they happen. ",
+					"icon": "plaatje"
+				},
+				{
+					"subtitle": "Custom tools and interactive modules",
+					"text": "Custom tools and interactive modules in the context of digital twins are software components or features specifically designed to enhance the functionality and user experience within a digital twin environment. These tools and modules are tailored to the unique needs and requirements of a particular digital twin application. They often enable users to interact with and manipulate the digital twin's data, simulations, and models in a more intuitive and efficient manner.",
+					"icon": "plaatje"
+				}
+			],
+			"persons": ["Architect", "Front-end Developer"],
+			"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/banner2.jpg"
+		},
+		{
+			"title": "User interfaces and interactivity",
+			"content": "This is step 1",
+			"persons": ["Architect", "Developer"],
+			"image": "https://fileserv.beta.geodan.nl/images/digital_twin_render.webp"
+		},
+		{
+			"title": "4D and simulation ",
 			"content": "This is step 1",
 			"persons": ["Architect", "Developer"],
 			"image": "https://fileserv.beta.geodan.nl/images/digital_twin_render.webp"
 		},
 		{
 			"title": "Feedback and Use",
-			"content": "This is step 1",
-			"persons": ["Architect", "Developer"],
-			"image": "https://fileserv.beta.geodan.nl/images/kea_droogtestress.PNG"
+			"content": "<p>Feedback and use are crucial aspects of their development and application. Digital twins are dynamic, data-driven models of real-world objects or environments, and their effectiveness relies on continuous feedback, usage, and improvement. Some examples of feedback:<br>1 Data Quality and Feedback:<br>Data Validation: Feedback is essential for ensuring the accuracy and quality of the data used in digital twins. Users can provide feedback on data discrepancies or inaccuracies, which can be used to refine the data sources and data processing pipelines.<br>Data Updates: Real-world data changes over time. Users can offer feedback on outdated information, prompting the update of data in the digital twin to reflect the most current state of the physical environment.<br> 2 Data Validation: User Engagement and Feedback:<br>User Experience: Feedback from users about the usability and user experience of digital twins is valuable. This can lead to user interface improvements, enhanced interactivity, and a more intuitive design.<br>Feature Requests: Users often have specific needs and requirements. Feedback can include requests for additional features, tools, or data layers, which can guide the development of the digital twin to meet these needs.<br>3 Accessibility and Inclusivity:<br>Inclusive Feedback: Ensuring that digital twins are accessible to individuals with disabilities is an important consideration. Feedback can help identify accessibility challenges and drive improvements.</p>",
+			"persons": ["Consultant", "User Experience Designer"],
+			"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/geoinfo-wur.jpg"
 		}
 	]
 }
