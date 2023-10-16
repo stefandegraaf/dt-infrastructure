@@ -7,9 +7,11 @@
 		"build": "vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"deploy": "npx gh-pages -d dist"
 	},
 	"dependencies": {
+		"@sveltejs/adapter-static": "^2.0.3",
 		"carbon-components-svelte": "0.75.0",
 		"carbon-icons-svelte": "^11.4.0",
 		"gh-pages": "^6.0.0"
