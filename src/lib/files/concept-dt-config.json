@@ -116,13 +116,19 @@
 			"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/artificial-intelligence-3382507_1280.jpg"
 		},
 		{
+			"title": "3D Terrain",
+			"content": "<div>Data exposure in the GIS (Geographic Information Systems) field refers to making geospatial data accessible, often to a wide audience or specific users, for various purposes. Data exposure involves sharing, publishing, and providing access to geographic information in a manner that enables data consumers to view, analyze, and utilize the data. GIS professionals and organizations publish geospatial data to make it available to others. This data can include maps, aerial imagery, satellite data, geospatial layers (e.g., land use, transportation networks, environmental data), and more. Data publishing involves making data accessible through online platforms, databases, web services, or public repositories.</div><div>Data exposure often comes with licensing terms and conditions. Organizations may specify how the data can be used, whether it can be redistributed, and any attribution requirements. Clear licensing and usage terms promote responsible data consumption.</div>",
+			"persons": ["Architect", "Developer", "User Experience Designer"],
+			"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/dataexposureduisburgsmartcity.PNG"
+		},
+		{
 			"title": "Data Exposure",
 			"content": "<div>Data exposure in the GIS (Geographic Information Systems) field refers to making geospatial data accessible, often to a wide audience or specific users, for various purposes. Data exposure involves sharing, publishing, and providing access to geographic information in a manner that enables data consumers to view, analyze, and utilize the data. GIS professionals and organizations publish geospatial data to make it available to others. This data can include maps, aerial imagery, satellite data, geospatial layers (e.g., land use, transportation networks, environmental data), and more. Data publishing involves making data accessible through online platforms, databases, web services, or public repositories.</div><div>Data exposure often comes with licensing terms and conditions. Organizations may specify how the data can be used, whether it can be redistributed, and any attribution requirements. Clear licensing and usage terms promote responsible data consumption.</div>",
 			"persons": ["Architect", "Developer", "User Experience Designer"],
 			"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/dataexposureduisburgsmartcity.PNG"
 		},
 		{
-			"title": "Digital Twin visualisation",
+			"title": "Visualization",
 			"content": [
 				{
 					"subtitle": "Web viewer (CesiumJS/MapLibre)",
@@ -160,7 +166,7 @@
 			"image": "https://fileserv.beta.geodan.nl/images/digital_twin_render.webp"
 		},
 		{
-			"title": "4D and simulation ",
+			"title": "Real-time updates and Simulation",
 			"content": "This is step 1",
 			"persons": ["Architect", "Developer"],
 			"image": "https://fileserv.beta.geodan.nl/images/digital_twin_render.webp"
