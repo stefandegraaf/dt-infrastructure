@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: 'main'
+    branches: 'master'
 
 jobs:
   build_site:
@@ -28,7 +28,7 @@ jobs:
 
       - name: build
         env:
-          BASE_PATH: '/dt-infrastructure'
+          BASE_PATH: '/${{ github.event.repository.name }}'
         run: |
           npm run build
           touch build/.nojekyll
