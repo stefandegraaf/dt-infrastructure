@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from "svelte";
+	import { AddAlt } from "carbon-icons-svelte";
 	import type { ItemInterface } from "$lib/components/interfaces";
 
 	export let item: ItemInterface;
@@ -11,10 +12,18 @@
 </script>
 
 
+<!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class="step-container">
 	<div class="step-image" style="background-image:url('{item.image}')" on:click={() => dispatch("select")}></div>
 	<div class="step-title">
 		{index}. {item.title}
+	</div>
+	<div class="step-sub" on:click={() => dispatch("select")}>
+		More info 
+		<AddAlt  
+			color="var(--dark-main)" 
+			size={16}
+		/>
 	</div>
 </div>
 
@@ -43,6 +52,14 @@
 		font-size: 1.5rem;
 		font-weight: 600;
 		margin-top: 10px;
+	}
+	.step-sub {
+		display: flex;
+		column-gap: 6px;
+		align-items: center;
+		margin-top: 10px;
+		cursor: pointer;
+		color: var(--dark-main);
 	}
 
 </style>

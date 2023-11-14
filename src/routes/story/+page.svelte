@@ -8,6 +8,7 @@
 
 <CustomStyle />
 
+
 <section class="section parallax-bg" style="background-image: url(https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/banner2.jpg)">
 	<div class="section-1-overlay"></div>
 	<div class="content" id="content-1">
@@ -30,7 +31,7 @@
 	</div>
 	
 	<div id="gif">
-	<img src={appears} alt="This is an animated gif image, but it does not move" width="950"/>
+	<img src={appears} alt="This is an animated gif image, but it does not move" width="950" />
 	</div>
 
 	<div class="content" id="content-4">

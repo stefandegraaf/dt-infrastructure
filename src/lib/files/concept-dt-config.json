@@ -33,7 +33,7 @@
 				{
 					"title": "Technical Platform",
 					"number" : "03",
-					"content": "The technical platform in a digital twin of the physical environment plays a crucial role in enabling the creation, operation, and effectiveness of the digital twin. The technical platform supports the data and visualization components of the digital twin",
+					"content": "The technical platform is the core for enabling the creation, operation, and effectiveness of the digital twin. All the data and visualization components of the digital twin run on the technical platform",
 					"components": [
 						{
 							"subtitle": "Storage",

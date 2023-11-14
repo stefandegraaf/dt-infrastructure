@@ -14,7 +14,7 @@ const config = {
 			typescript: true
 		}),
 		optimizeImports({}),
-		vitePreprocess()
+		//vitePreprocess()
 	],
 
 	//preprocess: vitePreprocess(),

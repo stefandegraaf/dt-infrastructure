@@ -20,8 +20,6 @@
 		config = content;
 	}
 
-	let idx = 1;
-
 </script>
 
 
@@ -118,8 +116,10 @@
 
 
 	#top-banner {
-		background-image: url(https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/banner2.jpg);
+		background-image: url(https://storage.googleapis.com/ahp-research/projects/communicatie/images/render_6-2mb.png);
 		height: 500px;
+		width: 110%;
+		margin-left: -5%;
 		background-size: cover;
 		background-position: center;
 		position: relative;
@@ -150,7 +150,7 @@
 		flex-wrap: wrap;
 		justify-content: space-evenly;
 		column-gap: 50px;
-		row-gap: 40px;
+		row-gap: 70px;
 		padding: 0 50px;
 		max-width: 1600px;
 		margin: 0 auto 70px;
