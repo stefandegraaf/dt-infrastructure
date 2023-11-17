@@ -1,15 +1,15 @@
 <script lang="ts">
+	import { writable, type Writable } from "svelte/store";
+    import { CaretDown } from "carbon-icons-svelte";
+
 	import fallback from "$lib/files/concept-dt-config.json";
 	import Item from "$lib/components/Item.svelte";
     import CustomStyle from "$lib/style/CustomStyle.svelte";
     import ContentModal from "$lib/components/ContentModal.svelte";
 	import type { IPhase, ItemInterface } from "$lib/components/interfaces";
-    import { CaretDown } from "carbon-icons-svelte";
-    import { writable, type Writable } from "svelte/store";
 
 	let selectedItem: Writable<ItemInterface | undefined> = writable(undefined);
 	let config: { phases: Array<IPhase>};
-
 	
 	async function setConfig(): Promise<void> {
 		//config = await loadConfig();
@@ -52,6 +52,8 @@
 		</div>
 		<img id="top-logo" src="https://bim-w.com/wp-content/uploads/SOGELINK_Logo_Responsive_01_Bleu.png" alt="Sogelink" />
 	</div>
+
+	<!--<ThreeDeeTilesRender />-->
 
 	<div id="top-banner">
 		<div id="top-banner-overlay"></div>

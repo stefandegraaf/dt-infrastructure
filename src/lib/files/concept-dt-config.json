@@ -27,11 +27,11 @@
 						}
 					],
 					"persons": ["Data analist", "Data manager", "Researcher"],
-					"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/datacollectieLekdijk_geotop_boringen_druk-1.png"
+					"image": "https://storage.googleapis.com/ahp-research/projects/communicatie/images/AR%20-%20foto%20GOconnectIT.jpg"
 				},
 				{
 					"title": "Technical Platform",
-					"content": "The technical platform is the core for enabling the creation, operation, and effectiveness of the digital twin. All the data and visualization components of the digital twin run on the technical platform",
+					"content": "The technical platform is the core for enabling the creation, operation, and effectiveness of the digital twin. All the data and visualization components of the digital twin run on the technical platform.",
 					"components": [
 						{
 							"subtitle": "Storage",
@@ -45,15 +45,16 @@
 						},
 						{
 							"subtitle": "Hosting",
-							"text": "Hosting refers to the process of storing and serving digital twin applications and services on a server or cloud platform. The hosting environment should provide the necessary resources and infrastructure to support the digital twin's data and visualization components. It should also ensure that the digital twin is accessible to users and can be used effectively. Hosting is organized via the Geodan AHP Cloud Platform that runs on a Kubernetes and Rancher.",
+							"text": "Hosting refers to the process of storing and serving digital twin applications and services on a server or cloud platform. The hosting environment should provide the necessary resources and infrastructure to support the digital twin's data and visualization components. It should also ensure that the digital twin is accessible to users and can be used effectively. Hosting is organized via the Geodan AHP Cloud Platform, which is a Kubernetes management platform running on Rancher.",
 							"icon": "https://kubernetes.io/images/favicon.png"
 						},
 						{
 							"subtitle": "Security",
-							"text": "Protecting the data and ensuring the security and privacy of sensitive information are paramount. The platform must include robust security features to safeguard the digital twin against cyber threats and unauthorized access.",
+							"text": "<div>Protecting the data and ensuring the security and privacy of sensitive information are paramount. The platform must include robust security features to safeguard the digital twin against cyber threats and unauthorized access.</div>",
 							"icon": "https://services.geodan.nl/public/document/_/api/data/GEOD1593WEBS/logo/default"
 						}
-					],	
+					],
+					"contentAfter": "<img class='module-img' src='https://storage.googleapis.com/ahp-research/projects/communicatie/images/DT%20architecture.png' />",
 					"persons": ["Platform admin", "Architect", "Back-end eveloper"],
 					"image": "https://d3caycb064h6u1.cloudfront.net/wp-content/uploads/2022/10/dataprocessing-scaled.jpg"
 				}
@@ -68,18 +69,18 @@
 				"content": "3D data processing refers to the techniques and methodologies used to process data so that it can be visualized in 3D. The data should be position in the physical world with height, width, and depth. 3D data can be stored in various formats, such as point clouds, mesh models, voxel grids, or volumetric representations.",
 				"components": [
 					{
-						"subtitle": "3D tiles",
-						"text": "3D Tiles is an open standard for streaming massive 3D geospatial datasets, primarily used for visualizing and interacting with 3D content in web and mobile applications. It is an initiative developed by the Cesium team and supported by the OGC (Open Geospatial Consortium). 3D Tiles is designed to efficiently organize and transmit large 3D datasets, such as 3D models of cities, terrain data, or any complex 3D content. Geodan Research has developed custom tooling to process data into 3D Tiles, including <a href='https://github.com/Geodan/pg2b3dm', target='_blank'>pg2b3dm</a> and <a href='https://github.com/Geodan/i3dm.export', target='_blank'>i3dm.export</a>.",
+						"subtitle": "GLB/glTF",
+						"text": "GLB (GL Binary) and glTF (GL Transmission Format) are open standard file formats designed for 3D models and scenes. They are often used in computer graphics, 3D modeling, virtual reality, augmented reality, and web-based applications. Both formats are developed and maintained by the Khronos Group, a consortium of companies that create open standards for 3D graphics and media.",
+						"icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/GlTF_logo.svg/1920px-GlTF_logo.svg.png"
+					},
+					{
+						"subtitle": "3D Tiles",
+						"text": "3D Tiles is an open standard for streaming massive 3D geospatial datasets, primarily used for visualizing and interacting with 3D content in web and mobile applications. It is an initiative developed by the Cesium team and supported by the OGC (Open Geospatial Consortium). 3D Tiles is designed to efficiently organize and transmit large 3D datasets, such as 3D models of cities, terrain data, or any complex 3D content.",
 						"icon": ""
 					},
 					{
 						"subtitle": "BIM to GIS",
 						"text": "Building Information Modeling (BIM) and Geographic Information Systems (GIS) are two distinct technologies used in the architecture, engineering, and construction (AEC) industry, as well as in urban planning and facility management. They serve different purposes but are often integrated to combine the detailed building information of BIM with the geospatial context of GIS. ",
-						"icon": ""
-					},
-					{
-						"subtitle": "GLB/glTF",
-						"text": "GLB (GL Binary) and glTF (GL Transmission Format) are open standard file formats designed for 3D models and scenes. They are often used in computer graphics, 3D modeling, virtual reality, augmented reality, and web-based applications. Both formats are developed and maintained by the Khronos Group, a consortium of companies that create open standards for 3D graphics and media.",
 						"icon": ""
 					},
 					{
@@ -89,11 +90,11 @@
 					}
 				],
 				"persons": ["Data analist", "Data manager", "ETL expert"],
-				"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/data_auto-s_shutterstock_1343869916.jpg"
+				"image": "https://storage.googleapis.com/ahp-research/projects/communicatie/images/bag-3d-image.jpg"
 			},
 			{
 				"title": "3D Terrain",
-				"content": "<div>3D Terrain is essential in a Digital Twin. Digital Elevation Model (DEM) is one of the most common formats for elevation data and are usually provided in TIFF or ASC files. The data typically requires pre-processing to account for gaps (e.g. on water surfaces) or irregularities. The resulting data can then be processed into a 3D Terrain, or in more technical terms, a triangulated 3D mesh. A quantized 3D mesh is a special format that is suited for streaming massive terrain datasets for 3D visualization. <a href='https://github.com/mfbonfigli/gocesiumtiler' target='_blank'>GoCesiumTiler</a> is a useful tool to make such quantized terrain meshes.</div><img src='https://images.prismic.io/cesium/2015-12-18-terrain-obb-wireframe.png?auto=compress,format' />",
+				"content": "<div>3D Terrain is essential in a geospatial Digital Twin. Digital Elevation Model (DEM) is one of the most common formats for elevation data and are usually provided in TIFF or ASC files. The data typically requires pre-processing to account for gaps (e.g. on water surfaces) or irregularities. The resulting data can then be processed into a 3D Terrain, or in more technical terms, a triangulated 3D mesh. A quantized 3D mesh is a special format that is suited for streaming massive terrain datasets for 3D visualization. <a href='https://github.com/mfbonfigli/gocesiumtiler' target='_blank'>GoCesiumTiler</a> is a useful tool to make such quantized terrain meshes.</div><img src='https://images.prismic.io/cesium/2015-12-18-terrain-obb-wireframe.png?auto=compress,format' />",
 				"components": [],
 				"persons": ["Developer"],
 				"image": "https://user-images.githubusercontent.com/538812/208296434-39bb50ec-7acf-4969-9f0a-546ee08138d9.png"
@@ -119,24 +120,52 @@
 					}
 				],
 				"persons": ["Modeller", "AI/ML expert", "ETL-expert"],
-				"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/google3dtiles.PNG"
+				"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/datacollectieLekdijk_geotop_boringen_druk-1.png"
 			},
 			{
 				"title": "Extract, Transform, Load",
-				"content": "We have our source data, we have the standards we want to comply to, we have our data processing software. In the end, this results in something we can use. The process can be quite complex. To prevent errors, we want to automatize these ETL-pipelines as much as possible. Here we have tooling that can help us.",
+				"content": "We have our source data and can combine them to create datasets with even more added value. We also have the standards we want the data to comply to so we have something we can use in a consistent and reliable way. The process can be quite complex. To prevent errors, we want to automatize these ETL-pipelines as much as possible. Here we have tooling that can help us.",
 				"components": [
 					{
-						"subtitle": "ETL pipelines",
+						"subtitle": "PostGIS",
+						"text": "PostGIS is an open-source extension for PostgreSQL that adds support for geospatial objects and functions. It enables the storage, manipulation and analysis of geospatial data in a PostgreSQL database. PostGIS is one of the most used software in the Geodan Digital Twin platform to store and process geospatial data. Geodan Research has developed custom tooling to process data from a PostgreSQL database directly into 3D Tiles, including <a href='https://github.com/Geodan/pg2b3dm', target='_blank'>pg2b3dm</a> and <a href='https://github.com/Geodan/i3dm.export', target='_blank'>i3dm.export</a>.",
+						"icon": "https://upload.wikimedia.org/wikipedia/en/thumb/6/60/PostGIS_logo.png/225px-PostGIS_logo.png"
+					},
+					{
+						"subtitle": "Containerization",
+						"text": "Containerization is a method of packaging software into standardized units called containers. These containers are isolated from each other and can be run on any operating system or cloud platform. Docker is the most widely used software for this purpose. Docker containers enables code to be run quickly and reliably across different environments. Therefore, containerziation is a valuable concept to facilitate ETL processes.",
+						"icon": "https://miro.medium.com/v2/resize:fit:400/1*OARpkeBkn_Tw3vk8H769OQ.png"
+					},
+					{
+						"subtitle": "Automatized ETL pipelines",
 						"text": "The data processing usually consists of multiple steps to get to the result. These steps are often automated in an ETL pipeline. ETL stands for Extract, Transform, and Load. The pipeline extracts data from a source, transforms it into a format that is suitable for the target system, and loads it into the target system. The ETL pipeline can be used to automate the data processing steps, ensuring that the data is always up-to-date and ready for use. <a href='https://www.mage.ai/' target='_blank'>Mage</a> is a tool that can be used to automate ETL processes.",
 						"icon": "https://avatars.githubusercontent.com/u/69371472?s=280&v=4"
 					}
 				],
 				"persons": ["Developer"],
-				"image": "https://user-images.githubusercontent.com/538812/208296434-39bb50ec-7acf-4969-9f0a-546ee08138d9.png"
+				"image": "https://storage.googleapis.com/ahp-research/projects/communicatie/images/bim-hoevesteijn.png"
+			},
+			{
+				"title": "Data Curation",
+				"content": "As the amount of data we produce increases, it is easy to lose sight. Also, when a user sees data in the digital, he wants to see where the data is coming from and what the quality is. Data curation is the process of collecting, organizing, and managing data to ensure its quality, reliability, and usability over time. It involves various activities aimed at maintaining and enhancing the value of data assets, making them accessible, and preserving them for current and future use. Data curation often involves standardizing data formats, units, and terminology. This ensures that data can be easily understood and used by different people and systems. Ensuring data quality is a fundamental aspect of data curation. This involves checking data for accuracy, completeness, consistency, and reliability. Data quality issues may be identified and corrected during this stage.",
+				"components": [
+					{
+						"subtitle": "Data Management",
+						"text": "Many different data management systems exist. From Geodan, we have experience with CKAN, which is an open-source data management system that provides a flexible way to manage and publish data along with its relevant metadata. It is used by governments, research institutions, and organizations worldwide to share and manage data.",
+						"icon": "https://upload.wikimedia.org/wikipedia/en/e/e2/CKAN_Logo_full_color.png"
+					},
+					{
+						"subtitle": "Real-time data",
+						"text": "Real-time data refers to data that is collected and processed in real-time, as it is generated. This data is typically used for monitoring and analysis of real-world systems, such as traffic, weather, or environmental conditions. Real-time data is often used in digital twins to provide up-to-date information about the physical environment. The quantities of data are huge and proper data management is crucial. Currently, we are making use of DuckDB to manage real-time data.",
+						"icon": "https://duckdb.org/images/logo-dl/DuckDB_Logo.png"
+					}
+				],	
+				"persons": ["Modelleur", "AI/ML expert"],
+				"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/data-processing-geoinformatie.jpg"
 			},
 			{
 				"title": "Data Services and APIs",
-				"content": "We can process our data and produce data products. Nice! However, that does not mean that it magically apears in the digital twin. We need to be able to serve the data to the digital twin from the different sources where the data may be stored. //////////////////////////////////////// Custom APIs, or Custom Application Programming Interfaces, are software interfaces developed for specific applications, systems, or services to enable communication, data exchange, and functionality between different components of a software ecosystem. These APIs are tailored to the unique requirements of a particular application or organization. Data exposure in the GIS (Geographic Information Systems) field refers to making geospatial data accessible, often to a wide audience or specific users, for various purposes. Data exposure involves sharing, publishing, and providing access to geographic information in a manner that enables data consumers to view, analyze, and utilize the data. GIS professionals and organizations publish geospatial data to make it available to others. This data can include maps, aerial imagery, satellite data, geospatial layers (e.g., land use, transportation networks, environmental data), and more. Data publishing involves making data accessible through online platforms, databases, web services, or public repositories.</div><div>Data exposure often comes with licensing terms and conditions. Organizations may specify how the data can be used, whether it can be redistributed, and any attribution requirements. Clear licensing and usage terms promote responsible data consumption.",
+				"content": "We can process our data and manage the data products. Nice! However, that does not mean that it magically apears in the digital twin. The final step in the process is that we need to be able to serve the data to the digital twin from the different sources where the data may be stored. //////////////////////////////////////// Custom APIs, or Custom Application Programming Interfaces, are software interfaces developed for specific applications, systems, or services to enable communication, data exchange, and functionality between different components of a software ecosystem. These APIs are tailored to the unique requirements of a particular application or organization. Data exposure in the GIS (Geographic Information Systems) field refers to making geospatial data accessible, often to a wide audience or specific users, for various purposes. Data exposure involves sharing, publishing, and providing access to geographic information in a manner that enables data consumers to view, analyze, and utilize the data. GIS professionals and organizations publish geospatial data to make it available to others. This data can include maps, aerial imagery, satellite data, geospatial layers (e.g., land use, transportation networks, environmental data), and more. Data publishing involves making data accessible through online platforms, databases, web services, or public repositories.</div><div>Data exposure often comes with licensing terms and conditions. Organizations may specify how the data can be used, whether it can be redistributed, and any attribution requirements. Clear licensing and usage terms promote responsible data consumption.",
 				"components": [
 					{
 						"subtitle": "pg_featureserv",
@@ -156,24 +185,6 @@
 				],
 				"persons": ["Architect", "Developer", "User Experience Designer"],
 				"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/dataexposureduisburgsmartcity.PNG"
-			},
-			{
-				"title": "Data Curation",
-				"content": "As the amount of data we produce increases, it is easy to lose sight. Also, when a user sees data in the digital, he wants to see where the data is coming from and what the quality is. Data curation is the process of collecting, organizing, and managing data to ensure its quality, reliability, and usability over time. It involves various activities aimed at maintaining and enhancing the value of data assets, making them accessible, and preserving them for current and future use. Data curation often involves standardizing data formats, units, and terminology. This ensures that data can be easily understood and used by different people and systems. Ensuring data quality is a fundamental aspect of data curation. This involves checking data for accuracy, completeness, consistency, and reliability. Data quality issues may be identified and corrected during this stage.",
-				"components": [
-					{
-						"subtitle": "Data Management",
-						"text": "Many different data management systems exist. From Geodan, we have experience with CKAN, which is an open-source data management system that provides a flexible way to manage and publish data along with its relevant metadata. It is used by governments, research institutions, and organizations worldwide to share and manage data.",
-						"icon": "https://upload.wikimedia.org/wikipedia/en/e/e2/CKAN_Logo_full_color.png"
-					},
-					{
-						"subtitle": "Real-time data",
-						"text": "Real-time data refers to data that is collected and processed in real-time, as it is generated. This data is typically used for monitoring and analysis of real-world systems, such as traffic, weather, or environmental conditions. Real-time data is often used in digital twins to provide up-to-date information about the physical environment. The quantities of data are huge and proper data management is crucial. Currently, we are making use of DuckDB to manage real-time data.",
-						"icon": "https://duckdb.org/images/logo-dl/DuckDB_Logo.png"
-					}
-				],	
-				"persons": ["Modelleur", "AI/ML expert"],
-				"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/data-processing-geoinformatie.jpg"
 			}
 		]
 	},
@@ -217,7 +228,7 @@
 					}
 				],
 				"persons": ["Architect", "Front-end Developer"],
-				"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/banner2.jpg"
+				"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/google3dtiles.PNG"
 			},
 			{
 				"title": "User interfaces and tools",
@@ -245,7 +256,7 @@
 					}
 				],
 				"persons": ["Architect", "Developer"],
-				"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/banner2.jpg"
+				"image": "https://storage.googleapis.com/ahp-research/projects/communicatie/images/circulaire-grondstromen-dashboard.png"
 			},
 			{
 				"title": "Real-time insight",
@@ -257,9 +268,15 @@
 			{
 				"title": "Data Analysis and Simulation",
 				"content": "Within the digital twin, we can show the as-is situation and display dynamic changes in the system through time. We are at a copy of reality - how nice. But it can be even better. This replicate of reality can also be used for simulations and run different scenarios. TKI dikes, Moerdijkbrug",
-				"components": [],
+				"components": [
+					{
+						"subtitle": "Jupyter Notebooks",
+						"text": "Thanks to the platform and adhering to standards, the data are not only specific for 3D visualization. The same data can also be parsed in other analytical tools. Jupyter Notebooks are a great example of this. Jupyter Notebooks are a popular tool for data analysis, visualization, and machine learning. They provide an interactive environment for running code, visualizing data, and sharing insights. Jupyter Notebooks are used in various industries, including data science, machine learning, and scientific research. They are also used in the field of GIS and geospatial data analysis. We have been using this extensively in the Smart City project in Den Bosch and Breda.",
+						"icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Jupyter_logo.svg/800px-Jupyter_logo.svg.png"
+					}
+				],
 				"persons": ["Data analyst", "Information analist"],
-				"image": "https://d3caycb064h6u1.cloudfront.net/wp-content/uploads/2022/10/dataprocessing-scaled.jpg"
+				"image": "https://storage.googleapis.com/ahp-research/projects/communicatie/images/moerdijkbrug-fem-model.png"
 			},
 			{
 				"title": "Feedback and Use",

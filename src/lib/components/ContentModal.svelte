@@ -6,23 +6,41 @@
 
 	import type { IPhase, ItemInterface } from "$lib/components/interfaces";
     import BottomNav from "./BottomNav.svelte";
+    import { getBlock, getBlockIndex } from "$lib/utils";
 
 	export let selectedItem: Writable<ItemInterface | undefined>;
 	export let config: { phases: Array<IPhase>};
 
 	let unsubscriber: Unsubscriber;
+	let doc: Document;
 	
 	onMount(() => {
-		unsubscriber = selectedItem.subscribe((i) => i ? document.body.classList.add("modal-open") : document.body.classList.remove("modal-open"))
-
-		onDestroy(() => {
-			if (unsubscriber) unsubscriber();
-			document.body.classList.remove("modal-open");
-		})
+		doc = document;
+		unsubscriber = selectedItem.subscribe((i) => i ? doc.body.classList.add("modal-open") : doc.body.classList.remove("modal-open"));
+		doc.addEventListener("keydown", processKeyEvent);
 	});
 
-	
+	onDestroy(() => {
+		if (unsubscriber) unsubscriber();
+		doc?.body.classList.remove("modal-open");
+		doc?.removeEventListener("keydown", processKeyEvent);
+	});
 
+
+	function processKeyEvent(e: KeyboardEvent): void {
+		if (e.key === "Escape") selectedItem.set(undefined);
+		else if (e.key === "ArrowRight") {
+			const index = getBlockIndex(config, $selectedItem);
+			const nextBlock = getBlock(config, index + 1);
+			if (nextBlock) selectedItem.set(nextBlock);
+		}
+		else if (e.key === "ArrowLeft") {
+			const index = getBlockIndex(config, $selectedItem);
+			const prevBlock = getBlock(config, index - 1);
+			if (prevBlock) selectedItem.set(prevBlock);
+		}
+	}
+	
 </script>
 
 
@@ -102,6 +120,9 @@
 								</div>
 							{/each}
 						{/if}
+						{#if $selectedItem.contentAfter}
+							{@html $selectedItem.contentAfter}
+						{/if}
 					</div>
 				</div>
 			</div>
@@ -167,22 +188,8 @@
 		backdrop-filter: blur(0px);
 		border-radius: 8px;
 	}
-	.inner-overlay {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		width: 80%;
-		height: 80%;
-		opacity: 0.75;
-		z-index: 1;
-		background-image: url(https://storage.googleapis.com/ahp-research/projects/communicatie/images/render_6-2mb.png);
-		background-size: cover;
-		background-position: center;
-		border-radius: 8px;
-	}
 	.modal-inner {
-		padding: 50px;
+		padding: 50px 50px 100px;
 		height: 100%;
 		overflow-x: hidden;
 		-ms-overflow-style: none;  /* IE and Edge */
@@ -199,6 +206,20 @@
 		width: 100%;
 		height: 50px;
 		background: linear-gradient(180deg, rgba(0, 17, 43, 1) 50%, rgba(0, 17, 43, 0) 100%);
+	}
+	.inner-overlay {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 80%;
+		height: 80%;
+		opacity: 0.75;
+		z-index: 1;
+		background-image: url(https://storage.googleapis.com/ahp-research/projects/communicatie/images/render_6-2mb.png);
+		background-size: cover;
+		background-position: center;
+		border-radius: 8px;
 	}
 	.modal-close-button {
 		position: absolute;

@@ -8,7 +8,8 @@ export interface ItemInterface {
 			text: string,
 			icon: string
 		}
-	>
+	>,
+	contentAfter: string,
 	persons: Array<string>,
 	image: string,
 }
