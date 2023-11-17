@@ -6,14 +6,13 @@
 			"blocks": [
 				{
 					"title": "Requirements Analysis",
-					"number" : "01",
-					"content": "The concept of a digital twin is very broad. Therefore, when developing new digital twin applications, it is always important to pay attention to relevant user stories. This primarily revolves around the question of which processes the digital twin should support. Through requirements analysis of the various use cases, it is determined what data and information are required and what functionalities and tools may need to be developed.",
+					"content": "<div>The concept of a digital twin is very broad. Therefore, when developing new digital twin applications, it is always important to pay attention to relevant user stories. This primarily revolves around the question of which processes the digital twin should support. Through requirements analysis of the various use cases, it is determined what data and information are required and what functionalities and tools may need to be developed.</div><img class='module-img' src='https://storage.googleapis.com/ahp-research/projects/communicatie/images/design-sprint-geo-assistent.jpg' />",
+					"components": [],
 					"persons": ["Consultant", "User Experience Designer", "Stakeholder"],
 					"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/requirementanalyse.jpg"
 				},
 				{
 					"title": "Data Collection",
-					"number" : "02",
 					"content": "",
 					"components": [
 						{
@@ -32,7 +31,6 @@
 				},
 				{
 					"title": "Technical Platform",
-					"number" : "03",
 					"content": "The technical platform is the core for enabling the creation, operation, and effectiveness of the digital twin. All the data and visualization components of the digital twin run on the technical platform",
 					"components": [
 						{
@@ -66,8 +64,7 @@
 			"description": "Data is the fundamental building block",
 			"blocks": [	
 			{
-				"title": "3D Data Formats",
-				"number" : "04",
+				"title": "Standards",
 				"content": "3D data processing refers to the techniques and methodologies used to process data so that it can be visualized in 3D. The data should be position in the physical world with height, width, and depth. 3D data can be stored in various formats, such as point clouds, mesh models, voxel grids, or volumetric representations.",
 				"components": [
 					{
@@ -96,14 +93,13 @@
 			},
 			{
 				"title": "3D Terrain",
-				"number" : "05",
 				"content": "<div>3D Terrain is essential in a Digital Twin. Digital Elevation Model (DEM) is one of the most common formats for elevation data and are usually provided in TIFF or ASC files. The data typically requires pre-processing to account for gaps (e.g. on water surfaces) or irregularities. The resulting data can then be processed into a 3D Terrain, or in more technical terms, a triangulated 3D mesh. A quantized 3D mesh is a special format that is suited for streaming massive terrain datasets for 3D visualization. <a href='https://github.com/mfbonfigli/gocesiumtiler' target='_blank'>GoCesiumTiler</a> is a useful tool to make such quantized terrain meshes.</div><img src='https://images.prismic.io/cesium/2015-12-18-terrain-obb-wireframe.png?auto=compress,format' />",
+				"components": [],
 				"persons": ["Developer"],
 				"image": "https://user-images.githubusercontent.com/538812/208296434-39bb50ec-7acf-4969-9f0a-546ee08138d9.png"
 			},
 			{
 				"title": "Data Fusion",
-				"number" : "06",
 				"content": "Data fusion is the process of enhancing existing data by adding valuable, relevant, and supplementary information to it. This additional data can provide greater context, depth, and insights into the existing dataset, making it more valuable for analysis, decision-making, and other purposes. Data fusion can be applied to various types of data, including appending demographic information (e.g., age, gender, education) or geospatial data (e.g.,geographic boundaries).",
 				"components": [
 					{
@@ -127,8 +123,7 @@
 			},
 			{
 				"title": "Extract, Transform, Load",
-				"number" : "07",
-				"content": "",
+				"content": "We have our source data, we have the standards we want to comply to, we have our data processing software. In the end, this results in something we can use. The process can be quite complex. To prevent errors, we want to automatize these ETL-pipelines as much as possible. Here we have tooling that can help us.",
 				"components": [
 					{
 						"subtitle": "ETL pipelines",
@@ -141,8 +136,7 @@
 			},
 			{
 				"title": "Data Services and APIs",
-				"number" : "08",
-				"content": "Custom APIs, or Custom Application Programming Interfaces, are software interfaces developed for specific applications, systems, or services to enable communication, data exchange, and functionality between different components of a software ecosystem. These APIs are tailored to the unique requirements of a particular application or organization. Data exposure in the GIS (Geographic Information Systems) field refers to making geospatial data accessible, often to a wide audience or specific users, for various purposes. Data exposure involves sharing, publishing, and providing access to geographic information in a manner that enables data consumers to view, analyze, and utilize the data. GIS professionals and organizations publish geospatial data to make it available to others. This data can include maps, aerial imagery, satellite data, geospatial layers (e.g., land use, transportation networks, environmental data), and more. Data publishing involves making data accessible through online platforms, databases, web services, or public repositories.</div><div>Data exposure often comes with licensing terms and conditions. Organizations may specify how the data can be used, whether it can be redistributed, and any attribution requirements. Clear licensing and usage terms promote responsible data consumption.",
+				"content": "We can process our data and produce data products. Nice! However, that does not mean that it magically apears in the digital twin. We need to be able to serve the data to the digital twin from the different sources where the data may be stored. //////////////////////////////////////// Custom APIs, or Custom Application Programming Interfaces, are software interfaces developed for specific applications, systems, or services to enable communication, data exchange, and functionality between different components of a software ecosystem. These APIs are tailored to the unique requirements of a particular application or organization. Data exposure in the GIS (Geographic Information Systems) field refers to making geospatial data accessible, often to a wide audience or specific users, for various purposes. Data exposure involves sharing, publishing, and providing access to geographic information in a manner that enables data consumers to view, analyze, and utilize the data. GIS professionals and organizations publish geospatial data to make it available to others. This data can include maps, aerial imagery, satellite data, geospatial layers (e.g., land use, transportation networks, environmental data), and more. Data publishing involves making data accessible through online platforms, databases, web services, or public repositories.</div><div>Data exposure often comes with licensing terms and conditions. Organizations may specify how the data can be used, whether it can be redistributed, and any attribution requirements. Clear licensing and usage terms promote responsible data consumption.",
 				"components": [
 					{
 						"subtitle": "pg_featureserv",
@@ -165,8 +159,7 @@
 			},
 			{
 				"title": "Data Curation",
-				"number" : "09",
-				"content": "Data curation is the process of collecting, organizing, and managing data to ensure its quality, reliability, and usability over time. It involves various activities aimed at maintaining and enhancing the value of data assets, making them accessible, and preserving them for current and future use. Data curation often involves standardizing data formats, units, and terminology. This ensures that data can be easily understood and used by different people and systems. Ensuring data quality is a fundamental aspect of data curation. This involves checking data for accuracy, completeness, consistency, and reliability. Data quality issues may be identified and corrected during this stage.",
+				"content": "As the amount of data we produce increases, it is easy to lose sight. Also, when a user sees data in the digital, he wants to see where the data is coming from and what the quality is. Data curation is the process of collecting, organizing, and managing data to ensure its quality, reliability, and usability over time. It involves various activities aimed at maintaining and enhancing the value of data assets, making them accessible, and preserving them for current and future use. Data curation often involves standardizing data formats, units, and terminology. This ensures that data can be easily understood and used by different people and systems. Ensuring data quality is a fundamental aspect of data curation. This involves checking data for accuracy, completeness, consistency, and reliability. Data quality issues may be identified and corrected during this stage.",
 				"components": [
 					{
 						"subtitle": "Data Management",
@@ -190,8 +183,8 @@
 		"blocks": [
 			{
 				"title": "3D Visualization",
-				"number" : "10",
-				"content": [
+				"content": "We have produced the necessary data in the correct formats. We have deployed the services to serve the data. And we have taken care of the curation. Everything is set for rolling out the actual digital twin. The first step is simply the visualization: displaying all the data in a portal. Since we have stuck to the standards, we can use many different tools to do achieve this.",
+				"components": [
 					{
 						"subtitle": "Web viewer (CesiumJS/MapLibre)",
 						"text": "Both CesiumJS and MapLibre are valuable tools for creating web viewers that present digital twin visualizations, geospatial data, and 3D models in an interactive and user-friendly manner. They provide an accessible foundation for a wide range of applications, from urban planning and architecture to virtual tourism and environmental monitoring. The choice between the two often depends on specific project requirements and development preferences.",
@@ -228,8 +221,7 @@
 			},
 			{
 				"title": "User interfaces and tools",
-				"number" : "11",
-				"content": "User interfaces enable users to interact with and manipulate the digital twin's data, simulations, and models in a more intuitive and efficient manner. User interfaces are designed to facilitate specific tasks or workflows. They can be tailored to the unique needs and requirements of a particular digital twin application. User interfaces can be designed for various purposes, such as data visualization, analysis, and simulation. They can also be used to provide tools and features for monitoring, controlling, and managing a physical system or environment. User interfaces are often designed to facilitate specific tasks or workflows. They can be tailored to the unique needs and requirements of a particular digital twin application. User interfaces can be designed for various purposes, such as data visualization, analysis, and simulation. They can also be used to provide tools and features for monitoring, controlling, and managing a physical system or environment.",
+				"content": "Showing some data is nice, but we are not yet at the digital twin level. For this, the data environment needs to come alive. User interfaces enable users to interact with and manipulate the digital twin's data, simulations, and models in a more intuitive and efficient manner. User interfaces are designed to facilitate specific tasks or workflows. They can be tailored to the unique needs and requirements of a particular digital twin application. User interfaces can be designed for various purposes, such as data visualization, analysis, and simulation. They can also be used to provide tools and features for monitoring, controlling, and managing a physical system or environment. User interfaces are often designed to facilitate specific tasks or workflows. They can be tailored to the unique needs and requirements of a particular digital twin application. User interfaces can be designed for various purposes, such as data visualization, analysis, and simulation. They can also be used to provide tools and features for monitoring, controlling, and managing a physical system or environment.",
 				"components": [
 					{
 						"subtitle": "Layer library",
@@ -257,22 +249,22 @@
 			},
 			{
 				"title": "Real-time insight",
-				"number" : "12",
 				"content": "Examples: Traffic/parking places Nantes. Ship animation.",
+				"components": [],
 				"persons": ["Architect", "Developer"],
 				"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/data_auto-s_shutterstock_1343869916.jpg"
 			},
 			{
 				"title": "Data Analysis and Simulation",
-				"number" : "13",
-				"content": "TKI dikes, Moerdijkbrug",
+				"content": "Within the digital twin, we can show the as-is situation and display dynamic changes in the system through time. We are at a copy of reality - how nice. But it can be even better. This replicate of reality can also be used for simulations and run different scenarios. TKI dikes, Moerdijkbrug",
+				"components": [],
 				"persons": ["Data analyst", "Information analist"],
 				"image": "https://d3caycb064h6u1.cloudfront.net/wp-content/uploads/2022/10/dataprocessing-scaled.jpg"
 			},
 			{
 				"title": "Feedback and Use",
-				"number" : "14",
-				"content": "<p>Feedback and use are crucial aspects of their development and application. Digital twins are dynamic, data-driven models of real-world objects or environments, and their effectiveness relies on continuous feedback, usage, and improvement. Some examples of feedback:<br>1 Data Quality and Feedback:<br>Data Validation: Feedback is essential for ensuring the accuracy and quality of the data used in digital twins. Users can provide feedback on data discrepancies or inaccuracies, which can be used to refine the data sources and data processing pipelines.<br>Data Updates: Real-world data changes over time. Users can offer feedback on outdated information, prompting the update of data in the digital twin to reflect the most current state of the physical environment.<br> 2 Data Validation: User Engagement and Feedback:<br>User Experience: Feedback from users about the usability and user experience of digital twins is valuable. This can lead to user interface improvements, enhanced interactivity, and a more intuitive design.<br>Feature Requests: Users often have specific needs and requirements. Feedback can include requests for additional features, tools, or data layers, which can guide the development of the digital twin to meet these needs.<br>3 Accessibility and Inclusivity:<br>Inclusive Feedback: Ensuring that digital twins are accessible to individuals with disabilities is an important consideration. Feedback can help identify accessibility challenges and drive improvements.</p>",
+				"content": "<p>The digital twin can be used for an endless number of applications. We are typically not the end-users. The expert opinion and wishes are what determines the succes of the digital twin in the end. Feedback and use are crucial aspects of their development and application. Digital twins are dynamic, data-driven models of real-world objects or environments, and their effectiveness relies on continuous feedback, usage, and improvement. Some examples of feedback:<br>1 Data Quality and Feedback:<br>Data Validation: Feedback is essential for ensuring the accuracy and quality of the data used in digital twins. Users can provide feedback on data discrepancies or inaccuracies, which can be used to refine the data sources and data processing pipelines.<br>Data Updates: Real-world data changes over time. Users can offer feedback on outdated information, prompting the update of data in the digital twin to reflect the most current state of the physical environment.<br> 2 Data Validation: User Engagement and Feedback:<br>User Experience: Feedback from users about the usability and user experience of digital twins is valuable. This can lead to user interface improvements, enhanced interactivity, and a more intuitive design.<br>Feature Requests: Users often have specific needs and requirements. Feedback can include requests for additional features, tools, or data layers, which can guide the development of the digital twin to meet these needs.<br>3 Accessibility and Inclusivity:<br>Inclusive Feedback: Ensuring that digital twins are accessible to individuals with disabilities is an important consideration. Feedback can help identify accessibility challenges and drive improvements.</p>",
+				"components": [],
 				"persons": ["Consultant", "User Experience Designer"],
 				"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/geoinfo-wur.jpg"
 			}

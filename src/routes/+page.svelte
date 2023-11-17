@@ -1,24 +1,40 @@
 <script lang="ts">
-	import content from "$lib/files/concept-dt-config.json";
+	import fallback from "$lib/files/concept-dt-config.json";
 	import Item from "$lib/components/Item.svelte";
     import CustomStyle from "$lib/style/CustomStyle.svelte";
     import ContentModal from "$lib/components/ContentModal.svelte";
-	import type { ItemInterface } from "$lib/components/interfaces";
+	import type { IPhase, ItemInterface } from "$lib/components/interfaces";
     import { CaretDown } from "carbon-icons-svelte";
+    import { writable, type Writable } from "svelte/store";
 
-	let selectedItem: ItemInterface | undefined;
+	let selectedItem: Writable<ItemInterface | undefined> = writable(undefined);
+	let config: { phases: Array<IPhase>};
 
-	let config: any;
-	loadConfig();
-	async function loadConfig(): Promise<void> {
+	
+	async function setConfig(): Promise<void> {
+		//config = await loadConfig();
+		const loaded = setBlockNumbers(fallback);
+		config = loaded;
+	}
+	async function loadConfig(): Promise<any> {
 		try {
 			const fileservConfig = await fetch("https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/backup-1419concept-dt-config.json");
-			config = await fileservConfig.json();
+			const response = await fileservConfig.json();
+			return response;
 		} catch (e) {
-			config = content;
+			return fallback;
 		}
-		config = content;
 	}
+	function setBlockNumbers(rawConfig: any): { phases: Array<IPhase>} {
+		const configFlat = rawConfig.phases.flatMap((phase: IPhase) => phase.blocks);
+		rawConfig.phases.forEach((phase: IPhase) => phase.blocks.map((block: ItemInterface) => {
+			const index = configFlat.findIndex((item: ItemInterface) => item === block);
+			block.index = index;
+		}));
+		return rawConfig;
+	}
+	setConfig();
+
 
 </script>
 
@@ -49,14 +65,17 @@
 			</div>
 			<div class="block-overview">
 				{#each phase.blocks as item }
-					<Item {item} index={item.number} on:select={() => selectedItem = item}/>
+					<Item {item} on:select={() => selectedItem.set(item)}/>
 				{/each}
 			</div>
 		{/each}
+		<ContentModal bind:selectedItem {config} />
 	{/if}
 
-	<ContentModal bind:selectedItem />
-
+	<div class="phase-header">
+		<div class="phase-header-title">Result</div>
+		<CaretDown size={32} />
+	</div>
 	<div id="embedded-viewer-container">
 		<embed src="https://sogelink.beta.geodan.nl/" id="embedded-viewer">
 	</div>
@@ -170,6 +189,8 @@
 	}
 
 	#footer {
+		background-color: var(--dark-main);
+		color: #fff;
 		height: 100px;
 		display: flex;
 		justify-content: center;

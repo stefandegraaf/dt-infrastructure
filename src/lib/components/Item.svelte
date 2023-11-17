@@ -4,8 +4,6 @@
 	import type { ItemInterface } from "$lib/components/interfaces";
 
 	export let item: ItemInterface;
-	export let index: number;
-
 
 	const dispatch = createEventDispatcher();
 	
@@ -16,7 +14,7 @@
 <div class="step-container">
 	<div class="step-image" style="background-image:url('{item.image}')" on:click={() => dispatch("select")}></div>
 	<div class="step-title">
-		{index}. {item.title}
+		{String(item.index + 1).padStart(2, '0')}. {item.title}
 	</div>
 	<div class="step-sub" on:click={() => dispatch("select")}>
 		More info 
@@ -40,12 +38,12 @@
 		height: 260px;
 		width: 100%;
 		cursor: pointer;
+		filter: saturate(1);
 		transition: 0.3s;
-		filter: grayscale(50%);
 	}
 
 	.step-image:hover {
-		filter: brightness(1);
+		filter: saturate(1.5);
 	}
 
 	.step-title {
