@@ -84,7 +84,7 @@
 
 
 	<div id="footer">
-		Created by Sogelink Group
+		Copyright © {new Date().getFullYear()} | Created by Sogelink Group
 	</div>
 </div>
 
