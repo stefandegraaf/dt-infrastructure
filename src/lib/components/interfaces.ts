@@ -1,5 +1,6 @@
 export interface ItemInterface {
 	index: number,
+	phase: string,
 	title: string,
 	content: string,
 	components: Array<
@@ -16,6 +17,5 @@ export interface ItemInterface {
 
 export interface IPhase {
 	phase: string,
-	description: string,
 	blocks: Array<ItemInterface>
 }

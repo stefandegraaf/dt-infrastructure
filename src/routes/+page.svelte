@@ -30,6 +30,7 @@
 		rawConfig.phases.forEach((phase: IPhase) => phase.blocks.map((block: ItemInterface) => {
 			const index = configFlat.findIndex((item: ItemInterface) => item === block);
 			block.index = index;
+			block.phase = phase.phase;
 		}));
 		return rawConfig;
 	}

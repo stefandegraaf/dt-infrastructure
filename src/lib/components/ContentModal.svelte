@@ -99,7 +99,10 @@
 								-5 -67z"/>
 							</g>
 						</svg>
-						<h2>{$selectedItem.title}</h2>
+						<div>
+							<span>{$selectedItem.phase}</span>
+							<h2>{$selectedItem.title}</h2>
+						</div>
 					</div>
 					<div class="content-blocks">
 						{@html $selectedItem.content}
@@ -150,6 +153,15 @@
 		display: block;
 		margin: 30px auto;
 		border-radius: 5px;
+	}
+
+	:global(a) {
+		color: #fff;
+		font-weight: 700;
+		text-decoration: none;
+	}
+	:global(a:hover) {
+		color: #ddf4ff;
 	}
 
 	.modal-container {
@@ -229,11 +241,13 @@
 	}
 
 	.modal-header {
+		display: flex;
+		align-items: center;
+	}
+	.modal-header h2 {
 		font-size: 2rem;
 		font-weight: 600;
 		margin-bottom: 30px;
-		display: flex;
-		align-items: center;
 	}
 	.modal-header-icon {
 		fill: #fff;

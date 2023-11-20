@@ -2,20 +2,19 @@
 	"phases": [
 		{
 			"phase": "Preparation",
-			"description": "You cannot start blind. Preparation and boundary conditions",
 			"blocks": [
 				{
 					"title": "Requirements Analysis",
-					"content": "<div>The concept of a digital twin is very broad. Therefore, when developing new digital twin applications, it is always important to pay attention to relevant user stories. This primarily revolves around the question of which processes the digital twin should support.</div>",
+					"content": "The concept of a Digital Twin is very broad. When developing new Digital Twin applications, it is therefore important to come up with relevant user stories. This primarily revolves around the question of which processes and which users the Digital Twin should support.",
 					"components": [
 						{
 							"subtitle": "Consultancy",
-							"text": "Consultants are the first to come into action when a new digital twin project is started. They are the ones who determine the requirements and wishes of the customer and translate them into a clear project plan. Through requirements analysis of the various use cases, it is determined what data and information are required and what functionalities and tools may need to be developed.",
+							"text": "Consultants are the first to come into action when a new Digital Twin project is started. The consultant determines the requirements and wishes of the client and translates them into a clear project plan and data-driven approach. The requirements analysis defines what data and information are required and what functionalities and tools need to be developed.",
 							"icon": ""
 						},
 						{
 							"subtitle": "UX Design",
-							"text": "Based on the wishes, a User Experience (UX) design can be made to make a general outline for the portal to be developed. It involves understanding the needs and expectations of users and designing a portal that meet those needs and provide a relevant experience to the users. The input to the consultants is central to create a design that is intuitive and easy to use.",
+							"text": "Based on the wishes, a User Experience (UX) design can be made to make a general outline for the portal to be developed. The design focusses on the needs and expectations of the end users in order to provide a relevant experience to the users. The input from the consultants is central to create a design that is intuitive and easy to use.",
 							"icon": ""
 						}
 					],
@@ -25,16 +24,16 @@
 				},
 				{
 					"title": "Data Inventory",
-					"content": "Data is the foundation of a Digital Twin. In any geoinformation project, the data collection phase is a critical component that involves acquiring and recording data related to the geographical area of interest. This phase is essential for creating an accurate and up-to-date geospatial database, and thus, Digital Twin. With the input from the requirements analysis, we can determine what data is needed. This data can be collected from various sources.",
+					"content": "Data is the foundation of a Digital Twin. During the data collection phase, data related to the geographical area of interest is gathered. With the input from the requirements analysis, we can determine what data is needed. These data can be collected from various sources to create an accurate and up-to-date geospatial database that supports the Digital Twin.",
 					"components": [
 						{
 							"subtitle": "Open Data",
-							"text": "For most projects, gathering open source datasets plays an important role. Open data is freely available to the public without restrictions or cost. These datasets are typically made available by governments and research institutions to stimulate research and application development. Open data is extremely valuable to save time and costs when developing geospatial data portals. Thanks to the Key Registers, the Netherlands has large amounts of high-quality open data available. The <a href='https://www.pdok.nl/' target='_blank'>PDOK</a> (Publieke Dienstverlening Op de Kaart) is the central platform for open geospatial data in the Netherlands.",				
+							"text": "For most projects, open source datasets plays an important role. Open data is freely available to the public without restrictions or costs. These datasets are typically made available by governments and research institutions to stimulate research and application development. Open data is extremely valuable to save time and costs when developing geodata portals. The Netherlands has large amounts of high-quality open data available thanks to the Key Registers. The <a href='https://www.pdok.nl/' target='_blank'>PDOK</a> (Publieke Dienstverlening Op de Kaart) is the central platform for open geospatial data in the Netherlands.",
 							"icon": "https://avatars.githubusercontent.com/u/7768379?s=280&v=4"
 						},
 						{
 							"subtitle": "Data Collection",
-							"text": "Sometimes, the open data is not sufficient to meet the requirements of the Digital Twin and extra data needs to be collected. The data collection may require using GPS devices, survey instruments, remote sensing equipment, or other specialized tools. Field surveys may be necessary to collect attribute data, such as land use information, infrastructure details, or environmental characteristics.",
+							"text": "Sometimes, open data alone is not sufficient to meet the requirements of the project and extra data needs to be collected. The data collection may involve field surveys using GPS devices or other specialized tools. For example, recently we have looked into point cloud data collection of cables and pipelines with the LiDAR scanner on the iPhone.",
 							"icon": ""
 						}
 					],
@@ -43,7 +42,7 @@
 				},
 				{
 					"title": "Technical Platform",
-					"content": "The technical platform is the core for enabling the creation, operation, and effectiveness of the digital twin. All the data and visualization components of the digital twin run on the technical platform. The platform provides a safe and reliable environment for developing and using the Digital Twin.",
+					"content": "The technical platform is the core for enabling both the development and operation of the Digital Twin. All the software components, from data storage to data processing and visualization, run on the platform. The platform provides a safe and reliable environment for developing and using the Digital Twin.",
 					"components": [
 						{
 							"subtitle": "Hosting",
@@ -51,18 +50,18 @@
 							"icon": "https://kubernetes.io/images/favicon.png"
 						},
 						{
-							"subtitle": "Deployment (CI/CD)",
-							"text": "Deployment of applications and services on the platform refers to the process of installing, configuring and activating the various software components of the digital twin. The deployment process may vary depending on the specific application or service. TeamCity is used for orchestrating the deployment of applications, software packagese and services that are used on the platform. The CI/CD application provides the configuration options to facilitate the deployment of the digital twin components.",
+							"subtitle": "Deployment",
+							"text": "All the components of the Digital Twin infrastructure can be intalled, configured and activated on the AHP Cloud Platform through a build management and continuous integration server. TeamCity is used for orchestrating the deployment of applications, software packages and services that are used on the platform. TeamCity provides the configuration options to facilitate the deployment of the Digital Twin components. The deployment process may vary considerably depending on the application or service.",
 							"icon": "https://cdn.icon-icons.com/icons2/1381/PNG/512/teamcity_94405.png"
 						},
 						{
 							"subtitle": "Storage",
-							"text": "The technical platform in a digital twin of the physical environment plays a crucial role in enabling the creation, operation, and effectiveness of the digital twin. The technical platform supports the data and visualization components of the digital twin. It should enable the creation of 2D and 3D visual representations of the physical environment, providing an intuitive way for users to interact with and understand the twin.",
+							"text": "Storage of data is obviously a core aspect of the Digital Twin infrastructure. All the data that is used in the Digital Twin needs to be stored somewhere. We have cloud storage buckets available for this purpose. The storage buckets can be used to store and retrieve a variety of data files, such as 3D models, point clouds, and other geospatial data.",
 							"icon": "https://miro.medium.com/v2/resize:fit:256/1*CHzvR53_W9FR2s1BQW9Bqg.png"
 						},
 						{
 							"subtitle": "Security",
-							"text": "<div>Protecting the data and ensuring the security and privacy of sensitive information are paramount. The platform must include robust security features to safeguard the digital twin against cyber threats and unauthorized access.</div>",
+							"text": "<div>Protecting the data and ensuring the security and privacy of sensitive information are important. The platform includes security features to safeguard against cyber threats and unauthorized access. This also allows us to comply with the ISO standards for digital security.</div>",
 							"icon": "https://services.geodan.nl/public/document/_/api/data/GEOD1593WEBS/logo/default"
 						}
 					],
@@ -74,31 +73,30 @@
 		},
 		{
 			"phase": "Data",
-			"description": "Data is the fundamental building block",
 			"blocks": [	
 			{
 				"title": "Standards",
-				"content": "3D data processing refers to the techniques and methodologies used to process data so that it can be visualized in 3D. The data should be position in the physical world with height, width, and depth. 3D data can be stored in various formats, such as point clouds, mesh models, voxel grids, or volumetric representations.",
+				"content": "The raw data that was collected during the preparation phase is usually not directly suited to be visualized in a Digital Twin. The data first need to be processed. Standards play a very important role to produce data products that can be used widely and reliably. Within Research, we adopt numerous key (3D) data standards. A few examples are listed below.",
 				"components": [
 					{
 						"subtitle": "GLB/glTF",
-						"text": "GLB (GL Binary) and glTF (GL Transmission Format) are open standard file formats designed for 3D models and scenes. They are often used in computer graphics, 3D modeling, virtual reality, augmented reality, and web-based applications. Both formats are developed and maintained by the Khronos Group, a consortium of companies that create open standards for 3D graphics and media.",
+						"text": "GLB (GL Binary) and glTF (GL Transmission Format) are open standard file formats designed for 3D models and scenes. They are often used in computer graphics, 3D modeling and virtual/augmented reality. Both formats are developed and maintained by the Khronos Group, a consortium of companies that create open standards for 3D graphics and media.",
 						"icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/GlTF_logo.svg/1920px-GlTF_logo.svg.png"
 					},
 					{
 						"subtitle": "3D Tiles",
-						"text": "3D Tiles is an open standard for streaming massive 3D geospatial datasets, primarily used for visualizing and interacting with 3D content in web and mobile applications. It is an initiative developed by the Cesium team and supported by the OGC (Open Geospatial Consortium). 3D Tiles is designed to efficiently organize and transmit large 3D datasets, such as 3D models of cities, terrain data, or any complex 3D content.",
-						"icon": ""
-					},
-					{
-						"subtitle": "BIM",
-						"text": "Building Information Modeling (BIM) and Geographic Information Systems (GIS) are two distinct technologies used in the architecture, engineering, and construction (AEC) industry, as well as in urban planning and facility management. They serve different purposes but are often integrated to combine the detailed building information of BIM with the geospatial context of GIS.",
-						"icon": ""
+						"text": "3D Tiles is an open standard for streaming massive 3D geospatial datasets, primarily used for visualizing and interacting with 3D content in web and mobile applications. It is an initiative developed by the Cesium team and supported by the OGC (Open Geospatial Consortium). 3D Tiles is designed to efficiently organize and transmit large 3D datasets, such as 3D models of cities, point clouds, or any complex 3D content.",
+						"icon": "https://images.prismic.io/cesium/cdc4f1d8-cc75-484d-92e6-3bfc5b6d1fdf_3DTiles-Color-White.png?auto=compress,format"
 					},
 					{
 						"subtitle": "OGC Web Map Services",
-						"text": "OGC Web Map Services (WMS) is a standard protocol developed by the Open Geospatial Consortium (OGC) for sharing geospatial map data and images over the internet. WMS is widely used in the field of Geographic Information Systems (GIS) and web mapping to provide a standardized way for clients to request and receive map images from remote servers. ",
-						"icon": ""
+						"text": "OGC Web Map Services (WMS) and Web Map Tiled Services (WMTS) are standard protocols developed by the Open Geospatial Consortium (OGC) for sharing geospatial map data and images over the internet. WMS is widely used in the field of Geographic Information Systems (GIS) and web mapping to provide a standardized way for clients to request and receive map images from remote servers. ",
+						"icon": "https://pbs.twimg.com/profile_images/1458440061817606145/akOa-8qf_400x400.jpg"
+					},
+					{
+						"subtitle": "CityGML",
+						"text": "Building Information Modeling (BIM) and Geographic Information Systems (GIS) are two distinct fields of expertise that are increasingly trying to bring together in our Digital Twin for asset management purposes. There are numerous BIM standards in use in the construction industry (IFC, DXF, DWG), which can be difficult to integrate in a GIS-environment. CityGML is an open standard for storing and exchanging virtual 3D city models that can be used for this integration.",
+						"icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/CityGML-Logo.png/1920px-CityGML-Logo.png"
 					}
 				],
 				"persons": ["Data specialist"],
@@ -106,7 +104,7 @@
 			},
 			{
 				"title": "3D Terrain",
-				"content": "<div>3D Terrain is essential in a geospatial Digital Twin. Digital Elevation Model (DEM) is one of the most common formats for elevation data and are usually provided in TIFF or ASC files. The data typically requires pre-processing to account for gaps (e.g. on water surfaces) or irregularities. The resulting data can then be processed into a 3D Terrain, or in more technical terms, a triangulated 3D mesh. A quantized 3D mesh is a special format that is suited for streaming massive terrain datasets for 3D visualization. <a href='https://github.com/mfbonfigli/gocesiumtiler' target='_blank'>GoCesiumTiler</a> is a useful tool to make such quantized terrain meshes.</div><img src='https://images.prismic.io/cesium/2015-12-18-terrain-obb-wireframe.png?auto=compress,format' />",
+				"content": "<div>3D Terrain is essential in a geospatial Digital Twin. A Digital Elevation Model (DEM) holds elevation data and is typically the starting point for a 3D terrain. DEMs are usually provided in GEOTIFF or ASC files. The elevation data usually requires pre-processing to account for gaps (e.g. on water surfaces) or irregularities. The resulting data can then be processed into a triangulated 3D mesh. A quantized 3D mesh is a special type of 3D mesh in the sense that it is suited for streaming massive terrain datasets for 3D visualization. <a href='https://github.com/geo-data/cesium-terrain-builder' target='_blank'>Cesium Terrain Builder</a> is a useful tool to make such quantized terrain meshes from GeoTIFF data.</div><img src='https://images.prismic.io/cesium/2015-12-18-terrain-obb-wireframe.png?auto=compress,format'/>",
 				"components": [],
 				"persons": ["Programmer", "ETL expert"],
 				"image": "https://user-images.githubusercontent.com/538812/208296434-39bb50ec-7acf-4969-9f0a-546ee08138d9.png"
@@ -136,12 +134,17 @@
 			},
 			{
 				"title": "Extract, Transform, Load",
-				"content": "We have our source data and can combine them to create datasets with even more added value. We also have the standards we want the data to comply to so we have something we can use in a consistent and reliable way. The process can be quite complex. To prevent errors, we want to automatize these ETL-pipelines as much as possible. Here we have tooling that can help us.",
+				"content": "We have our source data and can combine them to create datasets with even more added value. We also have the standards we want the data to comply to so we have something we can use in a consistent and reliable way. The process can be quite complex. The data have to be geographically positioned with the correct height, width and depth. To prevent errors, we want to automatize these ETL-pipelines as much as possible. Here we have tooling that can help us.",
 				"components": [
 					{
 						"subtitle": "PostGIS",
 						"text": "PostGIS is an open-source extension for PostgreSQL that adds support for geospatial objects and functions. It enables the storage, manipulation and analysis of geospatial data in a PostgreSQL database. PostGIS is one of the most used software in the Geodan Digital Twin platform to store and process geospatial data. Geodan Research has developed custom tooling to process data from a PostgreSQL database directly into 3D Tiles, including <a href='https://github.com/Geodan/pg2b3dm', target='_blank'>pg2b3dm</a> and <a href='https://github.com/Geodan/i3dm.export', target='_blank'>i3dm.export</a>.",
 						"icon": "https://upload.wikimedia.org/wikipedia/en/thumb/6/60/PostGIS_logo.png/225px-PostGIS_logo.png"
+					},
+					{
+						"subtitle":"ETL-Tooling",
+						"text": "Point clouds: <a href='https://github.com/mfbonfigli/gocesiumtiler' target='_blank'>GoCesiumTiler</a> or py3dtiles.",
+						"icon": ""
 					},
 					{
 						"subtitle": "Containerization",
@@ -152,6 +155,11 @@
 						"subtitle": "Automatized ETL pipelines",
 						"text": "The data processing usually consists of multiple steps to get to the result. These steps are often automated in an ETL pipeline. ETL stands for Extract, Transform, and Load. The pipeline extracts data from a source, transforms it into a format that is suitable for the target system, and loads it into the target system. The ETL pipeline can be used to automate the data processing steps, ensuring that the data is always up-to-date and ready for use. <a href='https://www.mage.ai/' target='_blank'>Mage</a> is a tool that can be used to automate ETL processes.",
 						"icon": "https://avatars.githubusercontent.com/u/69371472?s=280&v=4"
+					},
+					{
+						"subtitle":"FME",
+						"text": "FME can offer a solution for some ETL processes. Particularly when dealing with BIM data, FME can be a useful tool to facilitate the data transformation. FME is a separate piece of software and not running on the platform.",
+						"icon": "https://upload.wikimedia.org/wikipedia/en/thumb/b/b3/FME_Software_Logo.svg/1280px-FME_Software_Logo.svg.png"
 					}
 				],
 				"persons": ["Data Specialist", "ETL Expert", "Back-end Developer", "Architect"],
@@ -159,7 +167,7 @@
 			},
 			{
 				"title": "Data Curation",
-				"content": "As the amount of data we produce increases, it is easy to lose sight. Also, when a user sees data in the digital, he wants to see where the data is coming from and what the quality is. Data curation is the process of collecting, organizing, and managing data to ensure its quality, reliability, and usability over time. It involves various activities aimed at maintaining and enhancing the value of data assets, making them accessible, and preserving them for current and future use. Data curation often involves standardizing data formats, units, and terminology. This ensures that data can be easily understood and used by different people and systems. Ensuring data quality is a fundamental aspect of data curation. This involves checking data for accuracy, completeness, consistency, and reliability. Data quality issues may be identified and corrected during this stage.",
+				"content": "As the amount of data we produce increases, it is easy to lose the overview. Also, when a user sees data in the digital, he wants to see where the data is coming from and what the quality is. Data curation is the process of collecting, organizing, and managing data to ensure its quality, reliability, and usability over time. It involves various activities aimed at maintaining and enhancing the value of data assets, making them accessible, and preserving them for current and future use. Data curation often involves standardizing data formats, units, and terminology. This ensures that data can be easily understood and used by different people and systems. Ensuring data quality is a fundamental aspect of data curation. This involves checking data for accuracy, completeness, consistency, and reliability. Data quality issues may be identified and corrected during this stage.",
 				"components": [
 					{
 						"subtitle": "Data Management",
@@ -168,7 +176,7 @@
 					},
 					{
 						"subtitle": "Real-time data",
-						"text": "Real-time data refers to data that is collected and processed in real-time, as it is generated. This data is typically used for monitoring and analysis of real-world systems, such as traffic, weather, or environmental conditions. Real-time data is often used in digital twins to provide up-to-date information about the physical environment. The quantities of data are huge and proper data management is crucial. Currently, we are making use of DuckDB to manage real-time data.",
+						"text": "Real-time data refers to data that is collected and processed in real-time, as it is generated. This data is typically used for monitoring and analysis of real-world systems, such as traffic, weather, or environmental conditions. Real-time data is often used in Digital Twins to provide up-to-date information about the physical environment. The quantities of data are huge and proper data management is crucial. Currently, we are making use of DuckDB to manage real-time data.",
 						"icon": "https://duckdb.org/images/logo-dl/DuckDB_Logo.png"
 					},
 					{
@@ -182,7 +190,7 @@
 			},
 			{
 				"title": "Data Services and APIs",
-				"content": "We can process our data and manage the data products. Nice! However, that does not mean that it magically apears in the digital twin. The final step in the data phase is serving the data to the digital twin. The suited method to publish data depends on the storage location, data format and desired end use. Data can be made accessible through web servers, database connections, web services or other APIs. An API is a piece of software that allows specific distinct applications to communicate and exchange data between each other.</div>",
+				"content": "We can process our data and manage the data products. Nice! However, that does not mean that it magically apears in the Digital Twin. The final step in the data phase is serving the data to the Digital Twin. The suited method to publish data depends on the storage location, data format and desired end use. Data can be made accessible through web servers, database connections, web services or other APIs. An API is a piece of software that allows specific distinct applications to communicate and exchange data between each other.</div>",
 				"components": [
 					{
 						"subtitle": "File server",
@@ -212,15 +220,14 @@
 	},
 	{
 		"phase": "Digital Twin",
-		"description": "Integrate everything in a real-world environment",
 		"blocks": [
 			{
 				"title": "3D Data Visualization",
-				"content": "We have produced the necessary data in the correct formats. We have deployed the services to serve the data. And we have taken care of the curation. Everything is set for rolling out the actual digital twin. The first step is simply the visualization: displaying all the data in a portal. Since we have complied with official data standards, we can use many different platforms to do achieve this. The choice of platform often depends on the specific requirements of a project",
+				"content": "We have produced the necessary data in the correct formats. We have deployed the services to serve the data. And we have taken care of the curation. Everything is set for rolling out the actual Digital Twin. The first step is simply the visualization: displaying all the data in a portal. Since we have complied with official data standards, we can use many different platforms to do achieve this. The choice of platform often depends on the specific requirements of a project",
 				"components": [
 					{
 						"subtitle": "CesiumJS",
-						"text": "CesiumJS is an open-source software library for creating 3D globes and maps in web application. CesiumJS is primarily known for its capabilities in rendering geospatial data in 3D, making it a powerful tool for creating digital twins and other geospatial applications that require 3D. CesiumJS is the core software within the Geodan Digital Twin platform to create the base canvas with 3D data visualizations of the physical environment.",
+						"text": "CesiumJS is an open-source software library for creating 3D globes and maps in web application. CesiumJS is primarily known for its capabilities in rendering geospatial data in 3D, making it a powerful tool for creating Digital Twins and other geospatial applications that require 3D. CesiumJS is the core software within the Geodan Digital Twin platform to create the base canvas with 3D data visualizations of the physical environment in a user-friendly web-based applications.",
 						"icon": "https://global.discourse-cdn.com/cesium/original/2X/1/1b9df6dd0c62dcd8ffe7ea524bb33caf1921f8cf.png"
 					},
 					{
@@ -230,7 +237,7 @@
 					},
 					{
 						"subtitle": "Game Engines (Unity/Unreal/NVIDIA)",
-						"text": "Photoreal viewers like Unity, Unreal Engine and NVIDIA Omniverse are amazing for creating visually stunning and interactive digital twin experiences. They can provide immersive and even more realistic simulations of complex 3D environments and models. The downfall is that the software is more heavy to run, which makes is less accessible for users without a good computer.",
+						"text": "Photoreal viewers like Unity, Unreal Engine and NVIDIA Omniverse are amazing for creating visually stunning and interactive Digital Twin experiences. They can provide immersive and even more realistic simulations of complex 3D environments and models. The downfall is that the software is more heavy to run, which makes is less accessible for users without a good computer.",
 						"icon": "https://ue-cdn.artstation.com/imgproxy/mlY8m9rN7epZwxeFUwITnQUmMYceBm8HIfzbgsYDTpA/filename:thumb.jpg/resizing_type:fill/width:640/height:640/aHR0cHM6Ly9kMWl2N2RiNDR5aGd4bi5jbG91ZGZyb250Lm5ldC9pbWFnZXMvNWUxOTRmYmYtNzAyZS00MmNjLTliZDQtNTQ5NjlmNGYwMTgyL3RodW1iLmpwZw"
 					}				
 				],
@@ -239,13 +246,8 @@
 			},
 			{
 				"title": "User interfaces and tools",
-				"content": "Showing some data is nice, but we are not yet at the digital twin level. For this, the data environment needs to come alive. User interfaces enable users to interact with and manipulate the digital twin's data, simulations, and models in a more intuitive and efficient manner. User interfaces are designed to facilitate specific tasks or workflows. They can be tailored to the unique needs and requirements of a particular digital twin application. User interfaces can be designed for various purposes, such as data visualization, analysis, and simulation. They can also be used to provide tools and features for monitoring, controlling, and managing a physical system or environment. User interfaces are often designed to facilitate specific tasks or workflows. They can be tailored to the unique needs and requirements of a particular digital twin application. User interfaces can be designed for various purposes, such as data visualization, analysis, and simulation. They can also be used to provide tools and features for monitoring, controlling, and managing a physical system or environment.",
+				"content": "Showing the data in 3D is nice, but we are not yet at the level of a Digital Twin. The environment has to come alive. For this purpose, the Digital Twin needs to be equipped with user interfaces and tools that allows users to interact with the data and manipulate the Digital Twin. We have developed a number of default tools that are useful for most Digital Twin applications. On top of that, custom tools are developed for specific projects.",
 				"components": [
-					{
-						"subtitle": "Custom tools and interactive modules",
-						"text": "Custom tools and interactive modules in the context of digital twins are software components or features specifically designed to enhance the functionality and user experience within a digital twin environment. These tools and modules are tailored to the unique needs and requirements of a particular digital twin application. They often enable users to interact with and manipulate the digital twin's data, simulations, and models in a more intuitive and efficient manner.",
-						"icon": ""
-					},
 					{
 						"subtitle": "Layer library",
 						"text": " ",
@@ -272,11 +274,21 @@
 			},
 			{
 				"title": "Real-time insight",
-				"content": "It is hard to imagine a digital twin without the 4th dimension. Bringing in the time component brings the digital twin to life. Examples: Traffic/parking places Nantes. Ship animation.",
+				"content": "A Digital Twin cannot exist without the 4th dimension. Bringing in the time component brings the Digital Twin to life. From a data perspective, sensor data and the Internet of Things (IoT) can help us to make the environment dynamic. It enables users to monitor and understand the state of the environment or a physical asset in real-time. This capability is crucial for gaining insights, making informed decisions and responding to changes as they happen. We are icnreasingly implementing the time dimension into our Digital Twin. Several examples include: Traffic/parking places Nantes. Ship animation. Monitoring wells.",
 				"components": [
 					{
-						"subtitle": "Real-time (IoT) data visualization",
-						"text": "Real-time IoT data visualization in a digital twin is the process of presenting and analyzing data from Internet of Things (IoT) devices, sensors, and other sources within a digital twin environment. It enables users to monitor and understand the current state of a physical system, asset, or environment in real-time. This capability is crucial for gaining insights, making informed decisions, and responding to changes as they happen. ",
+						"subtitle": "Traffic/Parking places Nantes",
+						"text": "For the city of Nantes, we have visualized the traffic and parking situation in real-time. The Digital Twin is integrated with the city's traffic management system, which provides real-time data about traffic flows and parking availability.",
+						"icon": ""
+					},
+					{
+						"subtitle": "Ship Transponder data (AIS)",
+						"text": "",
+						"icon": ""
+					},
+					{
+						"subtitle": "Ground water levels",
+						"text": "",
 						"icon": ""
 					}
 				],
@@ -285,11 +297,11 @@
 			},
 			{
 				"title": "Data Analysis and Simulation",
-				"content": "Within the digital twin, we can show the as-is situation and display dynamic changes in the system through time. We are at a copy of reality - how nice. But it can be even better. This replicate of reality can also be used for simulations and run different scenarios. TKI dikes, Moerdijkbrug",
+				"content": "Within the Digital Twin, we can show the as-is situation and display dynamic changes in the system through time. We are at a copy of reality - how nice. Displaying the data on the map sometimes is not enough, and you want to get deeper insights. But it can be even better. This replicate of reality can also be used for simulations and run different scenarios. TKI dikes, Moerdijkbrug",
 				"components": [
 					{
-						"subtitle": "Analyis dashboards",
-						"text": "An analysis dashboard in the context of digital twin visualization is a user interface that provides tools and features for monitoring, analyzing, and making data-driven decisions based on the data and simulations of a digital twin. These dashboards are designed to facilitate real-time insights, visualization of complex data, and interactive analysis of a physical or digital system's behavior. ",
+						"subtitle": "Analytical dashboards",
+						"text": "An analysis dashboard in the context of Digital Twin visualization is a user interface that provides tools and features for monitoring, analyzing, and making data-driven decisions based on the data and simulations of a Digital Twin. These dashboards are designed to facilitate real-time insights, visualization of complex data, and interactive analysis of a physical or digital system's behavior. ",
 						"icon": ""
 					},
 					{
@@ -303,21 +315,21 @@
 			},
 			{
 				"title": "Feedback and Use",
-				"content": "<p>The digital twin can be used for an endless number of applications. We are typically not the end-users. The expert opinion and wishes are what determines the succes of the digital twin in the end. Feedback and use are crucial aspects of their development and application. Digital twins are dynamic, data-driven models of real-world objects or environments, and their effectiveness relies on continuous feedback, usage, and improvement.</p>",
+				"content": "<p>The Digital Twin can be used for an endless number of applications. We are typically not the end-users. The expert opinion and wishes are what determines the succes of the Digital Twin in the end. Feedback and use are crucial aspects of their development and application. Digital Twins are dynamic, data-driven models of real-world objects or environments, and their effectiveness relies on continuous feedback, usage, and improvement.</p>",
 				"components": [
 					{
 						"subtitle": "Data Validation",
-						"text": "Feedback is essential for ensuring the accuracy and quality of the data used in digital twins. Users can provide feedback on data discrepancies or inaccuracies, which can be used to refine the data sources and data processing pipelines.",
+						"text": "Feedback is essential for ensuring the accuracy and quality of the data used in Digital Twins. Users can provide feedback on data discrepancies or inaccuracies, which can be used to refine the data sources and data processing pipelines.",
 						"icon": ""
 					},
 					{
 						"subtitle": "User Experience",
-						"text": "Feedback from users about the usability and user experience of digital twins is valuable. This can lead to user interface improvements, enhanced interactivity and a more intuitive design.",
+						"text": "Feedback from users about the usability and user experience of Digital Twins is valuable. This can lead to user interface improvements, enhanced interactivity and a more intuitive design.",
 						"icon": ""
 					},
 					{
 						"subtitle": "Feature Requests",
-						"text": "Users often have specific needs and requirements. Feedback can include requests for additional features, tools, or data layers, which can guide the development of the digital twin to meet these needs",
+						"text": "Users often have specific needs and requirements. Feedback can include requests for additional features, tools, or data layers, which can guide the development of the Digital Twin to meet these needs",
 						"icon": ""
 					}
 				],
