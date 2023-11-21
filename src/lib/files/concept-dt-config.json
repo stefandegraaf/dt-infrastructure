@@ -240,7 +240,7 @@
 					},
 					{
 						"subtitle": "Serverless",
-						"text": "There are several serverless alternatives to serve map layers, including MBTiles and PMTiles. MBTiles is a SQLite database that storesmap tiles in a single. PMTiles is a lightweight and serverless API for serving tiled data. PMTiles is a cloud-optimized solution for serving both raster and vector map layers.",
+						"text": "There are several serverless alternatives to serve map layers, including MBTiles and PMTiles. MBTiles is a SQLite database that stores map tiles in a single file. PMTiles is a lightweight and serverless API for serving tiled data. PMTiles is a cloud-optimized solution for serving both raster and vector map layers.",
 						"icon": "https://docs.protomaps.com/logo.svg"
 					}
 				],
@@ -277,7 +277,7 @@
 			},
 			{
 				"title": "User Interfaces",
-				"content": "Showing the data in 3D is nice, but we are not yet at the level of a Digital Twin. The environment has to come alive. For this purpose, the Digital Twin first needs to be equipped with user interfaces and tools that allows users to interact with the data and manipulate the Digital Twin. We have developed a number of modules that are useful for most Digital Twin applications. On top of that, custom tools are developed for specific projects. SvelteKit is used as the framework for our default viewer application.",
+				"content": "Showing the data in 3D is nice, but we are not yet at the level of a Digital Twin. The environment has to come alive. For this purpose, the Digital Twin first needs to be equipped with user interfaces and tools that allows users to interact with the data and manipulate the Digital Twin. We have developed a number of modules that are useful for most Digital Twin applications. On top of that, custom tools are developed for specific projects. <a href='https://kit.svelte.dev/' target='_blank'>SvelteKit</a> is used as the framework for our default viewer application.",
 				"components": [
 					{
 						"subtitle": "Layer library",
