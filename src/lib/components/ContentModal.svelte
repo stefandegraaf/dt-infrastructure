@@ -147,7 +147,7 @@
 
 	:global.module-img {
 		max-width: 100%;
-		max-height: 500px;
+		max-height: 450px;
 		width: auto;
 		height: auto;
 		display: block;

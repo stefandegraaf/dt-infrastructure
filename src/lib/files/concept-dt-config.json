@@ -5,7 +5,7 @@
 			"blocks": [
 				{
 					"title": "Requirements Analysis",
-					"content": "The concept of a Digital Twin is very broad. When developing new Digital Twin applications, it is therefore important to come up with relevant user stories. This primarily revolves around the question of which processes and which users the Digital Twin should support.",
+					"content": "The concept of a Digital Twin is very broad and many definitions co-exist. When developing new Digital Twin applications, it is therefore important to come up with relevant user stories. This primarily revolves around the question of which processes and which users the Digital Twin should support.",
 					"components": [
 						{
 							"subtitle": "Consultancy",
@@ -24,7 +24,7 @@
 				},
 				{
 					"title": "Data Inventory",
-					"content": "Data is the foundation of a Digital Twin. During the data collection phase, data related to the geographical area of interest is gathered. With the input from the requirements analysis, we can determine what data is needed. These data can be collected from various sources to create an accurate and up-to-date geospatial database that supports the Digital Twin.",
+					"content": "Data is the basis of a Digital Twin. During the data collection phase, data related to the geographical area of interest is gathered. With the input from the requirements analysis, we can determine what data is needed. These data can be collected from various sources to create an accurate and up-to-date geospatial database that can be used to deploy the Digital Twin.",
 					"components": [
 						{
 							"subtitle": "Open Data",
@@ -46,17 +46,17 @@
 					"components": [
 						{
 							"subtitle": "Hosting",
-							"text": "All the components of the Digital Twin infrastructure are integrally hosted on a cloud platform. The hosting environment provides the necessary resources to run the various services and applications. It also ensures that the infrastructure is accessible to users and can be used effectively. Hosting is organized via the Geodan AHP Cloud Platform, which is a Kubernetes management platform running on Rancher.",
+							"text": "All the building blocks of the Digital Twin infrastructure are integrally hosted on a cloud platform. The hosting environment provides the necessary resources to run the various services and applications. It also ensures that the infrastructure is accessible to users and can be used effectively. Hosting is organized via the Sogelink AHP Cloud Platform, which is a Kubernetes management platform running on Rancher. All software applications and services presented in this series are hosted on the AHP Cloud Platform, unless stated differently.",
 							"icon": "https://kubernetes.io/images/favicon.png"
 						},
 						{
 							"subtitle": "Deployment",
-							"text": "All the components of the Digital Twin infrastructure can be intalled, configured and activated on the AHP Cloud Platform through a build management and continuous integration server. TeamCity is used for orchestrating the deployment of applications, software packages and services that are used on the platform. TeamCity provides the configuration options to facilitate the deployment of the Digital Twin components. The deployment process may vary considerably depending on the application or service.",
+							"text": "The software components of the Digital Twin infrastructure can be installed, configured and activated on the AHP Cloud Platform through TeamCity - a build management and continuous integration server. TeamCity provides the configuration options to orchestrate the deployment of the software applications and services.",
 							"icon": "https://cdn.icon-icons.com/icons2/1381/PNG/512/teamcity_94405.png"
 						},
 						{
-							"subtitle": "Storage",
-							"text": "Storage of data is obviously a core aspect of the Digital Twin infrastructure. All the data that is used in the Digital Twin needs to be stored somewhere. We have cloud storage buckets available for this purpose. The storage buckets can be used to store and retrieve a variety of data files, such as 3D models, point clouds, and other geospatial data.",
+							"subtitle": "Cloud Storage",
+							"text": "Storage of data is a core capablity of the Digital Twin infrastructure. Data files that are used in the Digital Twin need to be stored somewhere. We have cloud storage buckets available for this purpose. The storage buckets can be used to store and retrieve data files and are flexible to scale up or down.",
 							"icon": "https://miro.medium.com/v2/resize:fit:256/1*CHzvR53_W9FR2s1BQW9Bqg.png"
 						},
 						{
@@ -75,8 +75,49 @@
 			"phase": "Data",
 			"blocks": [	
 			{
+				"title": "Data Fusion",
+				"content": "We have our technical platform ready and collected a bunch of data. Now it is time to shape the data to feed the Digital Twin. A data-driven approach is all about getting as much value from the data as possible. One way to do this is by combining the existing data sources to create new datasets. Also, it is possible to apply modelling and machine learning techniques to extract new information from exisiting data. Reworking data in a smart way can provide greater contex and insights into the available data. ",
+				"components": [
+					{
+						"subtitle": "Data fusion",
+						"text": "Data fusion involves bringing together data from different sources. The goal is to combine the data to create new datasets with added value. Data fusion can be performed in many different ways. An example is our 3D Buildings dataset, where point cloud data are combined with building footprints to create 3D models of buildings.",
+						"icon": ""
+					},
+					{
+						"subtitle": "Machine learning",
+						"text": "Machine learning (ML) is gaining importance in the world of Geo-IT to analyze large amounts of data. Machine learning is a type of Artificial Intelligence (AI) that enables computers to learn without being explicitly programmed. Machine learning algorithms can learn from data and make predictions based on what they have learned. For example, machine learning can be used to detect objects in images or to predict future events based on historical data. Within Research, we have applied machine learning to predict fluxes of people in public transport and detect windows in buildings from aerial imagery.",
+						"icon": ""
+					},
+					{
+						"subtitle": "Modelling",
+						"text": "Modelling is performed to simulate and predict the behavior of a system. Models are basically (complex) calculations that can be used to test different scenarios under different conditions. Model results are a new data product that can be stored and visualized separately. Examples where we used modelling results are dike stability predictions (see image below) and asset management (Moerdijkbrug).<br><img class='module-img' src='https://storage.googleapis.com/ahp-research/projects/communicatie/images/tki-purmer-modelling-visualized.png' />",
+						"icon": ""
+					}				
+				],
+				"persons": ["Modeler", "AI/ML Expert", "Programmer"],
+				"image": "https://storage.googleapis.com/ahp-research/projects/communicatie/images/Lekdijk_geotop_boringen.PNG"
+			},
+			{
+				"title": "Databases",
+				"content": "We have our source data and can combine them to create datasets with even more added value. However, not all of the data can be stored as files in the cloud storage buckets. Some data is more suited to be stored in databases. There are many different types of databases, each with their own advantages and disadvantages. The choice of database depends on the type of data and the desired use. Our Digital Twin platform is equipped with a number of different databases to store and manage the data in an appropiate way.",
+				"components": [
+					{
+						"subtitle": "Relational data",
+						"text": "Relational databases are the most common type of database. They are based on the relational model, which organizes data into tables (or relations). Relational databases are often used in combination with Structured Query Language (SQL), which is a programming language for managing data in relational databases. PostgreSQL is an open-source database system that is used to store and manage most of our relational geospatial data. When talking about relation data, you can think about building details, subsurface models or tree locations.",
+						"icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/1985px-Postgresql_elephant.svg.png"
+					},
+					{
+						"subtitle": "Real-time data",
+						"text": "Real-time data is data that is continuously collected and processed by sensors and typically used for monitoring and analysis of real-world systems. Real-time data is often used in Digital Twins to provide live information about the physical environment. The quantities of data can be huge and proper data handling is crucial. Currently, we are making use of DuckDB to manage real-time data, which is an OLAP database management system. Examples of real-time data sources are traffic or weather data.",
+						"icon": "https://db.cs.uni-tuebingen.de/teaching/ws2324/what-makes-the-duck-quack/duckdb-logo.svg"
+					}
+				],	
+				"persons": ["Data Specialist", "ETL Expert"],
+				"image": "https://storage.googleapis.com/ahp-research/projects/communicatie/images/bag-3d-image.jpg"
+			},
+			{
 				"title": "Standards",
-				"content": "The raw data that was collected during the preparation phase is usually not directly suited to be visualized in a Digital Twin. The data first need to be processed. Standards play a very important role to produce data products that can be used widely and reliably. Within Research, we adopt numerous key (3D) data standards. A few examples are listed below.",
+				"content": "We have accumulated lots of data and all of it is stored in the storage buckets and databases. However, most data is usually not directly suited to be consumed in a Digital Twin application. Data standards are an essential pillar for a functional data portal. Standards allows for producing data that can be used widely and reliably. Within Research, we adopt numerous key (3D) data standards. A few important examples are listed below.",
 				"components": [
 					{
 						"subtitle": "GLB/glTF",
@@ -85,80 +126,52 @@
 					},
 					{
 						"subtitle": "3D Tiles",
-						"text": "3D Tiles is an open standard for streaming massive 3D geospatial datasets, primarily used for visualizing and interacting with 3D content in web and mobile applications. It is an initiative developed by the Cesium team and supported by the OGC (Open Geospatial Consortium). 3D Tiles is designed to efficiently organize and transmit large 3D datasets, such as 3D models of cities, point clouds, or any complex 3D content.",
+						"text": "3D Tiles is an open standard for streaming massive 3D geospatial datasets over the internet. The standard is actively being developed by the Cesium team and officially supported by the OGC (Open Geospatial Consortium). 3D Tiles is designed to efficiently organize and transmit large 3D datasets, including complex 3D content, model instancing and point clouds.",
 						"icon": "https://images.prismic.io/cesium/cdc4f1d8-cc75-484d-92e6-3bfc5b6d1fdf_3DTiles-Color-White.png?auto=compress,format"
 					},
 					{
 						"subtitle": "OGC Web Map Services",
-						"text": "OGC Web Map Services (WMS) and Web Map Tiled Services (WMTS) are standard protocols developed by the Open Geospatial Consortium (OGC) for sharing geospatial map data and images over the internet. WMS is widely used in the field of Geographic Information Systems (GIS) and web mapping to provide a standardized way for clients to request and receive map images from remote servers. ",
+						"text": "OGC Web Map Services (WMS) and Web Map Tiled Services (WMTS) are standard protocols developed by the Open Geospatial Consortium (OGC) for sharing 2D map layers over the internet. WMS are WMTS are the most widely used services in GIS systems and provide a standardized way for clients to request and receive map images from remote servers. ",
 						"icon": "https://pbs.twimg.com/profile_images/1458440061817606145/akOa-8qf_400x400.jpg"
 					},
 					{
 						"subtitle": "CityGML",
-						"text": "Building Information Modeling (BIM) and Geographic Information Systems (GIS) are two distinct fields of expertise that are increasingly trying to bring together in our Digital Twin for asset management purposes. There are numerous BIM standards in use in the construction industry (IFC, DXF, DWG), which can be difficult to integrate in a GIS-environment. CityGML is an open standard for storing and exchanging virtual 3D city models that can be used for this integration.",
+						"text": "Building Information Modeling (BIM) and Geographic Information Systems (GIS) are two distinct fields of expertise that are increasingly trying to bring together in our Digital Twin for asset management purposes. There are numerous BIM standards in use in the construction industry (IFC, RVT, DXF, DWG, OBJ), which can be difficult to integrate in a GIS environment. CityGML is an open standard for storing and exchanging virtual 3D city models that can be used for this integration.",
 						"icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/CityGML-Logo.png/1920px-CityGML-Logo.png"
 					}
 				],
 				"persons": ["Data specialist"],
-				"image": "https://storage.googleapis.com/ahp-research/projects/communicatie/images/bag-3d-image.jpg"
+				"image": "https://storage.googleapis.com/ahp-research/projects/communicatie/images/3dtiles-tiles.png"
 			},
 			{
 				"title": "3D Terrain",
-				"content": "<div>3D Terrain is essential in a geospatial Digital Twin. A Digital Elevation Model (DEM) holds elevation data and is typically the starting point for a 3D terrain. DEMs are usually provided in GEOTIFF or ASC files. The elevation data usually requires pre-processing to account for gaps (e.g. on water surfaces) or irregularities. The resulting data can then be processed into a triangulated 3D mesh. A quantized 3D mesh is a special type of 3D mesh in the sense that it is suited for streaming massive terrain datasets for 3D visualization. <a href='https://github.com/geo-data/cesium-terrain-builder' target='_blank'>Cesium Terrain Builder</a> is a useful tool to make such quantized terrain meshes from GeoTIFF data.</div><img src='https://images.prismic.io/cesium/2015-12-18-terrain-obb-wireframe.png?auto=compress,format'/>",
+				"content": "<div>3D Terrain is essential in a geospatial Digital Twin. A Digital Elevation Model (DEM) holds elevation data and is typically the starting point for a 3D terrain. DEMs are usually provided in GeoTIFF or ASC files. The elevation data usually requires pre-processing to account for gaps (e.g. on water surfaces) or irregularities. The resulting data can then be processed into a triangulated 3D mesh. A quantized 3D mesh is a special type of 3D mesh in the sense that it is suited for streaming massive terrain datasets for 3D visualization. <a href='https://github.com/geo-data/cesium-terrain-builder' target='_blank'>Cesium Terrain Builder</a> is a useful tool to make such quantized terrain meshes from GeoTIFF data.</div><img class='module-img' src='https://images.prismic.io/cesium/2015-12-18-terrain-obb-wireframe.png?auto=compress,format'/>",
 				"components": [],
 				"persons": ["Programmer", "ETL expert"],
 				"image": "https://user-images.githubusercontent.com/538812/208296434-39bb50ec-7acf-4969-9f0a-546ee08138d9.png"
 			},
 			{
-				"title": "Data Fusion",
-				"content": "Data fusion is the process of enhancing existing data by adding valuable, relevant, and supplementary information to it. This additional data can provide greater context, depth, and insights into the existing dataset, making it more valuable for analysis, decision-making, and other purposes. Data fusion can be applied to various types of data, including appending demographic information (e.g., age, gender, education) or geospatial data (e.g.,geographic boundaries).",
-				"components": [
-					{
-						"subtitle": "Modelling",
-						"text": "Data curation is the process of collecting, organizing, and managing data to ensure its quality, reliability, and usability over time. It involves various activities aimed at maintaining and enhancing the value of data assets, making them accessible, and preserving them for current and future use. Data curation often involves standardizing data formats, units, and terminology. This ensures that data can be easily understood and used by different people and systems. Ensuring data quality is a fundamental aspect of data curation. This involves checking data for accuracy, completeness, consistency, and reliability. Data quality issues may be identified and corrected during this stage.",
-						"icon": ""
-					},
-					{
-						"subtitle": "Machine learning",
-						"text": "Machine learning plays a significant role in data curation by automating and improving the process of collecting, cleaning, organizing, and maintaining data. Data curation is essential for ensuring that data is reliable, accurate, and ready for analysis and decision-making. Machine learning techniques are applied to various aspects of data curation to enhance efficiency and data quality. Machine learning algorithms can analyze the statistical properties of data, helping to identify anomalies, missing values, and inconsistencies. For instance, machine learning models can detect outliers or data that deviates from expected patterns. Natural language processing (NLP) techniques and machine learning can standardize and transform text data, ensuring consistency in format and terminology.",
-						"icon": ""
-					},
-					{
-						"subtitle": "Data fusion",
-						"text": "Data fusion involves bringing together data from different sources, which may include databases, sensors, external APIs, spreadsheets, and various file formats. This can include data in different structures, formats, and levels of granularity. Data from multiple sources may require transformation to ensure that it can be merged effectively. For example, text data may need to be tokenized, and numeric data might require scaling or normalization. In GIS and geospatial data curation, spatial alignment is crucial. This involves aligning data points on maps, reconciling coordinate systems, and handling overlaps or gaps in geographic data. Machine learning algorithms, such as ensemble methods, can be used to learn how to optimally combine data from multiple sources. These models can capture patterns and relationships in the data to make fusion decisions.",
-						"icon": ""
-					}
-				],
-				"persons": ["Modeler", "AI/ML Expert", "Programmer"],
-				"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/datacollectieLekdijk_geotop_boringen_druk-1.png"
-			},
-			{
 				"title": "Extract, Transform, Load",
-				"content": "We have our source data and can combine them to create datasets with even more added value. We also have the standards we want the data to comply to so we have something we can use in a consistent and reliable way. The process can be quite complex. The data have to be geographically positioned with the correct height, width and depth. To prevent errors, we want to automatize these ETL-pipelines as much as possible. Here we have tooling that can help us.",
+				"content": "Our storage now has plenty of useful data. We also have the data standards that we want to comply with in order to have something that can be used in a consistent way. The process to transform the data to the right formats can be quite complex. Furthermore, the data needs to be converted into 3D and geographically positioned, while the data is often in different coordinate systems. The data processing routine is often referred to as ETL: Extract, Transform, Load. Luckily, there are tools that can help us. The list of tooling that we actively use is almost too long to mention. The list below provides a few of the most important ones.",
 				"components": [
 					{
 						"subtitle": "PostGIS",
-						"text": "PostGIS is an open-source extension for PostgreSQL that adds support for geospatial objects and functions. It enables the storage, manipulation and analysis of geospatial data in a PostgreSQL database. PostGIS is one of the most used software in the Geodan Digital Twin platform to store and process geospatial data. Geodan Research has developed custom tooling to process data from a PostgreSQL database directly into 3D Tiles, including <a href='https://github.com/Geodan/pg2b3dm', target='_blank'>pg2b3dm</a> and <a href='https://github.com/Geodan/i3dm.export', target='_blank'>i3dm.export</a>.",
-						"icon": "https://upload.wikimedia.org/wikipedia/en/thumb/6/60/PostGIS_logo.png/225px-PostGIS_logo.png"
+						"text": "PostGIS is an open-source extension for PostgreSQL that adds support for geospatial objects and functions. It enables the manipulation and conversion of geospatial data in a PostgreSQL database. PostGIS is one of the most used software in the Sogelink Digital Twin platform to store and process geospatial data. Furthermore, Sogelink Research has developed custom tooling to process data from a PostgreSQL database directly into 3D Tiles, including <a href='https://github.com/Geodan/pg2b3dm', target='_blank'>pg2b3dm</a> and <a href='https://github.com/Geodan/i3dm.export', target='_blank'>i3dm.export</a>.",
+						"icon": "https://www.enbolivia.com/wp-content/uploads/2021/04/postgis-logo.png"
 					},
 					{
-						"subtitle":"ETL-Tooling",
-						"text": "Point clouds: <a href='https://github.com/mfbonfigli/gocesiumtiler' target='_blank'>GoCesiumTiler</a> or py3dtiles.",
-						"icon": ""
+						"subtitle": "GDAL",
+						"text": "GDAL is a popular open-source library for geospatial data processing. GDAL is extremely useful to convert data to other formats and coordinate systems.",
+						"icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/GDALLogoColor.svg/1200px-GDALLogoColor.svg.png"
 					},
 					{
-						"subtitle": "Containerization",
-						"text": "Containerization is a method of packaging software into standardized units called containers. These containers are isolated from each other and can be run on any operating system or cloud platform. Docker is the most widely used software for this purpose. Docker containers enables code to be run quickly and reliably across different environments. Therefore, containerziation is a valuable concept to facilitate ETL processes.",
-						"icon": "https://miro.medium.com/v2/resize:fit:400/1*OARpkeBkn_Tw3vk8H769OQ.png"
-					},
-					{
-						"subtitle": "Automatized ETL pipelines",
-						"text": "The data processing usually consists of multiple steps to get to the result. These steps are often automated in an ETL pipeline. ETL stands for Extract, Transform, and Load. The pipeline extracts data from a source, transforms it into a format that is suitable for the target system, and loads it into the target system. The ETL pipeline can be used to automate the data processing steps, ensuring that the data is always up-to-date and ready for use. <a href='https://www.mage.ai/' target='_blank'>Mage</a> is a tool that can be used to automate ETL processes.",
-						"icon": "https://avatars.githubusercontent.com/u/69371472?s=280&v=4"
+						"subtitle":"Point Clouds",
+						"text": "Point clouds are a common data type in our Digital Twins. Point clouds are collections of points that represent the surface of an object or area. Point clouds are typically generated by 3D scanners or LiDAR sensors. Point clouds are stored in various file formats, including LAS, LAZ, PLY, and XYZ. Point clouds can be converted to 3D Tiles using tools like <a href='https://github.com/mfbonfigli/gocesiumtiler' target='_blank'>GoCesiumTiler</a> or Oslandia's <a href='https://github.com/Oslandia/py3dtiles' target='_blank'>py3dtiles</a>.",
+						"icon": "https://avatars.githubusercontent.com/u/1655161?s=280&v=4"
 					},
 					{
 						"subtitle":"FME",
-						"text": "FME can offer a solution for some ETL processes. Particularly when dealing with BIM data, FME can be a useful tool to facilitate the data transformation. FME is a separate piece of software and not running on the platform.",
+						"text": "FME can offer a solution for certain data processing tasks. Particularly when dealing with BIM data, FME can be a useful tool to facilitate the data transformation. FME is a separate piece of software and not deployed on the platform.",
 						"icon": "https://upload.wikimedia.org/wikipedia/en/thumb/b/b3/FME_Software_Logo.svg/1280px-FME_Software_Logo.svg.png"
 					}
 				],
@@ -166,23 +179,31 @@
 				"image": "https://storage.googleapis.com/ahp-research/projects/communicatie/images/bim-hoevesteijn.png"
 			},
 			{
+				"title": "ETL Optimization",
+				"content": "ETL (Extract, Transform, Load) can be a complex process and greatly vary between data types. We have seen that the number of different data processing tools is very large. Furthermore, the data processing usually consists of multiple steps to get to the result. For that reason, it is valuable to make the ETL process as efficient as possible. Automating the standard ETL processes can prevent mistakes and save a lot of time and effort. There are several ways to optimize the ETL process.",
+				"components": [
+					{
+						"subtitle": "Containerization",
+						"text": "Containerization is a method of packaging software into standardized units called containers. These containers are isolated from each other and can be run on any operating system or cloud platform. Docker is the most widely used software for this purpose. Docker containers enable code to be run quickly and reliably independent of the user's environment or operating system. Therefore, containerziation is a valuable concept to facilitate ETL processes.",
+						"icon": "https://miro.medium.com/v2/resize:fit:400/1*OARpkeBkn_Tw3vk8H769OQ.png"
+					},
+					{
+						"subtitle": "Automatized ETL pipelines",
+						"text": "<a href='https://www.mage.ai/' target='_blank'>Mage</a> is a tool that we have implemented to automate ETL processes. With Mage, you can make an complete pipeline that extracts data from a source, transforms it into a format that is suitable for the target system, and then loads it into the target system. It can also be used to schedule pipelines at regular intervals to keep the data up-to-dat and ready for use.",
+						"icon": "https://avatars.githubusercontent.com/u/69371472?s=280&v=4"
+					}
+				],
+				"persons": ["Data Specialist", "ETL Expert", "Back-end Developer", "Architect"],
+				"image": "https://storage.googleapis.com/ahp-research/projects/communicatie/images/cesium-globe-streets-world.png"
+			},
+			{
 				"title": "Data Curation",
-				"content": "As the amount of data we produce increases, it is easy to lose the overview. Also, when a user sees data in the digital, he wants to see where the data is coming from and what the quality is. Data curation is the process of collecting, organizing, and managing data to ensure its quality, reliability, and usability over time. It involves various activities aimed at maintaining and enhancing the value of data assets, making them accessible, and preserving them for current and future use. Data curation often involves standardizing data formats, units, and terminology. This ensures that data can be easily understood and used by different people and systems. Ensuring data quality is a fundamental aspect of data curation. This involves checking data for accuracy, completeness, consistency, and reliability. Data quality issues may be identified and corrected during this stage.",
+				"content": "As the amount of data increases, it is easy to lose the overview. Data curation is the process of collecting, organizing and managing data to keep track of its quality, reliability and usability over time. Data curation helps to ensure that data is well-organized and easy to find by different people. When a user sees data in the digital, he wants to know where the data is coming from and what the quality is. Data quality and provenance issues may be identified and corrected when properly curating the data.",
 				"components": [
 					{
 						"subtitle": "Data Management",
-						"text": "Many different data management systems exist. From Geodan, we have experience with CKAN, which is an open-source data management system that provides a flexible way to manage and publish data along with its relevant metadata. It is used by governments, research institutions, and organizations worldwide to share and manage data.",
-						"icon": "https://upload.wikimedia.org/wikipedia/en/e/e2/CKAN_Logo_full_color.png"
-					},
-					{
-						"subtitle": "Real-time data",
-						"text": "Real-time data refers to data that is collected and processed in real-time, as it is generated. This data is typically used for monitoring and analysis of real-world systems, such as traffic, weather, or environmental conditions. Real-time data is often used in Digital Twins to provide up-to-date information about the physical environment. The quantities of data are huge and proper data management is crucial. Currently, we are making use of DuckDB to manage real-time data.",
-						"icon": "https://duckdb.org/images/logo-dl/DuckDB_Logo.png"
-					},
-					{
-						"subtitle": "Licensing",
-						"text": "Data products often come with licensing terms and conditions. Being able to specify how the data can be used, whether it can be redistributed, and any attribution requirements are important aspects. Clear licensing and usage terms promote responsible data consumption.",
-						"icon": ""
+						"text": "Many different data management systems exist. At Sogelink, we have experience with CKAN, which is an open-source data management system that provides a flexible way to manage and publish data along with its relevant metadata. Metadata describes the data and provides information about its content, licenses, quality and structure. CKAN is used in the Sogelink Digital Twin platform to manage all the data.",
+						"icon": "https://quintagroup.com/cms/python/images/ckan.png/@@images/f9d0b8cf-434e-49e5-a2a6-f020ace65aff.png"
 					}
 				],	
 				"persons": ["Data Manager"],
@@ -190,27 +211,37 @@
 			},
 			{
 				"title": "Data Services and APIs",
-				"content": "We can process our data and manage the data products. Nice! However, that does not mean that it magically apears in the Digital Twin. The final step in the data phase is serving the data to the Digital Twin. The suited method to publish data depends on the storage location, data format and desired end use. Data can be made accessible through web servers, database connections, web services or other APIs. An API is a piece of software that allows specific distinct applications to communicate and exchange data between each other.</div>",
+				"content": "We can process our data into the desired formats and manage the data products. Yet, that does not mean that it magically apears in the Digital Twin. The final step in the data phase is serving the data, that is, making the data available. The method to publish data depends on the storage location, data format and desired end use. Data can be made accessible through web servers, database connections, web services or other APIs. An API is a piece of software that allows specific distinct applications to communicate and exchange data between each other. File-based data (like 3D Tiles) can be served directly from the storage bucket. For other data formats, we have developed custom APIs to serve the data to the Digital Twin.",
 				"components": [
 					{
-						"subtitle": "File server",
-						"text": "File based data can be served through a local server or storage bucket in the cloud. This is a simple and straightforward way to make data accessible. The data can be accessed through a URL and loaded by users. This method is often used for sharing data with a limited number of users or for one-time data transfers. For example, GeoJSON files or 3D Tilesets can be served in this way. The platform's Cloud Storage buckets can be used directly to access data as a file server. An alternative file server that we use, for example, is MinIO object storage.",
-						"icon": "https://blog.min.io/content/images/2019/05/MINIO_wordmark.png"
-					},
-					{
 						"subtitle": "pg_featureserv",
-						"text": "<a href='https://github.com/CrunchyData/pg_featureserv' target='_blank'>pg_featureserv</a> is an API to communicate with PostgreSQL database. Execute SQL queries and return results in JSON format.",
+						"text": "<a href='https://github.com/CrunchyData/pg_featureserv' target='_blank'>pg_featureserv</a> is an API to communicate with PostgreSQL database. The tool makes it possible to define SQL functions on the database that can be run to return results in JSON format. Our GeoTOP API makes use of pg_featureserv to retrieve information from the Dutch subsurface model.",
 						"icon": ""
 					},
 					{
+						"subtitle": "PostGraphile",
+						"text": "PostGraphile offers a GraphQL API for PostgreSQL databases. GraphQL is a query language for APIs and a runtime for fulfilling those queries with your existing data. Compared to pg_featureserv, PostGraphile threfore provides a more flexible way to query data from a PostgreSQL database but is therefore also a bit more complex to set up.",
+						"icon": "https://camo.githubusercontent.com/ee28dc15ebd25aad43a8e3566e208bcf6cdfb8d568ffb86c51a99ae2c1482ace/68747470733a2f2f63646e2e7261776769742e636f6d2f6772617068696c652f6772617068696c652e6769746875622e696f2f613632323566386333303532646635633237366563656632386165623063616465316165633136612f6c6f676f732f706f73746772617068696c652e6f7074696d697a65642e737667"
+					},
+					{
 						"subtitle": "GoParquet",
-						"text": "A custom Geodan Research tool to query Parquet files. Parquet is a columnar storage format that is optimized for large datasets. It is especially useful to query large real-time datasets.",
+						"text": "A custom Sogelink Research tool to query Parquet files via DuckDB. Parquet is a columnar storage format that is optimized for large datasets. It is especially useful to query large real-time datasets.",
 						"icon": "https://miro.medium.com/v2/resize:fit:600/0*mB3erjnn6CpvHHHZ.png"
 					},
 					{
-						"subtitle": "PostGraphile",
-						"text": "PostGraphile offers a GraphQL API for PostgreSQL databases. GraphQL is a query language for APIs and a runtime for fulfilling those queries with your existing data. GraphQL provides a complete and understandable description of the data in your API, gives clients the power to ask for exactly what they need and nothing more, makes it easier to evolve APIs over time, and enables powerful developer tools. PostGraphile is a tool that can be used to automatically generate a GraphQL API for a PostgreSQL database. It provides a powerful and flexible way to query and manipulate data in a PostgreSQL database. PostGraphile is used in the Geodan Research Data Exposure platform to provide a GraphQL API for the PostgreSQL database",
-						"icon": "https://camo.githubusercontent.com/ee28dc15ebd25aad43a8e3566e208bcf6cdfb8d568ffb86c51a99ae2c1482ace/68747470733a2f2f63646e2e7261776769742e636f6d2f6772617068696c652f6772617068696c652e6769746875622e696f2f613632323566386333303532646635633237366563656632386165623063616465316165633136612f6c6f676f732f706f73746772617068696c652e6f7074696d697a65642e737667"
+						"subtitle": "FIWARE",
+						"text": "FIWARE is an open-source platform for IoT solutions. FIWARE provides a set of open APIs that can be used to directly serve real-time data from sensors and IoT devices.",
+						"icon": "https://www.fiware.org/wp-content/uploads/2018/05/FW_VERT_noclaim_RGB-forms.png"
+					},
+					{
+						"subtitle": "GeoServer",
+						"text": "GeoServer is an open-source server for publishing geospatial data as web services. GeoServer supports many different data formats and is mainly used in the Sogelink Digital Twin platform to serve WMS and WMTS map layers.",
+						"icon": "https://avatars.githubusercontent.com/u/186522?s=280&v=4"
+					},
+					{
+						"subtitle": "Serverless",
+						"text": "There are several serverless alternatives to serve map layers, including MBTiles and PMTiles. MBTiles is a SQLite database that storesmap tiles in a single. PMTiles is a lightweight and serverless API for serving tiled data. PMTiles is a cloud-optimized solution for serving both raster and vector map layers.",
+						"icon": "https://docs.protomaps.com/logo.svg"
 					}
 				],
 				"persons": ["Back-end Developer", "Architect"],
@@ -220,19 +251,19 @@
 	},
 	{
 		"phase": "Digital Twin",
-		"blocks": [
+		"blocks": [	
 			{
 				"title": "3D Data Visualization",
-				"content": "We have produced the necessary data in the correct formats. We have deployed the services to serve the data. And we have taken care of the curation. Everything is set for rolling out the actual Digital Twin. The first step is simply the visualization: displaying all the data in a portal. Since we have complied with official data standards, we can use many different platforms to do achieve this. The choice of platform often depends on the specific requirements of a project",
+				"content": "We have produced the necessary data in the correct formats. We have deployed the services to serve the data. And we have taken care of the data management. Everything is set for rolling out the actual Digital Twin. The first step is the visualization: displaying all the data together in a single portal. Since we have complied with official data standards, we can choose from numerous platforms to do achieve this. The choice of platform often depends on the specific requirements of a project",
 				"components": [
 					{
 						"subtitle": "CesiumJS",
-						"text": "CesiumJS is an open-source software library for creating 3D globes and maps in web application. CesiumJS is primarily known for its capabilities in rendering geospatial data in 3D, making it a powerful tool for creating Digital Twins and other geospatial applications that require 3D. CesiumJS is the core software within the Geodan Digital Twin platform to create the base canvas with 3D data visualizations of the physical environment in a user-friendly web-based applications.",
+						"text": "CesiumJS is an open-source software library for creating 3D globes and maps in web application. CesiumJS is primarily known for its capabilities in rendering geospatial data in 3D, making it a powerful tool for creating Digital Twins and other geospatial applications that require 3D. CesiumJS is the core software within the Sogelink Digital Twin platform to create the base canvas with 3D geospatial data visualizations in a user-friendly web-based applications.",
 						"icon": "https://global.discourse-cdn.com/cesium/original/2X/1/1b9df6dd0c62dcd8ffe7ea524bb33caf1921f8cf.png"
 					},
 					{
 						"subtitle": "MapLibre",
-						"text": "Although CesiumJS is completely focused on 3D, other mapping libraries may also have 3D capabilities. For example, MapLibre is an open-source JavaScript library for interactive maps and is sometimes used when complex 3D functionalities are not required. MapLibre has more limited 3D support, but is considerably more performant for 2D maps and 2D vector data.",
+						"text": "Although CesiumJS is completely focused on 3D, other mapping libraries often also have 3D capabilities. For example, MapLibre is an open-source JavaScript library for interactive maps and is sometimes used when complex 3D functionalities are not required. MapLibre has more limited 3D support, but is considerably more performant for 2D maps and 2D vector data.",
 						"icon": "https://camo.githubusercontent.com/e1f2a4886d9d6e1e267cc4ad238a0d7f4e3322f5eef1a72d6fdc9be504cf7c4e/68747470733a2f2f6d61706c696272652e6f72672f696d672f6d61706c696272652d6c6f676f2d6269672e737667"
 					},
 					{
@@ -245,50 +276,50 @@
 				"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/google3dtiles.PNG"
 			},
 			{
-				"title": "User interfaces and tools",
-				"content": "Showing the data in 3D is nice, but we are not yet at the level of a Digital Twin. The environment has to come alive. For this purpose, the Digital Twin needs to be equipped with user interfaces and tools that allows users to interact with the data and manipulate the Digital Twin. We have developed a number of default tools that are useful for most Digital Twin applications. On top of that, custom tools are developed for specific projects.",
+				"title": "User Interfaces",
+				"content": "Showing the data in 3D is nice, but we are not yet at the level of a Digital Twin. The environment has to come alive. For this purpose, the Digital Twin first needs to be equipped with user interfaces and tools that allows users to interact with the data and manipulate the Digital Twin. We have developed a number of modules that are useful for most Digital Twin applications. On top of that, custom tools are developed for specific projects. SvelteKit is used as the framework for our default viewer application.",
 				"components": [
 					{
 						"subtitle": "Layer library",
-						"text": " ",
-						"icon": ""
+						"text": "The layer library is an interface that allows users to manage the map layers in the Digital Twin. It provides the possibility to add, remove and configure map layers. It also enables users to add their own data to the Digital Twin. The layer library is a core component of the Digital Twin and is used in all projects.",
+						"icon": "https://cdn.thenewstack.io/media/2021/09/9969f494-sveltelogo.png"
 					},
 					{
 						"subtitle": "Bookmarks and Projects",
-						"text": " ",
-						"icon": ""
+						"text": "Bookmarks and projects are tools that allow users to save specific views and configurations of the Digital Twin. Bookmarks are a way to save a specific view of the Digital Twin, while projects make it possible to save map layers and create a cut-out of an area of interest.",
+						"icon": "https://cdn.thenewstack.io/media/2021/09/9969f494-sveltelogo.png"
 					},
 					{
 						"subtitle": "Measure tool",
-						"text": " ",
-						"icon": ""
+						"text": "The measure tool allows users to measure distances in the Digital Twin. It is a useful tool for getting insights into the dimensions of objects and areas in the Digital Twin.",
+						"icon": "https://cdn.thenewstack.io/media/2021/09/9969f494-sveltelogo.png"
 					},
 					{
 						"subtitle": "Stories",
-						"text": "",
-						"icon": ""
+						"text": "The stories module is a tool to provide interactive stories in the Digital Twin. It allows users to scroll through a sequence of views accompied with texts and images. The stories module is a useful tool for creating interactive presentations and virtual tours. A story provide more context to the background of the project and can be used to explain the data and models.",
+						"icon": "https://cdn.thenewstack.io/media/2021/09/9969f494-sveltelogo.png"
 					}
 				],
 				"persons": ["Front-end Developer"],
 				"image": "https://storage.googleapis.com/ahp-research/projects/communicatie/images/circulaire-grondstromen-dashboard.png"
 			},
 			{
-				"title": "Real-time insight",
-				"content": "A Digital Twin cannot exist without the 4th dimension. Bringing in the time component brings the Digital Twin to life. From a data perspective, sensor data and the Internet of Things (IoT) can help us to make the environment dynamic. It enables users to monitor and understand the state of the environment or a physical asset in real-time. This capability is crucial for gaining insights, making informed decisions and responding to changes as they happen. We are icnreasingly implementing the time dimension into our Digital Twin. Several examples include: Traffic/parking places Nantes. Ship animation. Monitoring wells.",
+				"title": "Real-time Insight",
+				"content": "A Digital Twin cannot exist without the 4th dimension. Bringing in the time component brings the Digital Twin to life. From a data perspective, sensor data and the Internet of Things (IoT) can help us to make the environment dynamic. It enables users to monitor and understand the state of the environment or a physical asset in real-time. This capability is crucial for gaining insights, making informed decisions and responding to changes as they happen. We are icnreasingly implementing the time dimension into our Digital Twin. Several examples are listed below.",
 				"components": [
 					{
-						"subtitle": "Traffic/Parking places Nantes",
-						"text": "For the city of Nantes, we have visualized the traffic and parking situation in real-time. The Digital Twin is integrated with the city's traffic management system, which provides real-time data about traffic flows and parking availability.",
+						"subtitle": "Traffic and Parking places Nantes",
+						"text": "For the city of Nantes, we have visualized the traffic and parking situation in real-time. This integration provides real-time insights into traffic flows and parking availability.<img class='module-img' src='https://storage.googleapis.com/ahp-research/projects/communicatie/images/nantes-live-traffic.png'/>",
 						"icon": ""
 					},
 					{
 						"subtitle": "Ship Transponder data (AIS)",
-						"text": "",
+						"text": "The locations of ships on the water networks are continuously tracked via an automatic identification system (AIS). The AIS data can be used to visualize the current location of ships in the Digital Twin. A time slider allows for displaying ship movements through time. The AIS data can also be used to predict the future location of ships, which is used to simulate the impact of ships on the water network.<img class='module-img' src='https://storage.googleapis.com/ahp-research/projects/communicatie/images/ship-ais-tracking.png'/>",
 						"icon": ""
 					},
 					{
 						"subtitle": "Ground water levels",
-						"text": "",
+						"text": "The ground water table is a key factor for dike stability. Ground water levels are continuously measured in monitoring wells to monitor the current situation. The sensor data from monitoring wells can be used to provide insights into the real-time and past ground water levels.<img class='module-img' src='https://storage.googleapis.com/ahp-research/projects/communicatie/images/purmer-peilbuizen.png'/>",
 						"icon": ""
 					}
 				],
@@ -296,17 +327,27 @@
 				"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/data_auto-s_shutterstock_1343869916.jpg"
 			},
 			{
-				"title": "Data Analysis and Simulation",
-				"content": "Within the Digital Twin, we can show the as-is situation and display dynamic changes in the system through time. We are at a copy of reality - how nice. Displaying the data on the map sometimes is not enough, and you want to get deeper insights. But it can be even better. This replicate of reality can also be used for simulations and run different scenarios. TKI dikes, Moerdijkbrug",
+				"title": "Prediction and Simulation",
+				"content": "Within the Digital Twin, we can show the current situation and display dynamic changes in the system through time. Displaying data on the map and through time is not always enough. To gain even deeper insight, the Digital Twin infrastructure can also be used to simulate different scenarios and make predictions.",
 				"components": [
 					{
+						"subtitle": "Simulation",
+						"text": "A Digital Twin can be used to simulate the behavior of a system. This can be done by running simulations on the data through an API connection with the modelling scripts. The results of the simulations can be visualized in the Digital Twin to provide insights into the behavior of the system. For example, the Digital Twin can be used to simulate the impact of a climate change on land use or the impact of a stresses on a bridge.",
+						"icon": ""
+					},
+					{
 						"subtitle": "Analytical dashboards",
-						"text": "An analysis dashboard in the context of Digital Twin visualization is a user interface that provides tools and features for monitoring, analyzing, and making data-driven decisions based on the data and simulations of a Digital Twin. These dashboards are designed to facilitate real-time insights, visualization of complex data, and interactive analysis of a physical or digital system's behavior. ",
+						"text": "An analytical dashboard can be implemented in the Digital Twin portal to show complex data and facilitate interactive analyses. Dashboards with predictive information for the subsurface.",
+						"icon": ""
+					},
+					{
+						"subtitle": "Multi-criteria analysis",
+						"text": "Users are able to control the Digital Twin to make decisions and take actions. The Digital Twin can be used to support decision-making by providing insights into the impact of different scenarios. For example, the Digital Twin can be used to compare different design options or tweak parameters.",
 						"icon": ""
 					},
 					{
 						"subtitle": "Jupyter Notebooks",
-						"text": "Thanks to the platform and adhering to standards, the data are not only specific for 3D visualization. The same data can also be parsed in other analytical tools. Jupyter Notebooks are a great example of this. Jupyter Notebooks are a popular tool for data analysis, visualization, and machine learning. They provide an interactive environment for running code, visualizing data, and sharing insights. Jupyter Notebooks are used in various industries, including data science, machine learning, and scientific research. They are also used in the field of GIS and geospatial data analysis. We have been using this extensively in the Smart City project in Den Bosch and Breda.",
+						"text": "Thanks to the platform and adhering to standards, the data are not only specific for 3D visualization. The data can also be imported and used in other analytical tools. Jupyter Notebooks are a great example of this. Jupyter Notebooks are an interactive environment for running code and showing the results. have been using analytical notebooks extensively in the Smart City project in Den Bosch and Breda.",
 						"icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Jupyter_logo.svg/800px-Jupyter_logo.svg.png"
 					}
 				],
@@ -315,11 +356,11 @@
 			},
 			{
 				"title": "Feedback and Use",
-				"content": "<p>The Digital Twin can be used for an endless number of applications. We are typically not the end-users. The expert opinion and wishes are what determines the succes of the Digital Twin in the end. Feedback and use are crucial aspects of their development and application. Digital Twins are dynamic, data-driven models of real-world objects or environments, and their effectiveness relies on continuous feedback, usage, and improvement.</p>",
+				"content": "The opinion of experts and users of the Digital Twin are what determines the success of the Digital Twin in the end. Their feedback is crucial for the further development and application. Digital Twins are dynamic, data-driven models of real-world objects or environments, and their effectiveness relies on continuous feedback, usage, and improvement.",
 				"components": [
 					{
 						"subtitle": "Data Validation",
-						"text": "Feedback is essential for ensuring the accuracy and quality of the data used in Digital Twins. Users can provide feedback on data discrepancies or inaccuracies, which can be used to refine the data sources and data processing pipelines.",
+						"text": "Feedback is essential to ensure the accuracy and quality of the data used in Digital Twins. Users can provide feedback on data discrepancies or inaccuracies, which can be used to refine the data sources and data processing pipelines.",
 						"icon": ""
 					},
 					{
@@ -334,7 +375,7 @@
 					}
 				],
 				"persons": ["Consultant"],
-				"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/geoinfo-wur.jpg"
+				"image": "https://storage.googleapis.com/ahp-research/projects/communicatie/images/dall-e-futuristic.png"
 			}
 		]
 	}

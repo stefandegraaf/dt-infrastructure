@@ -48,7 +48,7 @@
 				<div class="top-heading">From Concept to Digital Twin</div>
 			</div>
 			<div id="top-intro-right">
-				This series provides a look at the challenges, techniques, tools, and processes involved in realising our design, technology and sustainability ambitions for the Sogelink Digital Twin. Follow its journey from concept to usable Digital Twin.
+				This series provides a look into the challenges, techniques, tools and processes involved in realising the Sogelink Digital Twin. Follow its journey from concept to an interactive and dynamic data environment.
 			</div>
 		</div>
 		<img id="top-logo" src="https://bim-w.com/wp-content/uploads/SOGELINK_Logo_Responsive_01_Bleu.png" alt="Sogelink" />
