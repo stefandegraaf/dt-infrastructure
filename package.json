@@ -13,10 +13,12 @@
 		"@sveltejs/adapter-static": "^2.0.3",
 		"3d-tiles-renderer": "^0.3.21",
 		"carbon-components-svelte": "0.75.0",
-		"carbon-icons-svelte": "^11.4.0"
+		"carbon-icons-svelte": "^11.4.0",
+		"three": "^0.161.0"
 	},
 	"devDependencies": {
 		"@sveltejs/kit": "^1.15.7",
+		"@types/three": "^0.161.2",
 		"@typescript-eslint/eslint-plugin": "^5.50.0",
 		"@typescript-eslint/parser": "^5.50.0",
 		"carbon-preprocess-svelte": "0.9.1",

@@ -1,6 +1,7 @@
 <script lang="ts">
 
-	import CustomStyle from "$lib/style/CustomStyle.svelte";
+	import ThreeDeeTilesRender from "$lib/components/ThreeDeeTilesRender.svelte";
+import CustomStyle from "$lib/style/CustomStyle.svelte";
 
 	import appears from "../../lib/files/appears.gif";
 
@@ -9,6 +10,7 @@
 <CustomStyle />
 
 
+<ThreeDeeTilesRender/>
 <section class="section parallax-bg" style="background-image: url(https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/banner2.jpg)">
 	<div class="section-1-overlay"></div>
 	<div class="content" id="content-1">

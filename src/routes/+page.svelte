@@ -7,6 +7,7 @@
     import CustomStyle from "$lib/style/CustomStyle.svelte";
     import ContentModal from "$lib/components/ContentModal.svelte";
 	import type { IPhase, ItemInterface } from "$lib/components/interfaces";
+    import ThreeDeeTilesRenderTest from "$lib/components/animation/ThreeDeeTilesRenderTest.svelte";
 
 	let selectedItem: Writable<ItemInterface | undefined> = writable(undefined);
 	let config: { phases: Array<IPhase>};
@@ -54,7 +55,7 @@
 		<img id="top-logo" src="https://bim-w.com/wp-content/uploads/SOGELINK_Logo_Responsive_01_Bleu.png" alt="Sogelink" />
 	</div>
 
-	<!--<ThreeDeeTilesRender />-->
+	<ThreeDeeTilesRenderTest />
 
 	<div id="top-banner">
 		<div id="top-banner-overlay"></div>
