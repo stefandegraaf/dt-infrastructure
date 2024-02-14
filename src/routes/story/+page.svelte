@@ -1,6 +1,6 @@
 <script lang="ts">
 
-	import ThreeDeeTilesRender from "$lib/components/ThreeDeeTilesRender.svelte";
+	import ThreeDeeTilesRender from "$lib/components/animation/ThreeDeeTilesRenderTest.svelte";
 import CustomStyle from "$lib/style/CustomStyle.svelte";
 
 	import appears from "../../lib/files/appears.gif";

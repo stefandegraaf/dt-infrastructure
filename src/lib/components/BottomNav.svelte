@@ -60,6 +60,7 @@
 		border-top: 1px solid #577d89;
 		background-color: rgba(0, 17, 43, 0.7);
 		backdrop-filter: blur(10px);
+		z-index: 5;
 	}
 	.bottom-nav-block-container {
 		width: calc(50% - (1px / 2));

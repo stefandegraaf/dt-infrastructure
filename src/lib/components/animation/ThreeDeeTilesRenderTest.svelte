@@ -59,10 +59,13 @@
 		tilesets.forEach((t) => renderTilesRenderer(t))
 	});
 
+	let animationFrame: number;
+	onDestroy(() => {
+		if (animationFrame) cancelAnimationFrame(animationFrame);
+	});
 
 	
 	function renderTilesRenderer(url: string): void {
-		console.log(url);
 		//return;	
 		const scene = new THREE.Scene();
 		const camera = new THREE.PerspectiveCamera(
@@ -80,7 +83,7 @@
 		const randomVec = new THREE.Vector3(1, 1, 1);
 		randomVec.cross(normal).normalize();
 
-		let newVector = new THREE.Vector3(normal.x * dist, normal.y * dist, normal.z * dist);
+		const newVector = new THREE.Vector3(normal.x * dist, normal.y * dist, normal.z * dist);
 		newVector.applyAxisAngle(randomVec, Math.PI / 4); //.add(vector);
 		//newVector.multiplyScalar(dist);
 		//camera.position.copy(newVector).add(vector);
@@ -128,16 +131,13 @@
 		};
 		console.log(camera);
 
-		renderLoop();
 
-		function renderLoop() {
+		const renderLoop = () => {
 
-			requestAnimationFrame(renderLoop);
-			
+			animationFrame = requestAnimationFrame(renderLoop);
 			pivot.quaternion.multiply(quaternion);
 			//camera.applyQuaternion(quaternion);
 			//const newPosition = vector.clone().applyQuaternion(quaternion);
-
 			//camera.lookAt(newPosition);
 
 			camera.updateMatrixWorld();
@@ -145,6 +145,8 @@
 			renderer.render(scene, camera);
 
 		}
+		renderLoop();
+
 	
 /*
 

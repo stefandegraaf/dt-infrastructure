@@ -1,12 +1,16 @@
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
-	import { TilesRenderer, B3DMLoader } from '3d-tiles-renderer';
 	import * as THREE from 'three';
   
 	import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 	export let glbUrl: string;
 
+
+	let animationFrame: number;
+	onDestroy(() => {
+		if (animationFrame) cancelAnimationFrame(animationFrame);
+	});
 
 	function renderGLB(): void {
 		const canvas = document.getElementById('canvas');
@@ -36,7 +40,7 @@
 		camera.position.z = 115;
 
 		const animate = function () {
-			requestAnimationFrame(animate);
+			animationFrame = requestAnimationFrame(animate);
 
 			// Rotate the model (if needed)
 			if (model) {

@@ -7,12 +7,16 @@
 	import type { IPhase, ItemInterface } from "$lib/components/interfaces";
     import BottomNav from "./BottomNav.svelte";
     import { getBlock, getBlockIndex } from "$lib/utils";
+    import ThreeDeeTilesRenderTest from "./animation/ThreeDeeTilesRenderTest.svelte";
+    import ThreeRender from "./animation/ThreeRender.svelte";
 
 	export let selectedItem: Writable<ItemInterface | undefined>;
 	export let config: { phases: Array<IPhase>};
 
 	let unsubscriber: Unsubscriber;
 	let doc: Document;
+
+	$: render = $selectedItem?.render;
 	
 	onMount(() => {
 		doc = document;
@@ -50,6 +54,7 @@
 	<div class="modal-container">
 		<div class="modal modal-text">
 			<div class="modal-inner">
+				<!--
 				<div class="modal-close-button">
 					<Button
 						kind="tertiary"
@@ -58,7 +63,7 @@
 						icon={Close}
 						on:click={() => selectedItem.set(undefined)}
 					/>
-				</div>
+				</div>-->
 				<div class="modal-info">
 					<div class="modal-info-persons">
 						<div class="modal-info-header">Team</div>
@@ -116,7 +121,7 @@
 										<IbmCloudDirectLink_2Connect size={32} />
 									{/if}
 									</div>
-									<div class="block-content">
+									<div class="block-content" class:has-render={render}>
 										<div class="block-header">{block.subtitle}</div>
 										<div class="block">{@html block.text}</div>
 									</div>
@@ -127,6 +132,10 @@
 							{@html $selectedItem.contentAfter}
 						{/if}
 					</div>
+					{#if render}
+						<ThreeRender settings={render} />
+					{/if}
+
 				</div>
 			</div>
 			<BottomNav {selectedItem} {config} />
@@ -198,7 +207,7 @@
 		background-color: rgba(0, 17, 43, 0.82);
 		color: #fff;
 		backdrop-filter: blur(0px);
-		border-radius: 8px;
+		border-radius: 3px;
 		overflow: hidden;
 	}
 	.modal-inner {
@@ -232,13 +241,15 @@
 		background-image: url(https://storage.googleapis.com/ahp-research/projects/communicatie/images/render_6-2mb.png);
 		background-size: cover;
 		background-position: center;
-		border-radius: 8px;
+		border-radius: 3px;
 	}
+	/*
 	.modal-close-button {
 		position: absolute;
-		top: 10px;
-		right: 10px;
+		top: -1px;
+		right: -1px;
 	}
+	*/
 
 	.modal-header {
 		display: flex;
@@ -265,11 +276,11 @@
 	}
 
 	.modal-info {
-		margin: 0 40px 30px 30px;
+		margin: 0 0 40px 40px;
 		padding: 8px 20px 15px;
 		float: right;
-		border-radius: 8px;
-		background: linear-gradient(45deg, rgba(0, 17, 43, 0.82) 0%, rgba(0, 17, 43, 0) 90%);
+		border-radius: 3px;
+		background: linear-gradient(45deg, rgba(0, 17, 43, 0.3) 0%, rgba(0, 17, 43, 0) 90%);
 	}
 	.modal-info-header {
 		font-size: 1.2rem;
@@ -284,6 +295,16 @@
 		
 	}
 	
+	.content-blocks {
+		position: relative;
+		z-index: 3;
+	}
+	.block-content.has-render {
+		background-color: rgba(0, 17, 43, 0.86);
+		backdrop-filter: blur(5px);
+		border-radius: 3px;
+		padding: 10px;
+	}
 	.content-block {
 		display: grid;
 		grid-template-columns: 100px 1fr;

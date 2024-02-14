@@ -13,6 +13,7 @@ export interface ItemInterface {
 	contentAfter: string,
 	persons: Array<string>,
 	image: string,
+	render: any
 }
 
 export interface IPhase {

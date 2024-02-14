@@ -3,6 +3,7 @@
     import { CaretDown } from "carbon-icons-svelte";
 
 	import fallback from "$lib/files/concept-dt-config.json";
+	import fallbackMarcom from "$lib/files/concept-dt-config-marcom.json";
 	import Item from "$lib/components/Item.svelte";
     import CustomStyle from "$lib/style/CustomStyle.svelte";
     import ContentModal from "$lib/components/ContentModal.svelte";
@@ -14,7 +15,7 @@
 	
 	async function setConfig(): Promise<void> {
 		//config = await loadConfig();
-		const loaded = setBlockNumbers(fallback);
+		const loaded = setBlockNumbers(fallbackMarcom);
 		config = loaded;
 	}
 	async function loadConfig(): Promise<any> {
@@ -23,7 +24,7 @@
 			const response = await fileservConfig.json();
 			return response;
 		} catch (e) {
-			return fallback;
+			return fallbackMarcom;
 		}
 	}
 	function setBlockNumbers(rawConfig: any): { phases: Array<IPhase>} {
@@ -55,7 +56,7 @@
 		<img id="top-logo" src="https://bim-w.com/wp-content/uploads/SOGELINK_Logo_Responsive_01_Bleu.png" alt="Sogelink" />
 	</div>
 
-	<ThreeDeeTilesRenderTest />
+	<!--<ThreeDeeTilesRenderTest />-->
 
 	<div id="top-banner">
 		<div id="top-banner-overlay"></div>
