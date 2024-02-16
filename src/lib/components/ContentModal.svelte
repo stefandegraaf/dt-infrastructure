@@ -64,17 +64,19 @@
 						on:click={() => selectedItem.set(undefined)}
 					/>
 				</div>-->
-				<div class="modal-info">
-					<div class="modal-info-persons">
-						<div class="modal-info-header">Team</div>
-						{#each $selectedItem?.persons as person}
-						<div class="modal-info-person">
-							<Person size={24} />
-							<div class="modal-info-person-name">{person}</div>
+				{#if $selectedItem?.persons?.length > 0}
+					<div class="modal-info">
+						<div class="modal-info-persons">
+							<div class="modal-info-header">Team</div>
+							{#each $selectedItem.persons as person}
+							<div class="modal-info-person">
+								<Person size={24} />
+								<div class="modal-info-person-name">{person}</div>
+							</div>
+							{/each}
 						</div>
-						{/each}
 					</div>
-				</div>
+				{/if}
 				<div class="modal-content">
 					<div class="modal-header">
 						<svg class="modal-header-icon" version="1.0" xmlns="http://www.w3.org/2000/svg"
@@ -109,7 +111,7 @@
 							<h2>{$selectedItem.title}</h2>
 						</div>
 					</div>
-					<div class="content-blocks">
+					<div class="content-blocks" class:has-render={render}>
 						{@html $selectedItem.content}
 						{#if $selectedItem.components}
 							{#each $selectedItem.components as block}
@@ -121,7 +123,7 @@
 										<IbmCloudDirectLink_2Connect size={32} />
 									{/if}
 									</div>
-									<div class="block-content" class:has-render={render}>
+									<div class="block-content">
 										<div class="block-header">{block.subtitle}</div>
 										<div class="block">{@html block.text}</div>
 									</div>
@@ -299,13 +301,16 @@
 		position: relative;
 		z-index: 3;
 	}
-	.block-content.has-render {
-		background-color: rgba(0, 17, 43, 0.86);
-		backdrop-filter: blur(5px);
+	.content-blocks.has-render {
+		padding-bottom: 300px;
+	}
+	.has-render .block-content {
+		background-color: rgba(0, 17, 43, 0.6);
 		border-radius: 3px;
-		padding: 10px;
+		padding: 15px 25px;
 	}
 	.content-block {
+		width: 100%;
 		display: grid;
 		grid-template-columns: 100px 1fr;
 		align-items: center;
