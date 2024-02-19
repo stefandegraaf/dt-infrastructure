@@ -3,7 +3,7 @@
 	import { TilesRenderer, B3DMLoader } from '3d-tiles-renderer';
 	import * as THREE from 'three';
   
-	import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+	import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 	const glbs = [
 		"https://storage.googleapis.com/ahp-research/projects/communicatie/images/tree.glb",

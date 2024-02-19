@@ -1,9 +1,7 @@
 <script lang="ts">
-import { onDestroy, onMount } from 'svelte';
+import { onMount } from 'svelte';
 import { TilesRenderer } from '3d-tiles-renderer';
 import * as THREE from 'three';
-
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 
 export let url: string;
