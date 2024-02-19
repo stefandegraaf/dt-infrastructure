@@ -305,7 +305,7 @@
 		padding-bottom: 300px;
 	}
 	.has-render .block-content {
-		background-color: rgba(0, 17, 43, 0.6);
+		background-color: rgba(0, 17, 43, 0.75);
 		border-radius: 3px;
 		padding: 15px 25px;
 	}

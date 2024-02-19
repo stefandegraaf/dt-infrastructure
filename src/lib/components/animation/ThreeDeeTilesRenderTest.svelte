@@ -45,6 +45,9 @@
 	//Ilpendam
 	//matrix.set(1.0, 0.0, 0.0, 3879988.0, 0.0, 1.0, 0.0, 336566.0, 0.0, 0.0, 1.0, 5034108.0, 0.0, 0.0, 0.0, 1.0);
 
+	//IJsselbruggen
+	//matrix.set(1.0, 0.0, 0.0, 3915674, 0.0, 1.0, 0.0, 410808, 0.0, 0.0, 1.0, 5001080, 0.0, 0.0, 0.0, 1.0);
+
 	let canvas: HTMLElement | null;
 
 	//onMount(() => renderSimpleCube());
@@ -125,17 +128,15 @@
 		tilesRenderer.onLoadTileSet = (tileSet) => {
 			console.log('Tileset loaded', tileSet);
 		};
-		tilesRenderer.onLoadModel = (group, tile) => {
-			console.log('Model loaded', group, tile);
-			//pivot.add(group);
+		tilesRenderer.onLoadModel = (scene, tile) => {
+			console.log('Model loaded', scene, tile);
 		};
-		console.log(camera);
 
 
 		const renderLoop = () => {
 
 			animationFrame = requestAnimationFrame(renderLoop);
-			pivot.quaternion.multiply(quaternion);
+			//pivot.quaternion.multiply(quaternion);
 			//camera.applyQuaternion(quaternion);
 			//const newPosition = vector.clone().applyQuaternion(quaternion);
 			//camera.lookAt(newPosition);

@@ -1,4 +1,4 @@
-import { TilesRenderer } from '3d-tiles-renderer';
+import { TilesRenderer, B3DMLoader, DebugTilesRenderer } from '3d-tiles-renderer';
 import * as THREE from 'three';
 import { createNoise2D } from 'simplex-noise';
 
@@ -7,15 +7,17 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 export abstract class ThreeRender {
 
+	protected canvas: HTMLElement;
 	protected scene: THREE.Scene;
 	protected camera: THREE.PerspectiveCamera;
 	protected renderer: THREE.WebGLRenderer;
 	protected animationFrame: number | undefined;
 
 	constructor(canvas: HTMLElement) {
+		this.canvas = canvas;
 		this.scene = new THREE.Scene();
 		this.camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 10000);
-		this.renderer = new THREE.WebGLRenderer({alpha: true, canvas: canvas});
+		this.renderer = new THREE.WebGLRenderer({alpha: true, canvas: this.canvas, antialias: false});
 		this.init();
 	}
 
@@ -24,9 +26,9 @@ export abstract class ThreeRender {
 	public abstract dispose(): void;
 
 	private init(): void {
-		this.renderer.setSize(window.innerWidth, window.innerHeight);
-		this.renderer.setPixelRatio( window.devicePixelRatio );
-		window.addEventListener('resize', this.onWindowResize);
+		this.renderer.setPixelRatio(window.devicePixelRatio * 0.8);
+		this.setRendererSize();
+		window.addEventListener('resize', this.setRendererSize);
 	}
 
 	public destroy(): void {
@@ -35,17 +37,15 @@ export abstract class ThreeRender {
 		}
 		this.renderer.dispose();
 		this.dispose();
-		window.removeEventListener('resize', this.onWindowResize);
+		window.removeEventListener('resize', this.setRendererSize);
 	}
 
-	private onWindowResize(): void {
-		const newWidth = window.innerWidth;
-		const newHeight = window.innerHeight;
-
-		this.camera.aspect = newWidth / newHeight;
+	private setRendererSize(): void {
+		const width = window.innerWidth;
+		const height = window.innerHeight;
+		this.camera.aspect = width / height;
 		this.camera.updateProjectionMatrix();
-
-		this.renderer.setSize(newWidth, newHeight);
+		this.renderer.setSize(width, height);
 	}
 
 	public lookAtCartesian3(point: THREE.Vector3, distance: number, angle: number): void {
@@ -96,14 +96,30 @@ export class ThreeDeeTilesRender extends ThreeRender {
 		this.tilesRenderer.dispose();
 	}
 
-	render() {
+	async render() {
 		this.lookAtCartesian3(this.center, this.distance, 45);
+		this.camera.position.add(this.center);
+
+/*
+		const loader = new B3DMLoader(new THREE.LoadingManager());
+		const loaded = await loader.load("https://storage.googleapis.com/ahp-research/projects/rws/ijsselbruggen/tiles/ijsselbrug_struc_1/data/data0.b3dm");
+		console.log(loaded);
+		this.scene.add(loaded.scene);
+*/
+		
 
 		this.tilesRenderer = new TilesRenderer(this.url);
 		this.tilesRenderer.setCamera(this.camera);
 		this.tilesRenderer.setResolutionFromRenderer(this.camera, this.renderer);
 		this.scene.add(this.tilesRenderer.group);		
-
+		
+		/*
+		const newRenderer = new DebugTilesRenderer("https://storage.googleapis.com/ahp-research/projects/rws/ijsselbruggen/tiles/ijsselbrug_struc_3/tileset.json");
+		newRenderer.setCamera(this.camera);
+		newRenderer.setResolutionFromRenderer(this.camera, this.renderer);
+		this.scene.add(newRenderer.group);
+		newRenderer.displayRegionBounds = true;
+		*/
 		
 		let pivotPoint = this.center.clone();
 		//let newLength = pivotPoint.length() - 300;
@@ -111,21 +127,63 @@ export class ThreeDeeTilesRender extends ThreeRender {
 
 		const pivot = new THREE.Object3D();
 		pivot.position.set(pivotPoint.x, pivotPoint.y, pivotPoint.z);
-		this.scene.add(pivot);
+		pivot.position.set(0, 0, 0);
+		//this.scene.add(pivot);
 		pivot.add(this.camera);
 
 		//const rotationAxis = new THREE.Vector3(3879988, 336566, 5034108).normalize();
 		const quaternion = new THREE.Quaternion();
 		quaternion.setFromAxisAngle(this.center.clone().normalize(), 0.001); // 0.01 is the rotation angle in radians
 
+		let testmesh: THREE.Mesh;
+		this.tilesRenderer.onLoadTileSet = (tileSet) => {
+			console.log('Tileset loaded', tileSet);
+		}
+		this.tilesRenderer.onLoadModel = (group, tile) => {
+			console.log('Model loaded', group, tile);
+			const model = group.children[0]; // Get the loaded model
+			model.traverse((child) => {
+				child.position.add(this.center);
+				console.log(child);
+				//addSphere(this.scene, child);
+				if (child instanceof THREE.Mesh) {
+					this.scene.add(child);
+					child.material = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Set to red
+					this.lookAtCartesian3(this.center, this.distance, 45)
+				}
+			});
+		};
+
+		/*
+		newRenderer.onLoadModel = (group, tile) => {
+			console.log('Model loaded', group, tile);			
+			const model = group.children[0]; // Get the loaded model
+			model.traverse((child) => {
+				child.position.add(this.center);
+				//addSphere(this.scene, child);
+				if (child instanceof THREE.Mesh) {
+					this.scene.add(child);
+					child.material = new THREE.MeshBasicMaterial({ color: 0xff0000 }); // Set to red
+					//this.lookAtCartesian3(this.center, this.distance, 45)
+				}
+			});
+		};
+		const geometry = new THREE.CircleGeometry(1, 32); // Circle with radius 1 and 32 segments
+		const material = new THREE.MeshBasicMaterial({ color: 0xff0000 }); // Red color
+		const circle = new THREE.Mesh(geometry, material);
+		circle.position.copy(this.scene.position);
+		this.scene.add(circle);
+		*/
+		
+		
 
 		const renderLoop = () => {
 			this.animationFrame = requestAnimationFrame(renderLoop);
-
 			pivot.quaternion.multiply(quaternion);
 
 			this.camera.updateMatrixWorld();
 			this.tilesRenderer.update();
+			//newRenderer.update();
 			this.renderer.render(this.scene, this.camera);
 		}
 
@@ -315,7 +373,7 @@ export class EarthRender extends ThreeRender {
 	}
 
 	render() {
-		const segments = this.size * 10;
+		const segments = this.size * 5;
 		const geometry = new THREE.SphereGeometry(this.size, segments, segments);
 		const texture = new THREE.TextureLoader().load(this.texture);
 		const material = new THREE.MeshPhongMaterial({map: texture});

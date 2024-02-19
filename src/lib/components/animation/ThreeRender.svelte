@@ -54,9 +54,10 @@
 		if (settings.type === "3dtiles") {
 			render = new ThreeDeeTilesRender(
 				canvas,
-				settings.url,
-				new THREE.Vector3(3879789, 336573, 5034260),
-				500
+				"https://storage.googleapis.com/ahp-research/projects/rws/ijsselbruggen/tiles/ijsselbrug_struc_1/tileset.json",
+				//new THREE.Vector3(3879789, 336573, 5034260),
+				new THREE.Vector3(3915674, 410808, 5001080),
+				600
 			);		
 		} else if (settings.type === "earth") {
 			render = new EarthRender(
@@ -82,7 +83,6 @@
 <style>
 
   canvas {
-	padding-top: 200px;
 	width: 100%;
 	height: 100%;
 	display: block;
