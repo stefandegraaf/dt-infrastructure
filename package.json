@@ -14,8 +14,10 @@
 		"3d-tiles-renderer": "^0.3.21",
 		"carbon-components-svelte": "0.75.0",
 		"carbon-icons-svelte": "^11.4.0",
+		"gsap": "^3.12.5",
 		"simplex-noise": "^4.0.1",
-		"three": "^0.161.0"
+		"three": "^0.161.0",
+		"vite-plugin-glsl": "^1.2.1"
 	},
 	"devDependencies": {
 		"@sveltejs/kit": "^1.15.7",

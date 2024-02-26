@@ -1,14 +1,13 @@
 <script lang="ts">
 	import { onDestroy, onMount } from "svelte";
-	import type { Unsubscriber, Writable } from "svelte/store";
+	import { writable, type Unsubscriber, type Writable } from "svelte/store";
     import { Button } from "carbon-components-svelte";
 	import { Person, Close, IbmCloudDirectLink_2Connect } from "carbon-icons-svelte";
 
 	import type { IPhase, ItemInterface } from "$lib/components/interfaces";
     import BottomNav from "./BottomNav.svelte";
     import { getBlock, getBlockIndex } from "$lib/utils";
-    import ThreeDeeTilesRenderTest from "./animation/ThreeDeeTilesRenderTest.svelte";
-    import ThreeRender from "./animation/ThreeRender.svelte";
+    import ThreeRenderComplete from "./animation/ThreeRenderComplete.svelte";
 
 	export let selectedItem: Writable<ItemInterface | undefined>;
 	export let config: { phases: Array<IPhase>};
@@ -16,7 +15,8 @@
 	let unsubscriber: Unsubscriber;
 	let doc: Document;
 
-	$: render = $selectedItem?.render;
+	//$: render = $selectedItem?.render;
+	$: render = true;
 	
 	onMount(() => {
 		doc = document;
@@ -44,6 +44,9 @@
 			if (prevBlock) selectedItem.set(prevBlock);
 		}
 	}
+
+	const selectedIndex: Writable<number | undefined> = writable(0);
+	$: $selectedItem && selectedIndex.set(getBlockIndex(config, $selectedItem));
 	
 </script>
 
@@ -134,10 +137,12 @@
 							{@html $selectedItem.contentAfter}
 						{/if}
 					</div>
+					<!--
 					{#if render}
 						<ThreeRender settings={render} />
 					{/if}
-
+					-->
+					<ThreeRenderComplete index={selectedIndex} />
 				</div>
 			</div>
 			<BottomNav {selectedItem} {config} />
@@ -203,8 +208,8 @@
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
-		width: 80%;
-		height: 90%;
+		width: 82%;
+		height: 96%;
 		z-index: 2;
 		background-color: rgba(0, 17, 43, 0.82);
 		color: #fff;
@@ -240,7 +245,7 @@
 		height: 90%;
 		opacity: 0.75;
 		z-index: 1;
-		background-image: url(https://storage.googleapis.com/ahp-research/projects/communicatie/images/render_6-2mb.png);
+		/*background-image: url('https://storage.googleapis.com/ahp-research/projects/communicatie/images/render_6-2mb.png');*/
 		background-size: cover;
 		background-position: center;
 		border-radius: 3px;

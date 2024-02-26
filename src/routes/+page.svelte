@@ -8,7 +8,7 @@
     import CustomStyle from "$lib/style/CustomStyle.svelte";
     import ContentModal from "$lib/components/ContentModal.svelte";
 	import type { IPhase, ItemInterface } from "$lib/components/interfaces";
-    import ThreeDeeTilesRenderTest from "$lib/components/animation/ThreeDeeTilesRenderTest.svelte";
+    import HeaderThree from "$lib/components/HeaderThree.svelte";
 
 	let selectedItem: Writable<ItemInterface | undefined> = writable(undefined);
 	let config: { phases: Array<IPhase>};
@@ -42,25 +42,20 @@
 </script>
 
 
+
+
 <div id="dt-concept-body">
-	<div id="top-intro">
-		<div id="top-intro-container">
-			<div id="top-intro-left">
-				<div class="top-heading-sup">Overview</div>
-				<div class="top-heading">From Concept to Digital Twin</div>
-			</div>
-			<div id="top-intro-right">
-				This series provides a look into the challenges, techniques, tools and processes involved in realising the Sogelink Digital Twin. Follow its journey from concept to an interactive and dynamic data environment.
-			</div>
-		</div>
-		<img id="top-logo" src="https://bim-w.com/wp-content/uploads/SOGELINK_Logo_Responsive_01_Bleu.png" alt="Sogelink" />
-	</div>
+	
+	<HeaderThree on:select={() => {
+		if (window.scrollY < window.innerHeight) {
+			window.scroll({
+				top: window.innerHeight,
+				behavior: 'smooth'
+			});
+		}
+		selectedItem.set(config.phases[0].blocks[0])
+	}} />
 
-	<!--<ThreeDeeTilesRenderTest />-->
-
-	<div id="top-banner">
-		<div id="top-banner-overlay"></div>
-	</div>
 
 	{#if config && config.phases}
 		{#each config.phases as phase}
@@ -76,7 +71,7 @@
 		{/each}
 		<ContentModal bind:selectedItem {config} />
 	{/if}
-
+<!--
 	<div class="phase-header">
 		<div class="phase-header-title">Result</div>
 		<CaretDown size={32} />
@@ -84,7 +79,7 @@
 	<div id="embedded-viewer-container">
 		<embed src="https://sogelink.beta.geodan.nl/" id="embedded-viewer">
 	</div>
-
+-->
 
 	<div id="footer">
 		Copyright © {new Date().getFullYear()} | Created by Sogelink Group
@@ -102,61 +97,6 @@
 		background-color: #fcfcfa;
 		position: relative;
 	}
-
-	#top-intro {
-		position: relative;
-	}
-	#top-intro-container {
-		display: grid;
-		grid-template-columns: 2fr 3fr;
-		column-gap: 50px;
-		justify-content: space-between;
-		align-items: center;
-		padding: 50px 50px 40px 180px;
-		max-width: 1400px;
-		margin: 0 auto;
-	}
-
-	.top-heading-sup {
-		font-size: 1.5rem;
-		font-weight: 400;
-	}
-	.top-heading {
-		font-size: 2.5rem;
-		font-weight: 600;
-	}
-	#top-intro-right {
-		font-size: 1.1rem;
-		line-height: 1.2;
-		font-weight: 600;
-	}
-	#top-logo {
-		position: absolute;
-		top: 50%;
-		left: 20px;
-		transform: translateY(-50%);
-		width: 150px;
-	}
-
-
-	#top-banner {
-		background-image: url(https://storage.googleapis.com/ahp-research/projects/communicatie/images/render_6-2mb.png);
-		height: 500px;
-		width: 110%;
-		margin-left: -5%;
-		background-size: cover;
-		background-position: center;
-		position: relative;
-	}
-	#top-banner-overlay {
-		/*background: linear-gradient(45deg, transparent 70%, rgba(252, 252, 250, 100%) 90%);*/
-		height: 100%;
-		width: 100%;
-		position: absolute;
-		top: 0;
-		right: 0;
-	}
-
 
 	.phase-header {
 		display: flex;

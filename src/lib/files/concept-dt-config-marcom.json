@@ -285,7 +285,7 @@
 				"image": "https://storage.googleapis.com/ahp-research/projects/communicatie/images/cesium-globe-streets-world.png"
 			},
 			{
-				"title": "3D Tiles",
+				"title": "3D Data",
 				"content": "An important standard for optimized 3D data visualization is the OGC 3D Tiles standard. 3D Tiles is an open standard for streaming massive 3D geospatial datasets over the internet. The standard is actively being developed by the Cesium team and officially supported by the OGC (Open Geospatial Consortium). 3D Tiles is designed to efficiently organize and transmit large 3D datasets.<br> <img src='https://images.prismic.io/cesium/cdc4f1d8-cc75-484d-92e6-3bfc5b6d1fdf_3DTiles-Color-White.png?auto=compress,format' class='module-img' />",
 				"components": [
 					{
