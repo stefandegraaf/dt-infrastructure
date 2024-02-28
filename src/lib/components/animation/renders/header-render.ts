@@ -3,6 +3,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { getFresnelMaterial } from '../materials/fresnel-material';
 import gsap from 'gsap';
 import { createParticles } from '../objects/erratic-points';
+import type { Writable } from 'svelte/store';
 
 
 class RaycasterBase {
@@ -51,7 +52,7 @@ export class HeaderRender {
 	private ready: boolean = false;
 	private state: number = 0;
 
-	constructor(canvas: HTMLElement) {
+	constructor(canvas: HTMLElement, startAnimationProgress: Writable<number>) {
 		this.canvas = canvas;
 		this.scene = new THREE.Scene();
 		this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -72,12 +73,13 @@ export class HeaderRender {
 
 		this.camera.position.set(-1, 5, 70);
 		this.camera.lookAt(-5, 0, 0);
-		gsap.to(this.camera.position, {
+		let tween = gsap.to(this.camera.position, {
 			z: 7,
 			duration: 5,
 			ease: "power2.out",
 			onUpdate: () => {
 				this.camera.lookAt(-5, 0, 0);
+				startAnimationProgress.set(tween.progress());
 			},
 			onComplete: () => {
 				this.ready = true;
@@ -412,27 +414,27 @@ export class HeaderRender {
 				}
 			});
 
-			gsap.to(this.camera.position, {
-				x: this.state === 0 ? -1 : 0.5,
-				y: this.state === 0 ? 5 : 6,
-				z: this.state === 0 ? 7 : 8,
-				duration: duration,
-				ease: "power2.out"
-			});
+			if (this.ready)  {
+				gsap.to(this.camera.position, {
+					x: this.state === 0 ? -1 : 0.5,
+					y: this.state === 0 ? 5 : 6,
+					z: this.state === 0 ? 7 : 8,
+					duration: duration,
+					ease: "power2.out"
+				});
+			}
 		}
 	
 
 
 		const renderLoop = () => {
 			this.animationFrame = requestAnimationFrame(renderLoop);
-
-			//updateIntensity();
-    		//createLight();
-			wireframeShaderMaterial.uniforms.u_time.value = performance.now() / 1200; // time in seconds
-			starsMaterial.uniforms.progress.value = Math.abs(Math.sin(performance.now() / 13000));
-			stars.particles.rotation.y += 0.0001;
-
+			
 			if (this.isIntersecting) {
+				wireframeShaderMaterial.uniforms.u_time.value = performance.now() / 1200; // time in seconds
+				starsMaterial.uniforms.progress.value = Math.abs(Math.sin(performance.now() / 13000));
+				stars.particles.rotation.y += 0.0001;
+
 				earth.rotation.y += 0.00025;
 				clouds.rotation.y += 0.0002;
 				dots.rotation.y += 0.00025;
@@ -456,7 +458,7 @@ export class HeaderRender {
 					this.state = 0;
 				}
 				if (state !== this.state) {
-					if (this.ready) setState(this.state);
+					setState(this.state);
 				}
 
 				this.renderer.render(this.scene, this.camera);

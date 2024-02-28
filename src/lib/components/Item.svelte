@@ -14,7 +14,7 @@
 <div class="step-container">
 	<div class="step-image" style="background-image:url('{item.image}')" on:click={() => dispatch("select")}></div>
 	<div class="step-title">
-		{String(item.index + 1).padStart(2, '0')}. {item.title}
+		{String(item.index).padStart(2, '0')}. {item.title}
 	</div>
 	<div class="step-sub" on:click={() => dispatch("select")}>
 		More info 

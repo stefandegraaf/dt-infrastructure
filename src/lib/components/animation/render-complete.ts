@@ -5,6 +5,8 @@ import { BatchedGLBRender, GLBRender } from './renders/glb-render';
 import { EarthRender } from './renders/earth-render';
 import { ThreeDeeTilesRender } from './renders/tiles3D-render';
 import { MeshRender } from './renders/mesh-render';
+import { TerrainRender } from './renders/terrain-render';
+import { DataCore } from './renders/datacore-render';
 
 export class ThreeRenderComplete {
 
@@ -23,6 +25,8 @@ export class ThreeRenderComplete {
 	private bim!: BatchedGLBRender;
 	private spiral!: MeshRender;
 	private sogelinkOffice!: ThreeDeeTilesRender;
+	private terrain!: TerrainRender;
+	private dataCore!: DataCore;
 
 	constructor(canvas: HTMLElement, selectedIndex: Writable<number | undefined>) {
 		this.canvas = canvas;
@@ -104,7 +108,7 @@ export class ThreeRenderComplete {
 			for (const callback of this.renderCallbacks) {
 				callback();
 			}
-			//this.renderer.render(this.scene, this.camera);
+			this.renderer.render(this.scene, this.camera);
 		}
 		renderLoop();
 	}
@@ -171,6 +175,23 @@ export class ThreeRenderComplete {
 				break;
 			case 12:
 				this.sogelinkOffice ? this.sogelinkOffice.add() : this.sogelinkOffice = new ThreeDeeTilesRender(this, "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/ifc/existing_building/tileset.json");
+				break;
+			case 13:
+				this.sogelinkOffice?.dispose();
+				this.terrain?.dispose();
+				break;
+			case 14:
+				this.terrain ? this.terrain.add() : this.terrain = new TerrainRender(this);
+				break;
+			case 15:
+				this.terrain?.dispose();
+				this.dataCore?.dispose();
+				break;
+			case 16:
+				this.dataCore ? this.dataCore.add() : this.dataCore = new DataCore(this);
+				break;
+			case 17:
+				this.dataCore?.dispose();
 				break;
 			default:
 				break;

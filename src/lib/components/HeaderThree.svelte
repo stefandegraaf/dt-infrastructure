@@ -1,6 +1,6 @@
 <script lang="ts">
     import { createEventDispatcher, onDestroy, onMount } from "svelte";
-	import type { Writable } from "svelte/store";
+	import { writable, type Writable } from "svelte/store";
 
     import { HeaderRender } from "./animation/renders/header-render";
 
@@ -8,12 +8,15 @@
 	let canvas: HTMLElement | null;
 	let renderer: HeaderRender | undefined;
 
+	const startAnimationProgress: Writable<number> = writable(0);
+	$: progress = Math.min($startAnimationProgress + 0.1, 1);
+
 	onMount(() => {
 		canvas = document.getElementById('header-canvas');
 		if (!canvas) {
 			throw new Error('Canvas not found');
 		}
-		renderer = new HeaderRender(canvas);
+		renderer = new HeaderRender(canvas, startAnimationProgress);
 
 
 
@@ -25,7 +28,7 @@
 			if (!headerLogo || !headerHeading || !headerButton) return;
 			headerLogo.style.transform = `translateY(${offset * 0.4}px)`;
 			headerHeading.style.transform = `translateY(${offset * 0.4}px)`;
-			headerButton.style.transform = `translateY(${offset * 0.4}px)`;
+			headerButton.style.transform = `translateY(${offset * 0.35}px)`;
 		});
 	});
 	
@@ -41,10 +44,13 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div id="header" on:click={() => dispatch('select')}>
 	<canvas id="header-canvas"></canvas>
-	<div id="header-content">
+	<div id="header-content" style="transform:scale({progress}); left: max(50px, {20 * (1 - progress) + 6}%); top: {20 * progress}%; opacity: {progress}">
 		<img id="header-logo" src="https://bim-w.com/wp-content/uploads/SOGELINK_Logo_Responsive_01_Bleu.png" alt="Sogelink" />
 		<div id="header-heading">From Concept to Digital Twin</div>
-		<button id="header-button">START THE JOURNEY</button>
+		<!--<button id="header-button">START THE JOURNEY</button>-->
+		<div id="header-text">
+			This series provides a look into the challenges and techniques for creating the Sogelink Digital Twin. Follow its journey from concept to an interactive and dynamic data environment.
+		</div>
 	</div>
 </div>
 
@@ -55,6 +61,7 @@
 		height: max(100vh, 1000px);
 		display: block;
 		position: relative;
+		cursor: pointer;
 	}
 
 	#header-canvas {
@@ -70,8 +77,9 @@
 		top: 20%;
 		width: 40%;
 		height: 100%;
-		z-index: 10;
+		z-index: 1;
 		color: #fff;
+		pointer-events: none;
 	}
 
 	#header-heading {
@@ -85,8 +93,16 @@
 		filter: grayscale(1) invert(1);
 	}
 
+	#header-text {
+		font-size: 1.2em;
+		font-weight: 600;
+		line-height: 1.5rem;
+		margin-top: 40px;
+		max-width: 600px;
+	}
+
 	#header-button {
-		background: linear-gradient(15deg, #ced7e0 0%, #9ccddc 100%);
+		background: linear-gradient(15deg, #ced7e0 0%, #00e1ff 100%);
 		color: rgb(0, 17, 43);
 		font-weight: 900;
 		padding: 15px 30px;

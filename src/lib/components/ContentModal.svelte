@@ -211,14 +211,14 @@
 		width: 82%;
 		height: 96%;
 		z-index: 2;
-		background-color: rgba(0, 17, 43, 0.82);
+		background-color: rgba(0, 17, 43, 0.92);
 		color: #fff;
 		backdrop-filter: blur(0px);
 		border-radius: 3px;
 		overflow: hidden;
 	}
 	.modal-inner {
-		padding: 50px 50px 100px;
+		padding: 50px 50px 1000px;
 		height: 100%;
 		overflow-x: hidden;
 		-ms-overflow-style: none;  /* IE and Edge */
@@ -243,9 +243,9 @@
 		transform: translate(-50%, -50%);
 		width: 80%;
 		height: 90%;
-		opacity: 0.75;
+		opacity: 0.65;
 		z-index: 1;
-		/*background-image: url('https://storage.googleapis.com/ahp-research/projects/communicatie/images/render_6-2mb.png');*/
+		background-image: url('https://storage.googleapis.com/ahp-research/projects/communicatie/images/render_6-2mb.png');
 		background-size: cover;
 		background-position: center;
 		border-radius: 3px;

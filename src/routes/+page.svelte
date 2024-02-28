@@ -49,7 +49,7 @@
 	<HeaderThree on:select={() => {
 		if (window.scrollY < window.innerHeight) {
 			window.scroll({
-				top: window.innerHeight,
+				top: window.innerHeight + 50,
 				behavior: 'smooth'
 			});
 		}
@@ -58,16 +58,18 @@
 
 
 	{#if config && config.phases}
-		{#each config.phases as phase}
-			<div class="phase-header">
-				<div class="phase-header-title">{phase.phase}</div>
-				<CaretDown size={32} />
-			</div>
-			<div class="block-overview">
-				{#each phase.blocks as item }
-					<Item {item} on:select={() => selectedItem.set(item)}/>
-				{/each}
-			</div>
+		{#each config.phases as phase, i}
+			{#if i !== 0}
+				<div class="phase-header">
+					<div class="phase-header-title">{phase.phase}</div>
+					<CaretDown size={32} />
+				</div>
+				<div class="block-overview">
+					{#each phase.blocks as item }
+						<Item {item} on:select={() => selectedItem.set(item)}/>
+					{/each}
+				</div>
+			{/if}
 		{/each}
 		<ContentModal bind:selectedItem {config} />
 	{/if}
