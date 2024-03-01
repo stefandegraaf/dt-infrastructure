@@ -19,7 +19,6 @@
 		renderer = new HeaderRender(canvas, startAnimationProgress);
 
 
-
 		const headerLogo = document.getElementById('header-logo');
 		const headerHeading = document.getElementById('header-heading');
 		const headerButton = document.getElementById('header-button');
@@ -42,15 +41,15 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div id="header" on:click={() => dispatch('select')}>
+<div id="header" on:click={() => dispatch('select2')}>
 	<canvas id="header-canvas"></canvas>
 	<div id="header-content" style="transform:scale({progress}); left: max(50px, {20 * (1 - progress) + 6}%); top: {20 * progress}%; opacity: {progress}">
 		<img id="header-logo" src="https://bim-w.com/wp-content/uploads/SOGELINK_Logo_Responsive_01_Bleu.png" alt="Sogelink" />
 		<div id="header-heading">From Concept to Digital Twin</div>
-		<!--<button id="header-button">START THE JOURNEY</button>-->
 		<div id="header-text">
 			This series provides a look into the challenges and techniques for creating the Sogelink Digital Twin. Follow its journey from concept to an interactive and dynamic data environment.
 		</div>
+		<button id="header-button" on:click={() => dispatch('select')}>START THE JOURNEY</button>
 	</div>
 </div>
 
@@ -61,7 +60,6 @@
 		height: max(100vh, 1000px);
 		display: block;
 		position: relative;
-		cursor: pointer;
 	}
 
 	#header-canvas {
@@ -79,7 +77,6 @@
 		height: 100%;
 		z-index: 1;
 		color: #fff;
-		pointer-events: none;
 	}
 
 	#header-heading {
@@ -97,16 +94,16 @@
 		font-size: 1.2em;
 		font-weight: 600;
 		line-height: 1.5rem;
-		margin-top: 40px;
+		margin-top: 40px;pointer-events: none;
 		max-width: 600px;
 	}
 
 	#header-button {
-		background: linear-gradient(15deg, #ced7e0 0%, #00e1ff 100%);
-		color: rgb(0, 17, 43);
+		background: linear-gradient(15deg, rgb(0, 17, 43) 0%, #00e1ff 100%);
+		color: #fff;
+		border: 1px solid #00e1ff;
 		font-weight: 900;
 		padding: 15px 30px;
-		border: none;
 		border-radius: 5px;
 		font-size: 1.5em;
 		margin-top: 80px;

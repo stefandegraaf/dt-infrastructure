@@ -50,7 +50,7 @@
 		if (window.scrollY < window.innerHeight) {
 			window.scroll({
 				top: window.innerHeight + 50,
-				behavior: 'smooth'
+				//behavior: 'smooth'
 			});
 		}
 		selectedItem.set(config.phases[0].blocks[0])
@@ -66,7 +66,13 @@
 				</div>
 				<div class="block-overview">
 					{#each phase.blocks as item }
-						<Item {item} on:select={() => selectedItem.set(item)}/>
+						<Item {item} on:select={() => {
+							window.scroll({
+								top: Math.max(window.scrollY, window.innerHeight + 50)
+								//behavior: 'smooth'
+							});
+							selectedItem.set(item)
+							}}/>
 					{/each}
 				</div>
 			{/if}

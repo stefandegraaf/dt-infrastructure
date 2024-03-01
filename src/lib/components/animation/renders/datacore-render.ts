@@ -18,9 +18,8 @@ export class DataCore extends ThreeRenderAbstract {
 	private fboScene!: THREE.Scene;
 	private fboCamera!: THREE.OrthographicCamera;
 
-	constructor(renderer: ThreeRenderComplete) {
-		super(renderer);
-		this.init();
+	constructor(renderer: ThreeRenderComplete, start: number, end: number) {
+		super(renderer, start, end);
 	}
 
 	addToScene() {
@@ -39,7 +38,7 @@ export class DataCore extends ThreeRenderAbstract {
 		this.model.visible = false;
 	}
 
-	render() {
+	construct() {
 		new OrbitControls(this.renderer.camera, this.renderer.canvas);
 		
 		const textureLoader = new THREE.TextureLoader();
@@ -256,7 +255,7 @@ export class DataCore extends ThreeRenderAbstract {
 		*/
 	}
 
-	renderLoop() {
+	render() {
 
 		this.uniforms.uProgress.value = Math.abs(Math.sin(performance.now() / 3000));
 		

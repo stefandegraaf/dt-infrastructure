@@ -1,9 +1,12 @@
 import * as THREE from 'three';
+import gsap from 'gsap';
+
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 import type { ThreeRenderComplete } from "../render-complete";
 import { getFresnelMaterial } from '../materials/fresnel-material.js';
 import { ThreeRenderAbstract } from './render-base';
+import { earthDots, earthWireFrame } from './render-objects';
 
 
 
@@ -11,58 +14,119 @@ export class EarthRender extends ThreeRenderAbstract {
 
 	private earth!: THREE.Group;
 	private clouds!: THREE.Mesh;
+	private fresnel!: THREE.Mesh;
 	private moon!: THREE.Mesh;
-	private light!: THREE.DirectionalLight;
 	private dottedSurface!: THREE.Points;
+	private wireframe!: THREE.LineSegments;
+	private light!: THREE.DirectionalLight;
 
-	private texture: string;
-	private size: number;
+	private dotsMaterial!: THREE.ShaderMaterial;
+	private wireframeMaterial!: THREE.ShaderMaterial;
 
+	private size: number = 1000;
 	private fading = false;
 	private opacity = 1.0;
 
-
-	constructor(renderer: ThreeRenderComplete, texture: string, size: number) {
-		super(renderer);
-		this.texture = texture;
-		this.size = size;
-		this.init();
+	constructor(renderer: ThreeRenderComplete, start: number, end: number) {
+		super(renderer, start, end);
+		this.construct();
+		this.renderer.progressWritable.subscribe((progress) => {
+			if (progress >= start - 0.99 && progress < end - 0.01) {
+				if (!this.added) this.add();
+			} else {
+				if (this.added) this.dispose();
+			}
+		});
+		this.renderer.stepWritable.subscribe((step) => {
+			this.onStepChange(step - this.start);
+		});
 	}
 
 	addToScene(): void {
-		this.renderer.scene.add(this.light);
 		this.renderer.scene.add(this.earth);
+		this.renderer.scene.add(this.fresnel);
 		this.renderer.scene.add(this.moon);
-		this.renderer.scene.add(this.dottedSurface);		
+		this.renderer.scene.add(this.dottedSurface);
+		this.renderer.scene.add(this.wireframe);
+		this.renderer.scene.add(this.light);
 	}
 
 	disposeFromScene(): void {
-		this.fadeEarth();
-		this.renderer.scene.remove(this.light);
 		this.renderer.scene.remove(this.earth);
+		this.renderer.scene.remove(this.fresnel);
 		this.renderer.scene.remove(this.moon);
 		this.renderer.scene.remove(this.dottedSurface);
+		this.renderer.scene.remove(this.wireframe);
+		this.renderer.scene.remove(this.light);
 	}
 
-	show(): void {
-		this.earth.visible = true;
-		this.dottedSurface.visible = true;
+	onStepChange(progress: number) {
+		if (progress === 0) {
+			this.setRealistic();
+			gsap.to(this.renderer.camera.position, {
+				x: 0,
+				y: this.size * 1.04,
+				z: this.size * 1.04,
+				duration: 3,
+				ease: "power2.out",
+				onUpdate: () => {
+					this.renderer.camera.lookAt(0, 0, 0);
+				}
+			});
+		} else if (progress === 1) {
+			this.setDotted();
+			gsap.to(this.renderer.camera.position, {
+				x: 0,
+				y: this.size * 1.3,
+				z: this.size * 1.3,
+				duration: 3,
+				ease: "power2.out",
+				onUpdate: () => {
+					this.renderer.camera.lookAt(0, 0, 0);
+				}
+			});
+		} else if (progress === 2) {
+			this.setDotted();
+			gsap.to(this.renderer.camera.position, {
+				x: 0,
+				y: this.size * 1.5,
+				z: this.size * 1.5,
+				duration: 3,
+				ease: "power2.out",
+				onUpdate: () => {
+					this.renderer.camera.lookAt(0, 0, 0);
+				}
+			});
+		}
+
+		gsap.to(this.dotsMaterial.uniforms.u_opacity, {
+			value: progress === 1 || progress === 2 ? 1.0 : 0.0,
+			duration: 3,
+			ease: "power2.out"
+		});
+
+		gsap.to(this.wireframeMaterial.uniforms.u_opacity, {
+			value: progress === 1 || progress === 2 ? 1.0 : 0.0,
+			duration: 3,
+			ease: "power2.out"
+		});
 	}
 
-	hide(): void {
-		this.earth.visible = false;
-		this.dottedSurface.visible = false;
-	}
 
 	public setRealistic(): void {
 		this.setOpacity(1.0);
 		this.fading = false;
 		this.earth.visible = true;
+		this.fresnel.visible = true;
 		this.dottedSurface.visible = false;
+		this.wireframe.visible = false;
 	}
 
 	public setDotted(): void {
 		this.dottedSurface.visible = true;
+		this.wireframe.visible = true;
+		this.earth.visible = false;
+		this.fresnel.visible = true;
 		this.fadeEarth();
 	}
 	
@@ -75,16 +139,15 @@ export class EarthRender extends ThreeRenderAbstract {
 		}, 1000);
 	}
 
-	render(): void {
+	construct(): void {
 		this.earth = new THREE.Group();
 		this.earth.position.set(0, 0, 0);
 		new OrbitControls(this.renderer.camera, this.renderer.canvas);
-
-		const segments = this.size * 5;
+		
 		const geometry = new THREE.IcosahedronGeometry(this.size, 12);
 		const loader = new THREE.TextureLoader();
 		const normalMap = loader.load("https://raw.githubusercontent.com/8bittree/normal_heights/d7f1ed36457a9861464c5a937913173ac3e20b4d/samples/gebco_08_rev_elev_1080x540_normal.png");
-		const earthTexture = loader.load(this.texture);
+		const earthTexture = loader.load("./src/lib/files/textures/8k_earth_daymap.jpg");
 		earthTexture.colorSpace = THREE.SRGBColorSpace;
 		const material = new THREE.MeshStandardMaterial({
 			map: earthTexture,
@@ -94,7 +157,7 @@ export class EarthRender extends ThreeRenderAbstract {
 		this.earth.add(earthBasis);
 
 		// Create the moon
-        const moonGeometry = new THREE.SphereGeometry(this.size / 4, segments, segments);
+        const moonGeometry = new THREE.SphereGeometry(this.size / 4, 32, 32);
         const moonTexture = new THREE.TextureLoader().load("https://www.shutterstock.com/image-photo/textured-surface-moon-earths-satellite-260nw-1701426850.jpg");
 		const moonNormalMap = new THREE.TextureLoader().load("https://static.turbosquid.com/Preview/2020/02/10__12_15_26/The_Moon_Normal_Map_Cover_000.jpg3B67A625-1ED4-42EC-89CF-71DBFF106E25Large.jpg");
         const moonMaterial = new THREE.MeshStandardMaterial({
@@ -102,7 +165,7 @@ export class EarthRender extends ThreeRenderAbstract {
 			normalMap: moonNormalMap
 		});
         this.moon = new THREE.Mesh(moonGeometry, moonMaterial);
-        this.moon.position.set(12, 0, 0);
+        this.moon.position.set(this.size * 10, 0, 0);
 
 
 		//this.light = new THREE.HemisphereLight(0xffffff, 0x000000, 3);
@@ -149,7 +212,7 @@ export class EarthRender extends ThreeRenderAbstract {
 			`,
 			blending: THREE.AdditiveBlending
 		});
-		const lightsMesh = new THREE.Mesh(new THREE.IcosahedronGeometry(this.size + 0.01, 12), lightsMat);
+		const lightsMesh = new THREE.Mesh(new THREE.IcosahedronGeometry(this.size * 1.001, 12), lightsMat);
 		this.earth.add(lightsMesh);
 		//let helper = new VertexNormalsHelper(lightsMesh, 2, 0x00ff00);
 		//this.earth.add(helper);
@@ -160,67 +223,24 @@ export class EarthRender extends ThreeRenderAbstract {
 			map: loader.load('./src/lib/files/textures/8k_earth_clouds.jpg'),
 			blending: THREE.AdditiveBlending
 		});
-		this.clouds = new THREE.Mesh(new THREE.IcosahedronGeometry(this.size + 0.04, 12), cloudMat);
+		this.clouds = new THREE.Mesh(new THREE.IcosahedronGeometry(this.size * 1.004, 12), cloudMat);
 		this.earth.add(this.clouds);
 
 		const fresnelMat = getFresnelMaterial({rimHex: 0x00aaff, facingHex: 0x0088ff});
-		const fresnelMesh = new THREE.Mesh(new THREE.IcosahedronGeometry(this.size + 0.09, 12), fresnelMat);
-		this.earth.add(fresnelMesh);
+		const fresnelMesh = new THREE.Mesh(new THREE.IcosahedronGeometry(this.size * 1.009, 12), fresnelMat);
+		this.fresnel = fresnelMesh;
 
-		this.renderer.camera.position.z = 20;
+		const wf = earthWireFrame(this.size * 1.009);
+		this.wireframe = wf.mesh;
+		this.wireframeMaterial = wf.material;
 
-		this.createDottedSurface();
+		const dots = earthDots(this.size * 1.009, 20000);
+		this.dottedSurface = dots.points;
+		this.dotsMaterial = dots.material;
+
 		//this.addStars();
-	}
 
-
-	private createDottedSurface(): void {
-		const geometry = new THREE.BufferGeometry();
-		const numberOfDots = 1600;
-		const positions = new Float32Array(numberOfDots * 3);
-
-		for (let i = 0; i < numberOfDots; i++) {
-			const theta = Math.random() * Math.PI * 2;
-			const phi = Math.acos(1 - 2 * Math.random());
-			positions[i * 3] = this.size * Math.sin(phi) * Math.cos(theta);
-			positions[i * 3 + 1] = this.size * Math.sin(phi) * Math.sin(theta);
-			positions[i * 3 + 2] = this.size * Math.cos(phi);
-		}
-		geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-		const material = new THREE.PointsMaterial({ size: 0.06, color: 0xff44ff });
-
-		geometry.setAttribute('size', new THREE.BufferAttribute(new Float32Array(numberOfDots), 1));
-		const vertexShader = `
-			uniform float time;
-			uniform vec3 color;
-			attribute float size;
-			varying vec3 vColor;
-			void main() {
-				vColor = color;
-				vec3 pos = position;
-				vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-				gl_PointSize = size * (300.0 / -mvPosition.z);
-				gl_Position = projectionMatrix * mvPosition;
-			}
-		`;
-
-		const fragmentShader = `
-			uniform vec3 color;
-			varying vec3 vColor;
-			void main() {
-				gl_FragColor = vec4(color * vColor, 1.0);
-			}
-		`;
-		const material7 = new THREE.ShaderMaterial({
-			uniforms: {
-				color: { value: new THREE.Color(0xff44ff) },
-				time: { value: 0 }
-			},
-			vertexShader: vertexShader,
-			fragmentShader: fragmentShader,
-		});
-
-		this.dottedSurface = new THREE.Points(geometry, material);
+		//this.createDottedSurface();
 	}
 
 
@@ -253,23 +273,26 @@ export class EarthRender extends ThreeRenderAbstract {
 		
 	}
 
-	renderLoop() {
-		
-		this.earth.rotation.y += 0.0008;
-		this.dottedSurface.rotation.y += 0.0008;
+	render() {
+		this.renderer.pivot.rotation.y += 0.0001;
+		this.earth.rotation.y -= 0.0002;
+		this.dottedSurface.rotation.y += 0.0004;
 
-		this.clouds.rotation.x -= 0.0001;
-		this.clouds.rotation.y -= 0.0001;
+		this.clouds.rotation.x -= 0.00005;
+		this.clouds.rotation.y -= 0.00005;
 
-
-		// Rotate the moon around the Earth at a fixed incline
-		const angle = -Date.now() / 2000;
-		const radius = 14;
+		const angle = this.renderer.clock.getElapsedTime() * 0.1;
+		const radius = this.size * 10;
 		const incline = Math.PI / 36; // 5 degrees
 		this.moon.position.x = radius * Math.cos(angle);
 		this.moon.position.y = radius * Math.sin(incline) * Math.sin(angle);
 		this.moon.position.z = radius * Math.cos(incline) * Math.sin(angle);
 
+		this.light.position.x = radius * Math.cos(angle);
+		this.light.position.z = radius * Math.sin(angle);
+
+		this.wireframeMaterial.uniforms.u_time.value = this.renderer.clock.getElapsedTime();
+		
 		if (this.fading) {
 			this.setOpacity(this.opacity - 0.004);
 		}

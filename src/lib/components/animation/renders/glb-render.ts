@@ -1,48 +1,101 @@
 import * as THREE from 'three';
 
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
+
 import type { ThreeRenderComplete } from '../render-complete';
 import { createNoise2D } from 'simplex-noise';
 import { ThreeRenderAbstract } from './render-base';
 
 
-class ThreeGLBModel {
+interface glbLoadOptions {
+	useDraco: boolean | undefined;
+	animated: boolean | undefined;
+	verticalOffset: number | undefined;
+}
+
+export class ThreeGLBModel {
 
 	private scene: THREE.Scene;
-	private position: THREE.Vector3 | undefined;
-	private animated: boolean;
-	public model!: THREE.Object3D;
-	private mixer!: THREE.AnimationMixer;
+	private positions: Array<THREE.Vector3>;
+	private options: any;
 
-	constructor(url: string, position: THREE.Vector3 | undefined, animated: boolean, scene: THREE.Scene) {
+	public model!: THREE.Object3D;
+	public modelInstances: Array<THREE.Object3D> = [];
+	private mixers!: Array<THREE.AnimationMixer>;
+
+	public loaded: boolean = false;
+
+	constructor(url: string, positions: Array<THREE.Vector3>, scene: THREE.Scene, options: glbLoadOptions) {
 		this.scene = scene;
-		this.position = position;
-		this.animated = animated;
+		this.positions = positions;
+		this.options = options;
 		this.loadModel(url);
 	}
 
 	private loadModel(url: string): void {
 		const loader = new GLTFLoader();
+		if (this.options.useDraco) this.addDracoLoader(loader);
 		loader.load(url, (glb) => {
 			this.model = glb.scene;
-			if (this.position) this.model.position.set(this.position.x, this.position.y, this.position.z);
-			this.scene.add(this.model);
-			if (this.animated) {
-				this.mixer = new THREE.AnimationMixer(this.model);
-				const clips = glb.animations;
-				if (clips.length > 0) {
-					const action = this.mixer.clipAction(clips[0]);
-					action.play();
+
+			// correct position
+			let offset = 0;
+			if (this.options.verticalOffset) {
+				const boundingBox = new THREE.Box3();
+				glb.scene.traverse(function(node) {
+					if (node instanceof THREE.Mesh) {
+						boundingBox.expandByObject(node);
+					}
+				});
+				const height = boundingBox.max.z - boundingBox.min.z;
+				const offset = height * 0.5;
+			
+				//glb.scene.position.y = offset;
+				//const helper = new THREE.Box3Helper(boundingBox, 0xffff00);
+				//this.scene.add(helper);
+			}
+
+			for (let i = 0; i < this.positions.length; i++) {
+				const instance = this.model.clone();
+				instance.position.set(this.positions[i].x, this.positions[i].y, this.positions[i].z);
+				instance.position.y += offset
+				this.modelInstances.push(instance);
+
+				if (this.options.animated) {
+					const mixer = new THREE.AnimationMixer(this.model);
+					this.mixers.push(mixer);
+					const clips = glb.animations;
+					if (clips.length > 0) {
+						const action = mixer.clipAction(clips[0]);
+						action.play();
+					}
 				}
 			}
+			this.loaded = true;
 		});
 	}
 
-	public updateAnimation(delta: number): void {
-		if (this.animated && this.mixer) this.mixer.update(delta);
+	private afterModelLoaded(): void {
+		//this.model.scale.set(0.1, 0.1, 0.1);
+		//this.model.position.set(0, 0, 0);
+		//this.model.rotation.set(0, 0, 0);
 	}
 
+	private addDracoLoader(gltfLoader: GLTFLoader): void {
+		const dracoLoader = new DRACOLoader();
+		dracoLoader.setDecoderConfig({ type: 'js' });
+		dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
+		gltfLoader.setDRACOLoader(dracoLoader);
+	}
+
+	public updateAnimation(delta: number): void {
+		if (this.options.animated && this.mixers) this.mixers.forEach(mixer => mixer.update(delta));
+	}
 }
+
+
+
 
 class ThreeTerrainModel {
 
@@ -109,12 +162,11 @@ export class GLBRender extends ThreeRenderAbstract {
 	private animated: boolean;
 	private clock: THREE.Clock | undefined;
 
-	constructor(renderer: ThreeRenderComplete, url: string, animated: boolean) {
-		super(renderer);
+	constructor(renderer: ThreeRenderComplete, start: number, end: number, url: string, animated: boolean) {
+		super(renderer, start, end);
 		this.url = url;
 		this.animated = animated;
 		if (this.animated) this.clock = new THREE.Clock();
-		this.init();
 	}
 
 	addToScene() {
@@ -140,7 +192,7 @@ export class GLBRender extends ThreeRenderAbstract {
 		this.terrain.wireframe.visible = false;
 	}
 
-	render() {
+	construct() {
 		this.addModel(this.url, new THREE.Vector3(0,0,0));
 		this.addModel(this.url, new THREE.Vector3(100,0,100));
 		this.addModel(this.url, new THREE.Vector3(-100,0,-100));
@@ -163,11 +215,15 @@ export class GLBRender extends ThreeRenderAbstract {
 	}
 
 	public addModel(url: string, position: THREE.Vector3): void {
-		const model = new ThreeGLBModel(url, position, this.animated, this.renderer.scene);
+		const model = new ThreeGLBModel(url, [position], this.renderer.scene, {
+			useDraco: false,
+			animated: this.animated,
+			verticalOffset: 0
+		});
 		this.models.push(model);
 	}
 
-	renderLoop() {
+	render() {
 		this.flightPath.updateCamera(this.renderer.camera);
 
 		if (this.animated && this.clock) {
@@ -189,12 +245,11 @@ export class BatchedGLBRender extends ThreeRenderAbstract {
 	private animated: boolean;
 	private clock: THREE.Clock | undefined;
 
-	constructor(renderer: ThreeRenderComplete, urls: Array<string>, animated: boolean) {
-		super(renderer);
+	constructor(renderer: ThreeRenderComplete, start: number, end: number, urls: Array<string>, animated: boolean) {
+		super(renderer, start, end);
 		this.urls = urls;
 		this.animated = animated;
 		if (this.animated) this.clock = new THREE.Clock();
-		this.init();
 	}
 
 	addToScene() {
@@ -220,7 +275,7 @@ export class BatchedGLBRender extends ThreeRenderAbstract {
 		//this.terrain.wireframe.visible = false;
 	}
 
-	render() {
+	construct() {
 		this.urls.forEach(url => this.addModel(url));
 
 		//this.terrain = new ThreeTerrainModel(2, 300, 300, 100, 100);
@@ -234,7 +289,7 @@ export class BatchedGLBRender extends ThreeRenderAbstract {
 	}
 
 
-	renderLoop() {
+	render() {
 
 		this.models.forEach(model => {
 			if (model.model?.position) console.log(model)
@@ -247,7 +302,11 @@ export class BatchedGLBRender extends ThreeRenderAbstract {
 	}
 
 	public addModel(url: string): void {
-		const model = new ThreeGLBModel(url, undefined, this.animated, this.renderer.scene);
+		const model = new ThreeGLBModel(url, [new THREE.Vector3(0,0,0)], this.renderer.scene, {
+			useDraco: false,
+			animated: this.animated,
+			verticalOffset: 0
+		});
 		this.models.push(model);
 	}
 

@@ -1,12 +1,14 @@
-import type { Unsubscriber, Writable } from 'svelte/store';
+import { writable, type Unsubscriber, type Writable } from 'svelte/store';
 import * as THREE from 'three';
+import gsap from 'gsap';
 
-import { BatchedGLBRender, GLBRender } from './renders/glb-render';
+import type { BatchedGLBRender, GLBRender } from './renders/glb-render';
 import { EarthRender } from './renders/earth-render';
-import { ThreeDeeTilesRender } from './renders/tiles3D-render';
-import { MeshRender } from './renders/mesh-render';
-import { TerrainRender } from './renders/terrain-render';
-import { DataCore } from './renders/datacore-render';
+import type { ThreeDeeTilesRender } from './renders/tiles3D-render';
+import type { MeshRender } from './renders/mesh-render';
+import type { TerrainRender } from './renders/terrain-render';
+import type { DataCore } from './renders/datacore-render';
+import { DigiTwinRender } from './renders/digitwin-render';
 
 export class ThreeRenderComplete {
 
@@ -18,8 +20,14 @@ export class ThreeRenderComplete {
 	private selectedIndexUnsubscriber: Unsubscriber;
 
 	public renderCallbacks: Array<() => void> = [];
+	
+	public progress = { value: 0 };
+	public progressWritable: Writable<number> = writable(0);
+	public stepWritable: Writable<number> = writable(0);
+	public clock: THREE.Clock = new THREE.Clock();
+	public pivot: THREE.Object3D = new THREE.Object3D();
 
-	private earth!: EarthRender;
+	private earth: EarthRender ;
 	private particles!: Particles;
 	private windmills!: GLBRender;
 	private bim!: BatchedGLBRender;
@@ -27,6 +35,7 @@ export class ThreeRenderComplete {
 	private sogelinkOffice!: ThreeDeeTilesRender;
 	private terrain!: TerrainRender;
 	private dataCore!: DataCore;
+	private digiTwin: DigiTwinRender;
 
 	constructor(canvas: HTMLElement, selectedIndex: Writable<number | undefined>) {
 		this.canvas = canvas;
@@ -37,6 +46,9 @@ export class ThreeRenderComplete {
 		this.init();
 		this.render();
 
+		this.earth = new EarthRender(this, 1, 3);
+		this.digiTwin = new DigiTwinRender(this, 0, 1);
+
 		this.selectedIndexUnsubscriber = selectedIndex.subscribe((index) => {
 			this.onIndexUpdate(index);
 		});
@@ -46,6 +58,9 @@ export class ThreeRenderComplete {
 		this.renderer.setPixelRatio(window.devicePixelRatio * 0.8);
 		this.setRendererSize();
 		window.addEventListener('resize', () => this.setRendererSize());
+
+		this.pivot.add(this.camera);
+		this.scene.add(this.pivot);
 	}
 
 	public destroy(): void {
@@ -58,10 +73,10 @@ export class ThreeRenderComplete {
 	}
 
 	private destroyAllRenders(): void {
-		this.earth?.dispose();
+		//this.earth?.dispose();
 		this.particles?.dispose();
-		this.windmills?.dispose();
-		this.bim?.dispose();
+		//this.windmills?.dispose();
+		//this.bim?.dispose();
 		this.scene.traverse(object => {
 			if (!(object instanceof THREE.Mesh)) return;
 			object.geometry.dispose();
@@ -115,7 +130,20 @@ export class ThreeRenderComplete {
 
 
 	private onIndexUpdate(index: number | undefined): void {
+		if (index !== undefined) {
+			this.stepWritable.set(index);
+			gsap.to(this.progress, { 
+				value: index, 
+				duration: 1, 
+				onUpdate: () => this.progressWritable.set(this.progress.value) 
+			});
+		}
 		switch (index) {
+			case 0:
+				if (!this.digiTwin) this.digiTwin = new DigiTwinRender(this, 0, 1);
+			case 1:
+				if (!this.earth) this.earth = new EarthRender(this, 1, 4);
+			/*
 			case 0:
 				this.earth ? this.earth.add() : this.earth = new EarthRender(this, './src/lib/files/textures/8k_earth_daymap.jpg', 6);
 				this.earth.setRealistic();
@@ -128,7 +156,8 @@ export class ThreeRenderComplete {
 					this.particles = new Particles(this);
 				} else {
 					this.particles.add();
-				}*/
+				}
+				/
 				break;
 			case 2:
 				this.earth ? this.earth.add() : this.earth = new EarthRender(this, './src/lib/files/textures/8k_earth_daymap.jpg', 6);
@@ -157,7 +186,7 @@ export class ThreeRenderComplete {
 					"https://storage.googleapis.com/ahp-research/projects/circulaire_grondstromen/uwdh/3dtiles/dtb_uwdh_old/content/2_1_0.glb",
 					"https://storage.googleapis.com/ahp-research/projects/circulaire_grondstromen/uwdh/3dtiles/dtb_uwdh_old/content/2_1_3.glb",
 					"https://storage.googleapis.com/ahp-research/projects/circulaire_grondstromen/uwdh/3dtiles/dtb_uwdh_old/content/2_2_0.glb",
-					"https://storage.googleapis.com/ahp-research/projects/circulaire_grondstromen/uwdh/3dtiles/dtb_uwdh_old/content/2_2_3.glb"*/
+					"https://storage.googleapis.com/ahp-research/projects/circulaire_grondstromen/uwdh/3dtiles/dtb_uwdh_old/content/2_2_3.glb"/
 				], true);
 				break;
 			case 8:
@@ -192,9 +221,15 @@ export class ThreeRenderComplete {
 				break;
 			case 17:
 				this.dataCore?.dispose();
+				this.digiTwin?.dispose();
+				break;
+			case 18:
+				this.digiTwin ? this.digiTwin.add() : this.digiTwin = new DigiTwinRender(this);
 				break;
 			default:
 				break;
+		*/
+
 		}
 	}
 

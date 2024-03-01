@@ -57,7 +57,7 @@
 	<div class="modal-container">
 		<div class="modal modal-text">
 			<div class="modal-inner">
-				<!--
+
 				<div class="modal-close-button">
 					<Button
 						kind="tertiary"
@@ -66,7 +66,7 @@
 						icon={Close}
 						on:click={() => selectedItem.set(undefined)}
 					/>
-				</div>-->
+				</div>
 				{#if $selectedItem?.persons?.length > 0}
 					<div class="modal-info">
 						<div class="modal-info-persons">
@@ -208,8 +208,8 @@
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
-		width: 82%;
-		height: 96%;
+		width: 100%;
+		height: 100%;
 		z-index: 2;
 		background-color: rgba(0, 17, 43, 0.92);
 		color: #fff;
@@ -241,8 +241,8 @@
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
-		width: 80%;
-		height: 90%;
+		width: 100%;
+		height: 100%;
 		opacity: 0.65;
 		z-index: 1;
 		background-image: url('https://storage.googleapis.com/ahp-research/projects/communicatie/images/render_6-2mb.png');
@@ -250,17 +250,22 @@
 		background-position: center;
 		border-radius: 3px;
 	}
-	/*
+	
 	.modal-close-button {
 		position: absolute;
-		top: -1px;
-		right: -1px;
+		top: 20px;
+		right: 20px;
+		z-index: 2;
 	}
-	*/
 
 	.modal-header {
 		display: flex;
 		align-items: center;
+		position: relative;
+		z-index: 3;
+		background-color: rgba(0, 17, 43, 0.75);
+		backdrop-filter: blur(8px);
+		padding: 20px 40px;
 	}
 	.modal-header h2 {
 		font-size: 2rem;
@@ -305,12 +310,15 @@
 	.content-blocks {
 		position: relative;
 		z-index: 3;
+		background-color: rgba(0, 17, 43, 0.75);
+		backdrop-filter: blur(8px);
+		padding: 0 40px;
 	}
 	.content-blocks.has-render {
 		padding-bottom: 300px;
 	}
 	.has-render .block-content {
-		background-color: rgba(0, 17, 43, 0.75);
+		/*background-color: rgba(0, 17, 43, 0.75);*/
 		border-radius: 3px;
 		padding: 15px 25px;
 	}

@@ -1,50 +1,51 @@
+import * as THREE from 'three';
 import type { ThreeRenderComplete } from "../render-complete";
+
 
 export abstract class ThreeRenderAbstract {
 
 	public renderer: ThreeRenderComplete;
-	private boundRenderLoop!: () => void;
-	public added: boolean = false;
-	public progress: number = 0;
+	public boundRenderLoop!: () => void;
+	public start: number;
+	public end: number;
 
-	constructor(renderer: ThreeRenderComplete) {
+	public added: boolean = false;
+
+	constructor(renderer: ThreeRenderComplete, start: number, end: number) {
 		this.renderer = renderer;
+		this.start = start;
+		this.end = end;
 	}
 
-	public init(): void {
-		this.render();
-		this.add();
+	public destroy(): void {
+		this.dispose();
 	}
 
 	public add(): void {
-		if (this.added) return;
-		this.added = true;
 		this.addToScene();
-		this.boundRenderLoop = this.renderLoop.bind(this);
+		this.boundRenderLoop = this.render.bind(this);
 		this.renderer.renderCallbacks.push(this.boundRenderLoop);
+		this.added = true;
 	}
 
 	public dispose(): void {
-		if (!this.added) return;
-		this.added = false;
 		const index = this.renderer.renderCallbacks.indexOf(this.boundRenderLoop);
 		if (index > -1) {
 			this.renderer.renderCallbacks.splice(index, 1);
 		}
 		this.disposeFromScene();
+		this.added = false;
 	}
 
 	protected abstract addToScene(): void;
 
 	protected abstract disposeFromScene(): void;
 
-	protected abstract show(): void;
-
-	protected abstract hide(): void;
+	protected abstract construct(): void;
 
 	protected abstract render(): void;
 
-	protected abstract renderLoop(): void;
+	protected abstract onStepChange(step: number): void;
 	
 }
 
