@@ -1,6 +1,8 @@
-import { writable, type Unsubscriber, type Writable } from 'svelte/store';
+import { writable, type Unsubscriber, type Writable, get } from 'svelte/store';
 import * as THREE from 'three';
 import gsap from 'gsap';
+
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 import type { BatchedGLBRender, GLBRender } from './renders/glb-render';
 import { EarthRender } from './renders/earth-render';
@@ -10,24 +12,24 @@ import type { TerrainRender } from './renders/terrain-render';
 import type { DataCore } from './renders/datacore-render';
 import { DigiTwinRender } from './renders/digitwin-render';
 
-export class ThreeRenderComplete {
+export class RenderHandler {
 
-	public canvas: HTMLElement;
+	public canvas!: HTMLElement;
 	public scene: THREE.Scene;
-	public camera: THREE.PerspectiveCamera;
-	public renderer: THREE.WebGLRenderer;
+	public camera!: THREE.PerspectiveCamera;
+	public renderer!: THREE.WebGLRenderer;
 	protected animationFrame: number | undefined;
-	private selectedIndexUnsubscriber: Unsubscriber;
+	private selectedIndexUnsubscriber!: Unsubscriber;
 
 	public renderCallbacks: Array<() => void> = [];
 	
-	public progress = { value: 0 };
-	public progressWritable: Writable<number> = writable(0);
-	public stepWritable: Writable<number> = writable(0);
+	public progress: { value: number };
+	public progressWritable: Writable<number>;
+	public selectedIndex: Writable<number>;
 	public clock: THREE.Clock = new THREE.Clock();
 	public pivot: THREE.Object3D = new THREE.Object3D();
 
-	private earth: EarthRender ;
+	private earth!: EarthRender ;
 	private particles!: Particles;
 	private windmills!: GLBRender;
 	private bim!: BatchedGLBRender;
@@ -35,41 +37,51 @@ export class ThreeRenderComplete {
 	private sogelinkOffice!: ThreeDeeTilesRender;
 	private terrain!: TerrainRender;
 	private dataCore!: DataCore;
-	private digiTwin: DigiTwinRender;
+	private digiTwin!: DigiTwinRender;
 
-	constructor(canvas: HTMLElement, selectedIndex: Writable<number | undefined>) {
-		this.canvas = canvas;
+	constructor(selectedIndex: Writable<number>) {
 		this.scene = new THREE.Scene();
-		this.camera = new THREE.PerspectiveCamera(70, this.canvas.clientWidth / this.canvas.clientHeight, 0.1, 10000);
-		this.renderer = new THREE.WebGLRenderer({alpha: true, canvas: this.canvas, antialias: true});
-		this.renderer.outputColorSpace = THREE.SRGBColorSpace;
-		this.init();
-		this.render();
-
-		this.earth = new EarthRender(this, 1, 3);
-		this.digiTwin = new DigiTwinRender(this, 0, 1);
-
-		this.selectedIndexUnsubscriber = selectedIndex.subscribe((index) => {
-			this.onIndexUpdate(index);
-		});
+		this.selectedIndex = selectedIndex;
+		this.progress = { value: get(this.selectedIndex) };
+		this.progressWritable = writable(this.progress.value);
 	}
 
-	private init(): void {
+	public init(canvas: HTMLElement): void {
+		this.canvas = canvas;
+		this.camera = new THREE.PerspectiveCamera(70, this.canvas.clientWidth / this.canvas.clientHeight, 0.1, 10000);
+		this.renderer = new THREE.WebGLRenderer({alpha: true, canvas: this.canvas, antialias: true});
 		this.renderer.setPixelRatio(window.devicePixelRatio * 0.8);
+		this.renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+		new OrbitControls(this.camera, this.canvas);
+
 		this.setRendererSize();
 		window.addEventListener('resize', () => this.setRendererSize());
 
 		this.pivot.add(this.camera);
 		this.scene.add(this.pivot);
+
+		this.progress = { value: get(this.selectedIndex) };
+		this.progressWritable.set(this.progress.value);
+		this.selectedIndexUnsubscriber = this.selectedIndex.subscribe((index) => {
+			this.onIndexUpdate(index);
+		});
+
+		if (!this.digiTwin) this.digiTwin = new DigiTwinRender(this, 0, 1);
+		if (!this.earth) this.earth = new EarthRender(this, 1, 5);
+		this.digiTwin.init();
+		this.earth.init();
+
+		this.render();
 	}
 
-	public destroy(): void {
+	public detach(): void {
 		if (this.animationFrame) {
 			cancelAnimationFrame(this.animationFrame);
 		}
 		this.renderer.dispose();
-		this.selectedIndexUnsubscriber();
 		window.removeEventListener('resize', () => this.setRendererSize());
+		if (this.selectedIndexUnsubscriber) this.selectedIndexUnsubscriber();
 	}
 
 	private destroyAllRenders(): void {
@@ -131,13 +143,13 @@ export class ThreeRenderComplete {
 
 	private onIndexUpdate(index: number | undefined): void {
 		if (index !== undefined) {
-			this.stepWritable.set(index);
 			gsap.to(this.progress, { 
 				value: index, 
 				duration: 1, 
 				onUpdate: () => this.progressWritable.set(this.progress.value) 
 			});
 		}
+		/*
 		switch (index) {
 			case 0:
 				if (!this.digiTwin) this.digiTwin = new DigiTwinRender(this, 0, 1);
@@ -228,9 +240,9 @@ export class ThreeRenderComplete {
 				break;
 			default:
 				break;
-		*/
+		
 
-		}
+		}*/
 	}
 
 
@@ -243,7 +255,7 @@ export class ThreeRenderComplete {
 
 class Particles {
 
-	private renderer: ThreeRenderComplete;
+	private renderer: RenderHandler;
 
 	private particles!: THREE.BufferGeometry;
 	private particleMaterial!: THREE.PointsMaterial;
@@ -251,7 +263,7 @@ class Particles {
 
 	private boundRenderLoop!: () => void;
 	
-	constructor(renderer: ThreeRenderComplete) {
+	constructor(renderer: RenderHandler) {
 		this.renderer = renderer;
 		this.render();
 		this.add();
@@ -354,7 +366,7 @@ class Particles {
 
 class ParticleMesh {
 
-	private renderer: ThreeRenderComplete;
+	private renderer: RenderHandler;
 
 	private instancedMesh!: THREE.InstancedMesh;
 	private particlesData!: Float32Array;
@@ -364,7 +376,7 @@ class ParticleMesh {
 
 	private boundRenderLoop!: () => void;
 	
-	constructor(renderer: ThreeRenderComplete) {
+	constructor(renderer: RenderHandler) {
 		this.renderer = renderer;
 		this.render();
 		this.add();

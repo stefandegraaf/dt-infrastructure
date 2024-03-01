@@ -1,9 +1,8 @@
 import * as THREE from 'three';
 import gsap from 'gsap';
 
-import type { ThreeRenderComplete } from '../render-complete';
+import type { RenderHandler } from '../render-handler';
 import { ThreeRenderAbstract } from './render-base';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { ThreeGLBModel } from './glb-render';
 
 
@@ -15,19 +14,24 @@ export class DigiTwinRender extends ThreeRenderAbstract {
 
 	private lights!: THREE.Light[];
 
-	constructor(renderer: ThreeRenderComplete, start: number, end: number) {
+	constructor(renderer: RenderHandler, start: number, end: number) {
 		super(renderer, start, end);
 		this.construct();
 		this.renderer.progressWritable.subscribe((progress) => {
-			if (progress >= start - 0.99 && progress < end - 0.01) {
+			if (progress >= this.start - 0.99 && progress < this.end - 0.01) {
+
 				if (!this.added) this.add();
 			} else {
 				if (this.added) this.dispose();
 			}
 		});
-		this.renderer.stepWritable.subscribe((step) => {
+		this.renderer.selectedIndex.subscribe((step) => {
 			this.onStepChange(step - this.start);
 		});
+	}
+
+	detach() {
+		this.dispose();
 	}
 
 	addToScene() {
@@ -65,7 +69,6 @@ export class DigiTwinRender extends ThreeRenderAbstract {
 	}
 
 	construct() {
-		new OrbitControls(this.renderer.camera, this.renderer.canvas);
 
 		const geometry = new THREE.PlaneGeometry(250, 250, 100, 100);
 		geometry.rotateX(-Math.PI / 2);
@@ -88,7 +91,7 @@ export class DigiTwinRender extends ThreeRenderAbstract {
 		});
 		this.terrain = new THREE.Mesh(geometry, wireframeMaterial);
 
-		var axesHelper = new THREE.AxesHelper(25);
+		const axesHelper = new THREE.AxesHelper(25);
 		this.renderer.scene.add(axesHelper);
 
 		const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);

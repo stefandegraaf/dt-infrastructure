@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onDestroy, onMount } from "svelte";
-	import { writable, type Unsubscriber, type Writable } from "svelte/store";
+	import type { Unsubscriber, Writable } from "svelte/store";
     import { Button } from "carbon-components-svelte";
 	import { Person, Close, IbmCloudDirectLink_2Connect } from "carbon-icons-svelte";
 
@@ -8,9 +8,12 @@
     import BottomNav from "./BottomNav.svelte";
     import { getBlock, getBlockIndex } from "$lib/utils";
     import ThreeRenderComplete from "./animation/ThreeRenderComplete.svelte";
+	import type { RenderHandler } from "./animation/render-handler";
+
 
 	export let selectedItem: Writable<ItemInterface | undefined>;
 	export let config: { phases: Array<IPhase>};
+	export let renderer: RenderHandler;
 
 	let unsubscriber: Unsubscriber;
 	let doc: Document;
@@ -45,8 +48,9 @@
 		}
 	}
 
-	const selectedIndex: Writable<number | undefined> = writable(0);
-	$: $selectedItem && selectedIndex.set(getBlockIndex(config, $selectedItem));
+	let rendererProgress = renderer.progressWritable;
+	//$: progress = 1 - Math.pow(1 - $rendererProgress % 1, 3) * 100;
+	$: progress = -1 * Math.sign(0.5 - ($rendererProgress % 1)) * Math.sin($rendererProgress % 1 * Math.PI);
 	
 </script>
 
@@ -58,91 +62,93 @@
 		<div class="modal modal-text">
 			<div class="modal-inner">
 
-				<div class="modal-close-button">
-					<Button
-						kind="tertiary"
-						size="lg"
-						iconDescription="Close"
-						icon={Close}
-						on:click={() => selectedItem.set(undefined)}
-					/>
-				</div>
-				{#if $selectedItem?.persons?.length > 0}
-					<div class="modal-info">
-						<div class="modal-info-persons">
-							<div class="modal-info-header">Team</div>
-							{#each $selectedItem.persons as person}
-							<div class="modal-info-person">
-								<Person size={24} />
-								<div class="modal-info-person-name">{person}</div>
-							</div>
-							{/each}
+				<div class="modal-content" class:has-render={render}>
+					<div class="modal-body" style="transform:translateX({progress * 300}%)">
+						<div class="modal-close-button">
+							<Button
+								kind="tertiary"
+								size="lg"
+								iconDescription="Close"
+								icon={Close}
+								on:click={() => selectedItem.set(undefined)}
+							/>
 						</div>
-					</div>
-				{/if}
-				<div class="modal-content">
-					<div class="modal-header">
-						<svg class="modal-header-icon" version="1.0" xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 4961.000000 3508.000000">
-							<g transform="translate(0.000000,3508.000000) scale(0.100000,-0.100000)" stroke="none">
-								<path d="M24652 33870 c-166 -17 -324 -62 -462 -133 -154 -78 -13033 -7518
-								-13113 -7575 -97 -70 -247 -224 -314 -322 -96 -143 -166 -304 -210 -485 -16
-								-65 -18 -245 -21 -2465 -3 -2660 -7 -2484 63 -2697 83 -249 248 -484 447 -636
-								40 -30 928 -580 1973 -1222 l1900 -1166 7 93 c3 51 11 955 18 2008 7 1053 16
-								2172 20 2485 8 514 10 580 29 668 94 454 332 815 701 1062 76 51 9124 5196
-								9167 5212 6 2 2141 -1245 4743 -2773 2603 -1528 4737 -2777 4744 -2777 10 0
-								4672 2687 4688 2702 7 6 -13401 7752 -13620 7868 -234 124 -506 179 -760 153z"/>
-								<path d="M24545 22814 c-105 -19 -198 -47 -294 -88 -84 -37 -3728 -2136 -3851
-								-2220 -110 -74 -264 -233 -343 -352 -99 -149 -153 -274 -200 -464 l-21 -85 -3
-								-2233 c-3 -1922 -1 -2246 11 -2330 54 -359 242 -670 536 -889 63 -47 3690
-								-2144 3820 -2208 187 -93 353 -130 585 -129 235 1 403 38 585 129 116 59 3743
-								2156 3810 2203 271 193 473 514 537 852 17 89 18 226 18 2330 l0 2235 -22 100
-								c-29 130 -56 211 -104 314 -88 188 -246 383 -409 503 -70 52 -3694 2150 -3825
-								2215 -92 45 -160 71 -270 99 -88 23 -124 27 -290 30 -139 2 -211 -1 -270 -12z"/>
-								<path d="M34640 17393 c2 -546 -33 -4850 -40 -4963 -16 -240 -68 -437 -170
-								-640 -126 -251 -320 -474 -547 -628 -42 -29 -6270 -3569 -9045 -5142 l-137
-								-78 -4838 2840 c-2661 1562 -4848 2845 -4860 2850 -18 9 -324 -163 -2247
-								-1263 -1694 -970 -2223 -1276 -2213 -1285 32 -30 13634 -7873 13711 -7907 187
-								-81 375 -114 595 -104 199 9 352 48 521 132 100 49 12984 7487 13080 7550 247
-								164 452 442 534 727 59 205 57 93 54 2568 l-4 2265 -22 100 c-43 186 -129 372
-								-240 523 -72 96 -224 240 -323 305 -81 53 -3793 2217 -3804 2217 -3 0 -5 -30
-								-5 -67z"/>
-							</g>
-						</svg>
-						<div>
-							<span>{$selectedItem.phase}</span>
-							<h2>{$selectedItem.title}</h2>
-						</div>
-					</div>
-					<div class="content-blocks" class:has-render={render}>
-						{@html $selectedItem.content}
-						{#if $selectedItem.components}
-							{#each $selectedItem.components as block}
-								<div class="content-block">	
-									<div class="block-icon">
-									{#if block.icon}
-										<img src={block.icon} alt="icon" />
-									{:else}
-										<IbmCloudDirectLink_2Connect size={32} />
-									{/if}
+						{#if $selectedItem?.persons?.length > 0}
+							<div class="modal-info">
+								<div class="modal-info-persons">
+									<div class="modal-info-header">Team</div>
+									{#each $selectedItem.persons as person}
+									<div class="modal-info-person">
+										<Person size={24} />
+										<div class="modal-info-person-name">{person}</div>
 									</div>
-									<div class="block-content">
-										<div class="block-header">{block.subtitle}</div>
-										<div class="block">{@html block.text}</div>
-									</div>
+									{/each}
 								</div>
-							{/each}
+							</div>
 						{/if}
-						{#if $selectedItem.contentAfter}
-							{@html $selectedItem.contentAfter}
-						{/if}
+						<div class="modal-header">
+							<svg class="modal-header-icon" version="1.0" xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 4961.000000 3508.000000">
+								<g transform="translate(0.000000,3508.000000) scale(0.100000,-0.100000)" stroke="none">
+									<path d="M24652 33870 c-166 -17 -324 -62 -462 -133 -154 -78 -13033 -7518
+									-13113 -7575 -97 -70 -247 -224 -314 -322 -96 -143 -166 -304 -210 -485 -16
+									-65 -18 -245 -21 -2465 -3 -2660 -7 -2484 63 -2697 83 -249 248 -484 447 -636
+									40 -30 928 -580 1973 -1222 l1900 -1166 7 93 c3 51 11 955 18 2008 7 1053 16
+									2172 20 2485 8 514 10 580 29 668 94 454 332 815 701 1062 76 51 9124 5196
+									9167 5212 6 2 2141 -1245 4743 -2773 2603 -1528 4737 -2777 4744 -2777 10 0
+									4672 2687 4688 2702 7 6 -13401 7752 -13620 7868 -234 124 -506 179 -760 153z"/>
+									<path d="M24545 22814 c-105 -19 -198 -47 -294 -88 -84 -37 -3728 -2136 -3851
+									-2220 -110 -74 -264 -233 -343 -352 -99 -149 -153 -274 -200 -464 l-21 -85 -3
+									-2233 c-3 -1922 -1 -2246 11 -2330 54 -359 242 -670 536 -889 63 -47 3690
+									-2144 3820 -2208 187 -93 353 -130 585 -129 235 1 403 38 585 129 116 59 3743
+									2156 3810 2203 271 193 473 514 537 852 17 89 18 226 18 2330 l0 2235 -22 100
+									c-29 130 -56 211 -104 314 -88 188 -246 383 -409 503 -70 52 -3694 2150 -3825
+									2215 -92 45 -160 71 -270 99 -88 23 -124 27 -290 30 -139 2 -211 -1 -270 -12z"/>
+									<path d="M34640 17393 c2 -546 -33 -4850 -40 -4963 -16 -240 -68 -437 -170
+									-640 -126 -251 -320 -474 -547 -628 -42 -29 -6270 -3569 -9045 -5142 l-137
+									-78 -4838 2840 c-2661 1562 -4848 2845 -4860 2850 -18 9 -324 -163 -2247
+									-1263 -1694 -970 -2223 -1276 -2213 -1285 32 -30 13634 -7873 13711 -7907 187
+									-81 375 -114 595 -104 199 9 352 48 521 132 100 49 12984 7487 13080 7550 247
+									164 452 442 534 727 59 205 57 93 54 2568 l-4 2265 -22 100 c-43 186 -129 372
+									-240 523 -72 96 -224 240 -323 305 -81 53 -3793 2217 -3804 2217 -3 0 -5 -30
+									-5 -67z"/>
+								</g>
+							</svg>
+							<div>
+								<span>{$selectedItem.phase}</span>
+								<h2>{$selectedItem.title}</h2>
+							</div>
+						</div>
+						<div class="content-blocks">
+							{@html $selectedItem.content}
+							{#if $selectedItem.components}
+								{#each $selectedItem.components as block}
+									<div class="content-block">	
+										<div class="block-icon">
+										{#if block.icon}
+											<img src={block.icon} alt="icon" />
+										{:else}
+											<IbmCloudDirectLink_2Connect size={32} />
+										{/if}
+										</div>
+										<div class="block-content">
+											<div class="block-header">{block.subtitle}</div>
+											<div class="block">{@html block.text}</div>
+										</div>
+									</div>
+								{/each}
+							{/if}
+							{#if $selectedItem.contentAfter}
+								{@html $selectedItem.contentAfter}
+							{/if}
+						</div>
 					</div>
 					<!--
 					{#if render}
 						<ThreeRender settings={render} />
 					{/if}
 					-->
-					<ThreeRenderComplete index={selectedIndex} />
+					<ThreeRenderComplete {renderer} />
 				</div>
 			</div>
 			<BottomNav {selectedItem} {config} />
@@ -218,7 +224,7 @@
 		overflow: hidden;
 	}
 	.modal-inner {
-		padding: 50px 50px 1000px;
+		padding: 100px 50px 1000px;
 		height: 100%;
 		overflow-x: hidden;
 		-ms-overflow-style: none;  /* IE and Edge */
@@ -253,18 +259,22 @@
 	
 	.modal-close-button {
 		position: absolute;
-		top: 20px;
-		right: 20px;
+		top: -1px;
+		right: -1px;
 		z-index: 2;
 	}
 
+	.modal-body {
+		background-color: rgba(0, 17, 43, 0.75);
+		backdrop-filter: blur(8px);
+		position: relative;
+		z-index: 4;
+	}
 	.modal-header {
 		display: flex;
 		align-items: center;
 		position: relative;
 		z-index: 3;
-		background-color: rgba(0, 17, 43, 0.75);
-		backdrop-filter: blur(8px);
 		padding: 20px 40px;
 	}
 	.modal-header h2 {
@@ -286,9 +296,12 @@
 		max-width: 1100px;
 		margin: auto;
 	}
+	.modal-content.has-render  {
+		margin-left: 20px;
+	}
 
 	.modal-info {
-		margin: 0 0 40px 40px;
+		margin: 0 60px 40px 40px;
 		padding: 8px 20px 15px;
 		float: right;
 		border-radius: 3px;
@@ -310,12 +323,10 @@
 	.content-blocks {
 		position: relative;
 		z-index: 3;
-		background-color: rgba(0, 17, 43, 0.75);
-		backdrop-filter: blur(8px);
 		padding: 0 40px;
 	}
 	.content-blocks.has-render {
-		padding-bottom: 300px;
+		padding-bottom: 30px;
 	}
 	.has-render .block-content {
 		/*background-color: rgba(0, 17, 43, 0.75);*/

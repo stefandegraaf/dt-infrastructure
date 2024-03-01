@@ -1,20 +1,25 @@
 import * as THREE from 'three';
-import type { ThreeRenderComplete } from "../render-complete";
+import type { RenderHandler } from "../render-handler";
+import { get } from 'svelte/store';
 
 
 export abstract class ThreeRenderAbstract {
 
-	public renderer: ThreeRenderComplete;
+	public renderer: RenderHandler;
 	public boundRenderLoop!: () => void;
 	public start: number;
 	public end: number;
 
 	public added: boolean = false;
 
-	constructor(renderer: ThreeRenderComplete, start: number, end: number) {
+	constructor(renderer: RenderHandler, start: number, end: number) {
 		this.renderer = renderer;
 		this.start = start;
 		this.end = end;
+	}
+
+	public init(): void {
+		this.onStepChange(get(this.renderer.selectedIndex) - this.start);	
 	}
 
 	public destroy(): void {
@@ -37,11 +42,11 @@ export abstract class ThreeRenderAbstract {
 		this.added = false;
 	}
 
+	protected abstract construct(): void;
+
 	protected abstract addToScene(): void;
 
 	protected abstract disposeFromScene(): void;
-
-	protected abstract construct(): void;
 
 	protected abstract render(): void;
 

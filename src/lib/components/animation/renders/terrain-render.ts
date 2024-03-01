@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import gsap from 'gsap';
 
-import type { ThreeRenderComplete } from '../render-complete';
+import type { ThreeRenderComplete } from '../render-handler';
 import { ThreeRenderAbstract } from './render-base';
 
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';

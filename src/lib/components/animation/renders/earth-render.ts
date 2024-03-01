@@ -3,10 +3,11 @@ import gsap from 'gsap';
 
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
-import type { ThreeRenderComplete } from "../render-complete";
+import type { RenderHandler } from "../render-handler";
 import { getFresnelMaterial } from '../materials/fresnel-material.js';
 import { ThreeRenderAbstract } from './render-base';
-import { earthDots, earthWireFrame } from './render-objects';
+import { earthDots, earthSpiralDots, earthWireFrame } from './render-objects';
+import { get } from 'svelte/store';
 
 
 
@@ -27,17 +28,17 @@ export class EarthRender extends ThreeRenderAbstract {
 	private fading = false;
 	private opacity = 1.0;
 
-	constructor(renderer: ThreeRenderComplete, start: number, end: number) {
+	constructor(renderer: RenderHandler, start: number, end: number) {
 		super(renderer, start, end);
 		this.construct();
 		this.renderer.progressWritable.subscribe((progress) => {
-			if (progress >= start - 0.99 && progress < end - 0.01) {
+			if (progress >= this.start - 0.99 && progress < this.end - 0.01) {
 				if (!this.added) this.add();
 			} else {
 				if (this.added) this.dispose();
 			}
 		});
-		this.renderer.stepWritable.subscribe((step) => {
+		this.renderer.selectedIndex.subscribe((step) => {
 			this.onStepChange(step - this.start);
 		});
 	}
@@ -97,6 +98,18 @@ export class EarthRender extends ThreeRenderAbstract {
 					this.renderer.camera.lookAt(0, 0, 0);
 				}
 			});
+		} else if (progress === 3) {
+			this.setSpiral();
+			gsap.to(this.renderer.camera.position, {
+				x: -this.size * 1.5,
+				y: 0,
+				z: this.size,
+				duration: 3,
+				ease: "power2.out",
+				onUpdate: () => {
+					this.renderer.camera.lookAt(-this.size * 1.2, 0, this.size/2);
+				}
+			});
 		}
 
 		gsap.to(this.dotsMaterial.uniforms.u_opacity, {
@@ -113,20 +126,31 @@ export class EarthRender extends ThreeRenderAbstract {
 	}
 
 
-	public setRealistic(): void {
+	private setRealistic(): void {
 		this.setOpacity(1.0);
 		this.fading = false;
 		this.earth.visible = true;
+		this.moon.visible = true;
 		this.fresnel.visible = true;
 		this.dottedSurface.visible = false;
 		this.wireframe.visible = false;
 	}
 
-	public setDotted(): void {
+	private setDotted(): void {
 		this.dottedSurface.visible = true;
 		this.wireframe.visible = true;
 		this.earth.visible = false;
+		this.moon.visible = false;
 		this.fresnel.visible = true;
+		this.fadeEarth();
+	}
+	
+	private setSpiral(): void {
+		this.dottedSurface.visible = true;
+		this.wireframe.visible = false;
+		this.earth.visible = false;
+		this.moon.visible = false;
+		this.fresnel.visible = false;
 		this.fadeEarth();
 	}
 	
@@ -142,7 +166,6 @@ export class EarthRender extends ThreeRenderAbstract {
 	construct(): void {
 		this.earth = new THREE.Group();
 		this.earth.position.set(0, 0, 0);
-		new OrbitControls(this.renderer.camera, this.renderer.canvas);
 		
 		const geometry = new THREE.IcosahedronGeometry(this.size, 12);
 		const loader = new THREE.TextureLoader();
@@ -181,6 +204,7 @@ export class EarthRender extends ThreeRenderAbstract {
 		});
 		const nightTexture = loader.load('./src/lib/files/textures/8k_earth_nightmap.jpg');
 		nightTexture.colorSpace = THREE.SRGBColorSpace;
+		/*
 		const lightsMat = new THREE.ShaderMaterial({
 			uniforms: {
 				textureMap: { value: nightTexture },
@@ -213,7 +237,7 @@ export class EarthRender extends ThreeRenderAbstract {
 			blending: THREE.AdditiveBlending
 		});
 		const lightsMesh = new THREE.Mesh(new THREE.IcosahedronGeometry(this.size * 1.001, 12), lightsMat);
-		this.earth.add(lightsMesh);
+		this.earth.add(lightsMesh);*/
 		//let helper = new VertexNormalsHelper(lightsMesh, 2, 0x00ff00);
 		//this.earth.add(helper);
 
@@ -234,7 +258,7 @@ export class EarthRender extends ThreeRenderAbstract {
 		this.wireframe = wf.mesh;
 		this.wireframeMaterial = wf.material;
 
-		const dots = earthDots(this.size * 1.009, 20000);
+		const dots = earthSpiralDots(this.size * 1.009, 32000);
 		this.dottedSurface = dots.points;
 		this.dotsMaterial = dots.material;
 
@@ -296,6 +320,9 @@ export class EarthRender extends ThreeRenderAbstract {
 		if (this.fading) {
 			this.setOpacity(this.opacity - 0.004);
 		}
+
+		this.dotsMaterial.uniforms.u_time.value = this.renderer.clock.getElapsedTime();
+		this.dotsMaterial.uniforms.u_progress.value = this.renderer.progress.value - 3;
 	}
 
 	private setOpacity(opacity: number): void {

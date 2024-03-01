@@ -9,6 +9,8 @@
     import ContentModal from "$lib/components/ContentModal.svelte";
 	import type { IPhase, ItemInterface } from "$lib/components/interfaces";
     import HeaderThree from "$lib/components/HeaderThree.svelte";
+	import { RenderHandler } from "$lib/components/animation/render-handler";
+    import { getBlockIndex } from "$lib/utils";
 
 	let selectedItem: Writable<ItemInterface | undefined> = writable(undefined);
 	let config: { phases: Array<IPhase>};
@@ -38,6 +40,12 @@
 	}
 	setConfig();
 
+	
+	const selectedIndex: Writable<number | undefined> = writable(0);
+	$: $selectedItem && selectedIndex.set(getBlockIndex(config, $selectedItem));
+	let selectedIndexNumber: Writable<number> = writable(0);
+	$: if ($selectedIndex !== undefined) selectedIndexNumber.set($selectedIndex);
+	const renderer = new RenderHandler(selectedIndexNumber);
 
 </script>
 
@@ -77,7 +85,7 @@
 				</div>
 			{/if}
 		{/each}
-		<ContentModal bind:selectedItem {config} />
+		<ContentModal bind:selectedItem {config} {renderer} />
 	{/if}
 <!--
 	<div class="phase-header">

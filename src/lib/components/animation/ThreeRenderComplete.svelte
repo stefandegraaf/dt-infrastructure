@@ -1,25 +1,25 @@
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
-	import type { Writable } from "svelte/store";
+	import { writable, type Writable } from "svelte/store";
 
 	import * as THREE from 'three';
-    import { ThreeRenderComplete } from "./render-complete";
+    import type { RenderHandler } from "./render-handler";
 
-	export let index: Writable<number | undefined>;
-
+	export let renderer: RenderHandler;
+	
 	let canvas: HTMLElement | null;
-	let renderer: ThreeRenderComplete;
 
 	onMount(() => {
 		canvas = document.getElementById('module-canvas');
 		if (!canvas) {
 			throw new Error('Canvas not found');
 		}
-		renderer = new ThreeRenderComplete(canvas, index);
+		//init canvas and couple the renders
+		renderer.init(canvas);
 	});
 	
 	onDestroy(() => {
-		renderer.destroy();
+		renderer.detach();
 	});
 
 	
