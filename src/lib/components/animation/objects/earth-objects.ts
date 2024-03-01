@@ -179,6 +179,9 @@ export function earthSpiralDots(size: number, numberOfDots: number):  {points: T
 			uniform sampler2D texture;
 			
 			varying float vColorRandom;
+			varying float progress;
+			varying float scale;
+			varying float minPointSize;
 
 			attribute vec3 spiralPosition;
 			attribute float randoms;
@@ -195,19 +198,27 @@ export function earthSpiralDots(size: number, numberOfDots: number):  {points: T
 				vUv = uv;
 				vColorRandom = colorRandoms;
 				
-				float progress = clamp(u_progress, 0.0, 1.0);
-				vec3 newPos = mix(position, spiralPosition, progress);
-				if (progress > 0.5) {
-					float t = sin(u_time);
-					newPos.x += clamp((t * (offset + 1.0) * 1.2 - 1.0), 0.0, 1.0) * 5.0 * offset;
-					newPos.z -= clamp((t * (offset + 1.0) * 1.2 - 1.0), 0.0, 1.0) * 5.0 * offset;
-					newPos.y += clamp((t * (offset + 1.0) * 1.2 - 1.0), 0.0, 1.0) * 2.0 * offset;
+				minPointSize = 10.0;
+				scale = u_progress;
+				progress = clamp(u_progress, 0.0, 2.0);
+				vec3 newPos = mix(position, spiralPosition, clamp(progress, 0.0, 1.0));
+				if (progress > 0.0) {
+					float t = sin(u_time) + 0.3;
+					newPos.x += clamp((t * (offset + 1.0) * 1.2 - 1.0), 0.0, 1.0) * 5.0 * offset * 1000.0;
+					newPos.z -= clamp((t * (offset + 1.0) * 1.2 - 1.0), 0.0, 1.0) * 5.0 * offset * 1000.0;
+					newPos.y += clamp((t * (offset + 1.0) * 1.2 - 1.0), 0.0, 1.0) * 2.0 * offset * 1000.0;
 
 					//float uvOffset = uv.y;
 					//newPos.y += 3.0 * quarticInOut( clamp(0.0, 1.0, (progress - uvOffset*0.6)/0.4) );
 				}
+				if (progress > 1.0) {
+					//newPos.y = mix(newPos.y, 0.0, clamp(progress - 1.0, 0.0, 1.0));
+					newPos = mix(mix(newPos, position, clamp(progress - 1.0, 0.0, 1.0)), vec3(0.0), clamp(progress - 1.0, 0.0, 1.0));
+					scale = 1.0 - clamp(progress - 1.0, 0.0, 1.0);
+					minPointSize = clamp((2.0 - progress) * 10.0, 0.0, 10.0);
+				}
 				vec4 mvPosition = modelViewMatrix * vec4(newPos, 1.0);
-				gl_PointSize = (10.0 * randoms + 4.0 * u_progress) * (1000.0 / - mvPosition.z);
+				gl_PointSize = (minPointSize * randoms + 4.0 * scale)  * (1000.0 / - mvPosition.z);
 				gl_Position = projectionMatrix * mvPosition;
 			}
 		`,

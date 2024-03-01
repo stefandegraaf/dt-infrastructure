@@ -29,6 +29,7 @@
 			return fallbackMarcom;
 		}
 	}
+
 	function setBlockNumbers(rawConfig: any): { phases: Array<IPhase>} {
 		const configFlat = rawConfig.phases.flatMap((phase: IPhase) => phase.blocks);
 		rawConfig.phases.forEach((phase: IPhase) => phase.blocks.map((block: ItemInterface) => {

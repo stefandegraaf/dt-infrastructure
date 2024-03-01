@@ -6,7 +6,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import type { RenderHandler } from "../render-handler";
 import { getFresnelMaterial } from '../materials/fresnel-material.js';
 import { ThreeRenderAbstract } from './render-base';
-import { earthDots, earthSpiralDots, earthWireFrame } from './render-objects';
+import { earthDots, earthSpiralDots, earthWireFrame } from '../objects/earth-objects';
 import { get } from 'svelte/store';
 
 
@@ -101,13 +101,13 @@ export class EarthRender extends ThreeRenderAbstract {
 		} else if (progress === 3) {
 			this.setSpiral();
 			gsap.to(this.renderer.camera.position, {
-				x: -this.size * 1.5,
+				x: 0,
 				y: 0,
-				z: this.size,
+				z: this.size *1.5,
 				duration: 3,
 				ease: "power2.out",
 				onUpdate: () => {
-					this.renderer.camera.lookAt(-this.size * 1.2, 0, this.size/2);
+					this.renderer.camera.lookAt(-this.size * 1.2, 0, 0);
 				}
 			});
 		}
@@ -300,12 +300,13 @@ export class EarthRender extends ThreeRenderAbstract {
 	render() {
 		this.renderer.pivot.rotation.y += 0.0001;
 		this.earth.rotation.y -= 0.0002;
-		this.dottedSurface.rotation.y += 0.0004;
+		this.dottedSurface.rotation.y += 0.001;
 
 		this.clouds.rotation.x -= 0.00005;
 		this.clouds.rotation.y -= 0.00005;
 
-		const angle = this.renderer.clock.getElapsedTime() * 0.1;
+		const elapsedTime = this.renderer.clock.getElapsedTime();
+		const angle = elapsedTime * 0.1;
 		const radius = this.size * 10;
 		const incline = Math.PI / 36; // 5 degrees
 		this.moon.position.x = radius * Math.cos(angle);
@@ -315,13 +316,13 @@ export class EarthRender extends ThreeRenderAbstract {
 		this.light.position.x = radius * Math.cos(angle);
 		this.light.position.z = radius * Math.sin(angle);
 
-		this.wireframeMaterial.uniforms.u_time.value = this.renderer.clock.getElapsedTime();
+		this.wireframeMaterial.uniforms.u_time.value = elapsedTime;
 		
 		if (this.fading) {
 			this.setOpacity(this.opacity - 0.004);
 		}
 
-		this.dotsMaterial.uniforms.u_time.value = this.renderer.clock.getElapsedTime();
+		this.dotsMaterial.uniforms.u_time.value = elapsedTime/2;
 		this.dotsMaterial.uniforms.u_progress.value = this.renderer.progress.value - 3;
 	}
 

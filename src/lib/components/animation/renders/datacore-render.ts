@@ -1,16 +1,14 @@
 import * as THREE from 'three';
 import gsap from 'gsap';
 
-import type { ThreeRenderComplete } from '../render-handler';
+import type { RenderHandler } from '../render-handler';
 import { ThreeRenderAbstract } from './render-base';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 
 export class DataCore extends ThreeRenderAbstract {
 
-	private model!: THREE.Mesh;
+	private instancedMesh!: THREE.InstancedMesh;
 	private uniforms!: any;
 	private material!: THREE.MeshPhysicalMaterial;
 	
@@ -18,37 +16,75 @@ export class DataCore extends ThreeRenderAbstract {
 	private fboScene!: THREE.Scene;
 	private fboCamera!: THREE.OrthographicCamera;
 
-	constructor(renderer: ThreeRenderComplete, start: number, end: number) {
+	private ambientLight!: THREE.AmbientLight;
+	private spotLight!: THREE.SpotLight;
+
+	constructor(renderer: RenderHandler, start: number, end: number) {
 		super(renderer, start, end);
+		this.construct();
+		this.renderer.progressWritable.subscribe((progress) => {
+			if (progress >= this.start - 0.99 && progress < this.end - 0.01) {
+				if (!this.added) this.add();
+			} else {
+				if (this.added) this.dispose();
+			}
+		});
+		this.renderer.selectedIndex.subscribe((step) => {
+			this.onStepChange(step);
+		});
 	}
 
 	addToScene() {
-		this.renderer.scene.add(this.model);
+		/* DIRTY GLB LOAD FIX */
+		if (!this.instancedMesh){ setTimeout(() => this.addToScene(), 10); return; }
+		/* DIRTY GLB LOAD FIX */
+		this.renderer.scene.add(this.instancedMesh);
+		this.renderer.scene.add(this.ambientLight);
+		this.renderer.scene.add(this.spotLight);
+		this.renderer.scene.add(this.spotLight.target);
 	}
 
 	disposeFromScene() {
-		this.renderer.scene.remove(this.model);
+		this.renderer.scene.remove(this.instancedMesh);
+		this.renderer.scene.remove(this.ambientLight);
+		this.renderer.scene.remove(this.spotLight);
+		this.renderer.scene.remove(this.spotLight.target);
+	}
+
+	onStepChange(progress: number) {
+		if (progress === 5) {
+			gsap.to(this.renderer.camera.position, {
+				x: -35,
+				y: 40,
+				z: 50,
+				duration: 2,
+				ease: "power2.out",
+				onUpdate: () => {
+					this.renderer.camera.lookAt(-35, 0, 30);
+				}
+			});
+		} else if (progress > 9 && progress < 9.2) {
+			this.renderer.clock.oldTime -= this.renderer.clock.getElapsedTime() * 1000;
+		}
 	}
 
 	show() {
-		this.model.visible = true;
+		this.instancedMesh.visible = true;
 	}
 
 	hide() {
-		this.model.visible = false;
+		this.instancedMesh.visible = false;
 	}
 
-	construct() {
-		new OrbitControls(this.renderer.camera, this.renderer.canvas);
-		
+	construct() {		
 		const textureLoader = new THREE.TextureLoader();
 		const aoTexture = textureLoader.load("src/lib/files/textures/cube-ambient-occlusion-texture.png");
 		aoTexture.flipY = false;
 
 		this.uniforms = {
 			cluster: { value: 0 },
-			time: { value: 0 },
-			uProgress: { value: 0 },
+			u_cycle: { value: 0 },
+			u_progress: { value: 0 },
 			uFBO: { value: null },
 			aoMap: { value: aoTexture },
 			light_color: { value: new THREE.Color(0xffe9e9) },
@@ -61,48 +97,61 @@ export class DataCore extends ThreeRenderAbstract {
 		const fboTextureSquare = textureLoader.load("src/lib/files/textures/fbo-square.png");
 		fboTextureSquare.flipY = false;
 		const fboTextureEurope = textureLoader.load("src/lib/files/textures/fbo-europe.png");
-		fboTextureEurope.flipY = false;
+		//fboTextureEurope.flipY = false;
 
 		this.fbo = new THREE.WebGLRenderTarget(this.renderer.canvas.clientWidth, this.renderer.canvas.clientHeight);
 		this.fboCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, -1, 1);
 		this.fboScene = new THREE.Scene();
 		const fboMaterial = new THREE.ShaderMaterial({
 			uniforms: {
-				uProgress: this.uniforms.uProgress,
+				u_progress: this.uniforms.u_progress,
+				u_cycle: this.uniforms.u_cycle,
 				uState1: { value: fboTextureSquare },
 				uState2: { value: fboTextureEurope },
 				uFBO: { value: null }
 			},
 			vertexShader: `
+				uniform float u_progress;
 				varying vec2 vUv;
+				varying float vAnimationProgress;
 				void main() {
 					vUv = uv;
+					vAnimationProgress = u_progress - 9.0;
+
 					gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 				}
 			`,
 			fragmentShader: `
-				uniform float uProgress;
+				uniform float u_progress;
 				uniform sampler2D uState1;
 				uniform sampler2D uState2;
 				varying vec2 vUv;
+				varying float vAnimationProgress;
 				void main() {
-					vec4 color1 = texture2D(uState1, vUv);
-					vec4 color2 = vec4(1.0, 1.0, 1.0, 0.0) - texture2D(uState2, vUv);
+					//vec4 color1 = texture2D(uState1, vUv);
+					if (u_progress > 9.0) {
+						vec4 color2 = vec4(1.0, 1.0, 1.0, 0.0) - texture2D(uState2, vUv);
+						if (u_progress > 10.0) {
+							color2 *= (1.0 - smoothstep(10.0, 11.0, u_progress));
+						}
 
-					float dist = distance(vUv, vec2(0.5));
-					float radius = 1.8;
-					//float outer_progress = clamp(1.1*uProgress, 0.0, 1.0);
-					//float inner_progress = clamp(1.1*uProgress - 0.05, 0.0, 1.0);
-					float outer_progress = smoothstep(0.0, 1.0, 1.1*uProgress);
-					float inner_progress = smoothstep(0.0, 1.0, 1.1*uProgress - 0.05);
-				
-					float innerCircle = 1.0 - smoothstep((inner_progress-0.1)*radius, inner_progress*radius, dist);
-					float outerCircle = 1.0 - smoothstep((outer_progress-0.1)*radius, outer_progress*radius, dist);
+						float dist = distance(vUv, vec2(0.5));
+						float radius = 1.8;
+						//float outer_progress = clamp(1.1*u_cycle, 0.0, 1.0);
+						//float inner_progress = clamp(1.1*u_cycle - 0.05, 0.0, 1.0);
+						float outer_progress = smoothstep(0.0, 1.0, 1.1*vAnimationProgress);
+						float inner_progress = smoothstep(0.0, 1.0, 1.1*vAnimationProgress - 0.05);
+					
+						float innerCircle = 1.0 - smoothstep((inner_progress-0.1)*radius, inner_progress*radius, dist);
+						float outerCircle = 1.0 - smoothstep((outer_progress-0.1)*radius, outer_progress*radius, dist);
 
-					float displacement = outerCircle - innerCircle;
-					float scale = mix(color1.r, color2.r, innerCircle);
+						float displacement = outerCircle - innerCircle;
+						float scale = mix(1.0, color2.r, innerCircle);
 
-					gl_FragColor = vec4(vec3(displacement, scale, scale), 1.0);
+						gl_FragColor = vec4(vec3(displacement, scale, scale), 1.0);
+					} else {
+						gl_FragColor = vec4(0.0, 1.0, 1.0, 1.0);
+					}
 				}
 			`
 		});
@@ -127,7 +176,7 @@ export class DataCore extends ThreeRenderAbstract {
 				#include <common>
 
 				uniform sampler2D uFBO;
-				uniform float uProgress;
+				uniform float u_progress;
 				attribute vec2 instanceUV;
 				attribute float stepNumber;
 				varying float vStepNumber;
@@ -142,16 +191,23 @@ export class DataCore extends ThreeRenderAbstract {
 				#include <begin_vertex>
 
 				vStepNumber = stepNumber;
+				
+				if (vStepNumber < u_progress) {
+					if (transformed.y > 0.0) {
+						transformed.y += 2.0 * clamp(u_progress - vStepNumber, 0.0, 1.0);
+					}
+				} 
 
-				//float n = cnoise(vec3(instanceUV.x*5.0, instanceUV.y*5.0, uProgress*5.0));
+				//float n = cnoise(vec3(instanceUV.x*5.0, instanceUV.y*5.0, u_cycle*5.0));
 				//transformed.y += n*0.25;
-				//transformed.y += 0.4 * sin(3.14159 * (uProgress * 5.0 - instanceUV.x * 13.0));
-
-				vHeightUV = clamp(position.y*1.5, 0.0, 1.0);
+				//transformed.y += 0.4 * sin(3.14159 * (u_cycle * 5.0 - instanceUV.x * 13.0));
+				
 				vec4 transition = texture2D(uFBO, instanceUV);
 				transformed *= transition.g;
 				transformed.y += transition.r*8.0;
+				
 				vHeight = transformed.y;
+				
 				`
 			);
 			shader.fragmentShader = shader.fragmentShader.replace(
@@ -185,14 +241,14 @@ export class DataCore extends ThreeRenderAbstract {
 
 		const loader = new GLTFLoader();
 		loader.load("src/lib/files/glb/bar.glb", (gltf) => {
-			this.model = gltf.scene.children[0] as THREE.Mesh;
-			this.model.material = this.material;
+			const model = gltf.scene.children[0] as THREE.Mesh;
+			const geometry = model.geometry;
 
 			const size = 50;
 			const instances = size**2;
-			const instancedMesh = new THREE.InstancedMesh(this.model.geometry, this.model.material, instances);
+			this.instancedMesh = new THREE.InstancedMesh(geometry, this.material, instances);
 			let dummy = new THREE.Object3D();
-			let width = 1.5;
+			let width = 1.6;
 			let stepNumber = new Float32Array(instances);
 			let instanceUV = new Float32Array(instances * 2);
 			for (let i=0; i<size; i++) {
@@ -202,39 +258,31 @@ export class DataCore extends ThreeRenderAbstract {
 					dummy.position.set(
 						(i-size/2)*width,
 						0,
-						(j-size/2)*width
+						-(j-size/2)*width
 					);
 					dummy.updateMatrix();
-					instancedMesh.setMatrixAt(i*size+j, dummy.matrix);
-					stepNumber[i*size+j] = getStepNumber(j/size);
+					this.instancedMesh.setMatrixAt(i*size+j, dummy.matrix);
+					stepNumber[i*size+j] = getStepNumber(j/size) + this.start - 1;
 				}
 			}
-			this.model.geometry.setAttribute("instanceUV", new THREE.InstancedBufferAttribute(instanceUV, 2));
-			this.model.geometry.setAttribute("stepNumber", new THREE.InstancedBufferAttribute(stepNumber, 1));
-			this.renderer.scene.add(instancedMesh);
+			geometry.setAttribute("instanceUV", new THREE.InstancedBufferAttribute(instanceUV, 2));
+			geometry.setAttribute("stepNumber", new THREE.InstancedBufferAttribute(stepNumber, 1));
 
 		});
 
 		function getStepNumber(y: number) {
-			return Math.floor(y * 6);
+			return Math.floor(y * 5);
 		}
 		
 
+		this.ambientLight = new THREE.AmbientLight(0xffffff, 1);
 
-		const light = new THREE.AmbientLight(0xffffff, 1);
-		this.renderer.scene.add(light);
-
-		const spotLight = new THREE.SpotLight(0xffffff, 200);
-		spotLight.position.set(10, 15, -15);
-		spotLight.target.position.set(-50, 0, 20);
-		spotLight.penumbra = 1.5;
-		spotLight.distance = 400;
-		spotLight.decay = 1.0;
-		this.renderer.scene.add(spotLight);
-		this.renderer.scene.add(spotLight.target);
-
-		this.renderer.camera.position.set(-30, 20, 50);
-		this.renderer.camera.lookAt(0, 0, 0);
+		this.spotLight = new THREE.SpotLight(0xffffff, 200);
+		this.spotLight.position.set(10, 15, -15);
+		this.spotLight.target.position.set(-50, 0, 20);
+		this.spotLight.penumbra = 1.5;
+		this.spotLight.distance = 400;
+		this.spotLight.decay = 1.0;
 
 		/*
 		let tl = gsap.timeline({
@@ -257,7 +305,9 @@ export class DataCore extends ThreeRenderAbstract {
 
 	render() {
 
-		this.uniforms.uProgress.value = Math.abs(Math.sin(performance.now() / 3000));
+		this.uniforms.u_progress.value = this.renderer.progress.value;
+		const elapsedTime = this.renderer.clock.getElapsedTime();
+		this.uniforms.u_cycle.value = Math.abs(Math.sin(elapsedTime / 3));
 		
 		this.renderer.renderer.setRenderTarget(this.fbo);
 		this.renderer.renderer.render(this.fboScene, this.fboCamera);

@@ -4,7 +4,7 @@ import { getFresnelMaterial } from '../materials/fresnel-material';
 import gsap from 'gsap';
 import { createParticles } from '../objects/erratic-points';
 import type { Writable } from 'svelte/store';
-import { earthDots, earthWireFrame } from './render-objects';
+import { earthDots, earthWireFrame } from '../objects/earth-objects';
 
 
 class RaycasterBase {

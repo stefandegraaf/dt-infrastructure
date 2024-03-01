@@ -51,6 +51,8 @@
 	let rendererProgress = renderer.progressWritable;
 	//$: progress = 1 - Math.pow(1 - $rendererProgress % 1, 3) * 100;
 	$: progress = -1 * Math.sign(0.5 - ($rendererProgress % 1)) * Math.sin($rendererProgress % 1 * Math.PI);
+
+	let flatConfig = config.phases.flatMap((phase: IPhase) => phase.blocks);
 	
 </script>
 
@@ -63,7 +65,15 @@
 			<div class="modal-inner">
 
 				<div class="modal-content" class:has-render={render}>
+					
 					<div class="modal-body" style="transform:translateX({progress * 300}%)">
+						<div class="progress-bar">
+							<div class="progress-bar-line"></div>
+							<div class="progress-bar-line-done" style="height: {100 * $rendererProgress / (flatConfig.length-1)}%"></div>
+							{#each flatConfig as item, i}
+								<div class="progress-bar-dot" title="{item.title}" class:active={i === $rendererProgress} on:click={() => selectedItem.set(item)}></div>
+							{/each}
+						</div>
 						<div class="modal-close-button">
 							<Button
 								kind="tertiary"
@@ -300,6 +310,71 @@
 		margin-left: 20px;
 	}
 
+	.progress-bar {
+		position: absolute;
+		top: 0;
+		left: -30px;
+		width: 30px;
+		margin-top: 15px;
+		z-index: 5;
+	}
+	.progress-bar-dot {
+		width: 10px;
+		height: 10px;
+		background: radial-gradient(circle, #4cabd8 30%, rgba(0, 17, 43, 1) 100%);
+		border-radius: 50%;
+		margin: 0 auto;
+		position: relative;
+		cursor: pointer;
+		z-index: 1;
+	}
+	.progress-bar-dot:not(:last-child) {
+		margin-bottom: 25px;
+	}
+	.progress-bar-dot.active {
+		background-color: blue;
+		width: 15px;
+		height: 15px;
+	}
+	.progress-bar-line {
+		position: absolute;
+		width: 2px;
+		height: 100%;
+		top: 0;
+		left: 50%;
+		transform: translate(-50%);
+		background-color: rgba(255, 255, 255, 0.3);
+	}
+	.progress-bar-line-done {
+		position: absolute;
+		width: 2px;
+		top: 0;
+		left: 50%;
+		transform: translate(-50%);
+		background-color: #4cabd8;
+		/*transition: height 0.3s ease;*/
+	}
+	
+	.progress-bar-dot::after {
+		content: attr(title);
+		position: absolute;
+		bottom: 50%;
+		right: -10px;
+		transform: translate(100%, 50%);
+		background-color: rgba(0, 17, 43, 1);
+		color: #fff;
+		padding: 5px;
+		border-radius: 3px;
+		white-space: nowrap;
+		opacity: 0;
+		transition: opacity 0.3s ease;
+	}
+
+	.progress-bar-dot:hover::after {
+		opacity: 1;
+	}
+
+
 	.modal-info {
 		margin: 0 60px 40px 40px;
 		padding: 8px 20px 15px;
@@ -325,7 +400,7 @@
 		z-index: 3;
 		padding: 0 40px;
 	}
-	.content-blocks.has-render {
+	.has-render .content-blocks {
 		padding-bottom: 30px;
 	}
 	.has-render .block-content {

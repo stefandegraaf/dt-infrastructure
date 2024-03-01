@@ -91,8 +91,8 @@ export class DigiTwinRender extends ThreeRenderAbstract {
 		});
 		this.terrain = new THREE.Mesh(geometry, wireframeMaterial);
 
-		const axesHelper = new THREE.AxesHelper(25);
-		this.renderer.scene.add(axesHelper);
+		//const axesHelper = new THREE.AxesHelper(25);
+		//this.renderer.scene.add(axesHelper);
 
 		const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
 		const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
