@@ -4,8 +4,7 @@ import gsap from 'gsap';
 import type { RenderHandler } from '../render-handler';
 import { ThreeRenderAbstract } from './render-base';
 
-import { GLTFLoader } from 'three/examples/jsm/Addons';
-//import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { animateCamera, gsapAddLight, gsapRemoveLight } from '../gsap-helpers';
 
 

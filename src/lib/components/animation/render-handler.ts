@@ -2,9 +2,7 @@ import { writable, type Unsubscriber, type Writable, get } from 'svelte/store';
 import * as THREE from 'three';
 import gsap from 'gsap';
 
-
-import { OrbitControls } from 'three/examples/jsm/Addons';
-//import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 import type { BatchedGLBRender, GLBRender } from './renders/glb-render';
 import type { ThreeDeeTilesRender } from './renders/tiles3D-render';

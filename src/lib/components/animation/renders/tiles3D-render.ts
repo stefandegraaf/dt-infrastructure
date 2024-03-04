@@ -3,10 +3,9 @@ import * as THREE from 'three';
 import type { ThreeRenderComplete } from '../render-handler';
 import { ThreeRenderAbstract } from './render-base';
 
-import { OrbitControls, GLTFLoader, DRACOLoader } from 'three/examples/jsm/Addons';
-//import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-//import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
-//import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader';
 import { geodeticToCartesian, lookAtCartesian3 } from '../render-helpers';
 
 
