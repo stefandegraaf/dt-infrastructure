@@ -3,7 +3,7 @@ import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import preprocess from "svelte-preprocess";
 import { optimizeImports } from "carbon-preprocess-svelte";
-import glsl from 'vite-plugin-glsl';
+//import glsl from 'vite-plugin-glsl';
 
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -32,8 +32,19 @@ const config = {
 	},
 
 	vite: {
-		plugins: [
-			glsl()
+		plugins: [{
+				name: 'modify-imports',
+				enforce: 'pre',
+				transform(code, id) {
+					if (id.endsWith('.svelte') || id.endsWith('.ts') || id.endsWith('.js')) {
+						return {
+							code: code.replace(/'three\/examples\/jsm\/loaders\/'/g, '\'three/addons/loaders/\''),
+							map: null,
+						};
+					}
+				}
+			}
+			//glsl()
 		],
 		ssr: {
 			noExternal: ['vite-plugin-glsl']
