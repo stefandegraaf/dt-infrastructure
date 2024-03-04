@@ -15,7 +15,7 @@ import { ThreeRenderAbstract } from './render-base';
 import { createParticles } from '../objects/erratic-points.js';
 
 
-//import vertex from '../glsl/vertexParticles.glsl';
+import vertex from '../glsl/vertexParticles.glsl';
 
 export class MeshRender extends ThreeRenderAbstract {
 

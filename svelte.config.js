@@ -29,26 +29,6 @@ const config = {
 		paths: {
 			base: process.argv.includes('dev') ? '' : `/${process.env.BASE_PATH}/src`,
         }
-	},
-
-	vite: {
-		plugins: [{
-				name: 'modify-imports',
-				enforce: 'pre',
-				transform(code, id) {
-					if (id.endsWith('.svelte') || id.endsWith('.ts') || id.endsWith('.js')) {
-						return {
-							code: code.replace(/'three\/examples\/jsm\/loaders\/'/g, '\'three/addons/loaders/\''),
-							map: null,
-						};
-					}
-				}
-			}
-			//glsl()
-		],
-		ssr: {
-			noExternal: ['vite-plugin-glsl']
-		}
 	}
 };
 
