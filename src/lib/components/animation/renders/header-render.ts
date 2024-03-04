@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+//import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { getFresnelMaterial } from '../materials/fresnel-material';
 import gsap from 'gsap';
 import { createParticles } from '../objects/erratic-points';

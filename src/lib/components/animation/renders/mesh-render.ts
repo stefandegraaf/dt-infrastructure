@@ -1,4 +1,8 @@
 import * as THREE from 'three';
+
+import { GLTFLoader, DRACOLoader, OrbitControls, EffectComposer, RenderPass, UnrealBloomPass, ShaderPass } from 'three/examples/jsm/Addons';
+
+/*
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -7,7 +11,7 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
-
+*/
 import { AberrationShader } from '../shaders/aberration-shader.js';
 
 import type { ThreeRenderComplete } from '../render-handler.js';

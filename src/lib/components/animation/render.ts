@@ -2,7 +2,8 @@ import { TilesRenderer, B3DMLoader, DebugTilesRenderer } from '3d-tiles-renderer
 import * as THREE from 'three';
 import { createNoise2D } from 'simplex-noise';
 
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { GLTFLoader } from 'three/examples/jsm/Addons';
+//import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 
 export abstract class ThreeRender {

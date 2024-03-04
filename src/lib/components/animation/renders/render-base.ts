@@ -1,4 +1,3 @@
-import * as THREE from 'three';
 import type { RenderHandler } from "../render-handler";
 import { get } from 'svelte/store';
 

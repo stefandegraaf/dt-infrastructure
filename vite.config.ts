@@ -5,6 +5,7 @@ import glsl from 'vite-plugin-glsl';
 const config = {	
 	plugins: [
 		sveltekit(),
+		/*
 		{
 			name: 'modify-imports',
 			enforce: 'pre',
@@ -16,7 +17,7 @@ const config = {
 					};
 				}
 			}
-		},
+		}*/
 		glsl()
 	]
 	/*
