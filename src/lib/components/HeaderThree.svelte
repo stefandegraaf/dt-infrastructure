@@ -21,13 +21,15 @@
 
 		const headerLogo = document.getElementById('header-logo');
 		const headerHeading = document.getElementById('header-heading');
+		const headerText = document.getElementById('header-text');
 		const headerButton = document.getElementById('header-button');
 		window.addEventListener('scroll', () => {
 			const offset = window.scrollY;
-			if (!headerLogo || !headerHeading || !headerButton) return;
-			headerLogo.style.transform = `translateY(${offset * 0.4}px)`;
-			headerHeading.style.transform = `translateY(${offset * 0.4}px)`;
-			headerButton.style.transform = `translateY(${offset * 0.35}px)`;
+			if (!headerLogo || !headerHeading || !headerButton || !headerText) return;
+			headerLogo.style.transform = `translateY(${offset * 0.12}px)`;
+			headerHeading.style.transform = `translateY(${offset * 0.12}px)`;
+			headerText.style.transform = `translateY(${offset * 0.12}px)`;
+			headerButton.style.transform = `translateY(${offset * 0.12}px)`;
 		});
 	});
 	
@@ -49,7 +51,7 @@
 		<div id="header-text">
 			This series provides a look into the challenges and techniques for creating the Sogelink Digital Twin. Follow its journey from concept to an interactive and dynamic data environment.
 		</div>
-		<button id="header-button" on:click={() => dispatch('select')}>START THE JOURNEY</button>
+		<button id="header-button" on:click={() => dispatch('select')}>Start the Journey</button>
 	</div>
 </div>
 
@@ -66,7 +68,7 @@
 		width: 100%;
 		height: 100%;
 		background-color: #121212;
-		/*background: radial-gradient(circle  at right top, rgba(0,17,43,1) 0%, rgba(18, 18, 18,1) 100%);*/
+		/*background: radial-gradient(circle,  rgba(30,30,30, 1) 0%, rgba(18, 18, 18,1) 100%);*/
 	}
 	
 	#header-content {

@@ -3,15 +3,15 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 
-import type { ThreeRenderComplete } from '../render-handler';
+import type { RenderHandler } from '../render-handler';
 import { createNoise2D } from 'simplex-noise';
 import { ThreeRenderAbstract } from './render-base';
 
 
 interface glbLoadOptions {
-	useDraco: boolean | undefined;
-	animated: boolean | undefined;
-	verticalOffset: number | undefined;
+	useDraco?: boolean;
+	animated?: boolean;
+	verticalOffset?: number;
 }
 
 export class ThreeGLBModel {
@@ -38,7 +38,6 @@ export class ThreeGLBModel {
 		if (this.options.useDraco) this.addDracoLoader(loader);
 		loader.load(url, (glb) => {
 			this.model = glb.scene;
-
 			// correct position
 			let offset = 0;
 			if (this.options.verticalOffset) {
@@ -49,9 +48,9 @@ export class ThreeGLBModel {
 					}
 				});
 				const height = boundingBox.max.z - boundingBox.min.z;
-				const offset = height * 0.5;
+				const offset = height * this.options.verticalOffset;
 			
-				//glb.scene.position.y = offset;
+				glb.scene.position.y = offset;
 				//const helper = new THREE.Box3Helper(boundingBox, 0xffff00);
 				//this.scene.add(helper);
 			}
@@ -162,7 +161,7 @@ export class GLBRender extends ThreeRenderAbstract {
 	private animated: boolean;
 	private clock: THREE.Clock | undefined;
 
-	constructor(renderer: ThreeRenderComplete, start: number, end: number, url: string, animated: boolean) {
+	constructor(renderer: RenderHandler, start: number, end: number, url: string, animated: boolean) {
 		super(renderer, start, end);
 		this.url = url;
 		this.animated = animated;
@@ -245,7 +244,7 @@ export class BatchedGLBRender extends ThreeRenderAbstract {
 	private animated: boolean;
 	private clock: THREE.Clock | undefined;
 
-	constructor(renderer: ThreeRenderComplete, start: number, end: number, urls: Array<string>, animated: boolean) {
+	constructor(renderer: RenderHandler, start: number, end: number, urls: Array<string>, animated: boolean) {
 		super(renderer, start, end);
 		this.urls = urls;
 		this.animated = animated;

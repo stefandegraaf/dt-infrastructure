@@ -62,18 +62,9 @@
 	.bottom-nav-block-container {
 		width: calc(50% - (1px / 2));
 		cursor: pointer;
-		background-color: rgba(0, 17, 43, 0.7);
-		backdrop-filter: blur(10px);
 		width: 300px;
-		border-style: solid;
-		border-color:  #577d89;
-		border-width: 1px 0 0 1px;
-		border-radius: 50px 0 0 0;
+
 		overflow: hidden;
-	}
-	.bottom-nav-block-container:first-child {
-		border-width: 1px 1px 0 0;
-		border-radius: 0 50px 0 0;
 	}
 	.bottom-nav-block-container:hover {
 		background-color: #577d89;
@@ -86,10 +77,18 @@
 		transition: background-color 0.3s;
 		fill: #577d89;
 		padding: 6px 10px;
+		background-color: rgba(0, 17, 43, 0.7);
+		backdrop-filter: blur(10px);
+		border-style: solid;
+		border-color:  #577d89;
+		border-width: 1px 1px 0 0;
+		border-radius: 0 3px 0 0;
 	}
 	.next-post {
 		justify-content: flex-end;
 		text-align: right;
+		border-width: 1px 0 0 1px;
+		border-radius: 3px 0 0 0;
 	}
 	
 	.bottom-nav-block svg {

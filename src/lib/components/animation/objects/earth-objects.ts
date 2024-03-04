@@ -15,23 +15,24 @@ export function earthWireFrame(size: number): { mesh: THREE.LineSegments, materi
 			uniform float u_opacity;
 
 			void main() {
-				//vIntensity = intensity;
-				vIntensity = sin(position.y * 10.0 + u_time) * u_opacity;
-				//vIntensity = vIntensity - clamp(sin(position.x * 10.0 + u_time), 0.0, 1.0);
+				vIntensity = clamp(sin(position.y * 10.0 + u_time) * u_opacity, 0.0, 1.0);
 				gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 			}
 		`,
 
 		fragmentShader: `
 			varying float vIntensity;
+			uniform float u_opacity;
 			void main() {
-				//gl_FragColor = vec4(vec3(vIntensity), 1.0);
 				vec3 color = vec3(0.0, 1.0, 1.0); // neon blue color
-				gl_FragColor = vec4(color * (vIntensity * 1.0 + 0.5), vIntensity); // Use vIntensity to set the color
+				gl_FragColor = vec4(color * (vIntensity * 1.0 ), vIntensity);
+				if (gl_FragColor.a < 0.2) discard;
 			}
 		`,
-		transparent: true
-	
+		transparent: true,
+		blending: THREE.AdditiveBlending,
+		depthWrite: false,
+		depthTest: true
 	});
 
 	const noiseAmount = size / 24;
@@ -104,7 +105,10 @@ export function earthDots(size: number, numberOfDots: number): {points: THREE.Po
 				gl_FragColor = vec4(vColor, u_opacity);
 			}
 		`,
-		transparent: true
+		transparent: true,
+		blending: THREE.AdditiveBlending,
+		depthWrite: false,
+		depthTest: false
 	});
 	const dots = new THREE.Points(dotsGeometry, dotsMaterial);
 	return { points: dots, material: dotsMaterial };
@@ -193,6 +197,13 @@ export function earthSpiralDots(size: number, numberOfDots: number):  {points: T
 					+8.0 * pow(t, 4.0) : 
 					-8.0 * pow(t - 1.0, 4.0) + 1.0;
 			}
+			float easeOutCubic(float x) {
+				float y = 1.0 - x;
+				return 1.0 - y * y * y * y;
+			}
+			float easeInCubic(float x) {
+				return x * x;
+			}
 	
 			void main() {
 				vUv = uv;
@@ -213,8 +224,8 @@ export function earthSpiralDots(size: number, numberOfDots: number):  {points: T
 				}
 				if (progress > 1.0) {
 					//newPos.y = mix(newPos.y, 0.0, clamp(progress - 1.0, 0.0, 1.0));
-					newPos = mix(mix(newPos, position, clamp(progress - 1.0, 0.0, 1.0)), vec3(0.0), clamp(progress - 1.0, 0.0, 1.0));
-					scale = 1.0 - clamp(progress - 1.0, 0.0, 1.0);
+					newPos = mix(mix(newPos, position, clamp(progress - 1.0, 0.0, 1.0)), vec3(100.0, 0.0, -20.0), clamp(easeInCubic(progress - 1.0), 0.0, 0.98));
+					scale = clamp(progress - 1.0, 0.0, 1.0);
 					minPointSize = clamp((2.0 - progress) * 10.0, 0.0, 10.0);
 				}
 				vec4 mvPosition = modelViewMatrix * vec4(newPos, 1.0);
@@ -232,7 +243,8 @@ export function earthSpiralDots(size: number, numberOfDots: number):  {points: T
 			varying vec2 vUv;
 			void main() {
 	
-				float alpha = 1.0 - smoothstep(-0.2, 0.5, length(gl_PointCoord - vec2(0.5)));
+				//float alpha = 1.0 - smoothstep(-0.2, 0.5, length(gl_PointCoord - vec2(0.5)));
+				float alpha = 1.0 - smoothstep(0.0, 0.5, length(gl_PointCoord - vec2(0.5)));
 				alpha *= 0.8;
 				vec3 finalColor = uColor1;
 				if (vColorRandom > 0.33 && vColorRandom < 0.66) {

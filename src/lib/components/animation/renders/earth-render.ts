@@ -1,13 +1,11 @@
 import * as THREE from 'three';
 import gsap from 'gsap';
 
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-
 import type { RenderHandler } from "../render-handler";
 import { getFresnelMaterial } from '../materials/fresnel-material.js';
 import { ThreeRenderAbstract } from './render-base';
-import { earthDots, earthSpiralDots, earthWireFrame } from '../objects/earth-objects';
-import { get } from 'svelte/store';
+import { earthSpiralDots, earthWireFrame } from '../objects/earth-objects';
+import { animateCamera } from '../gsap-helpers';
 
 
 
@@ -39,7 +37,7 @@ export class EarthRender extends ThreeRenderAbstract {
 			}
 		});
 		this.renderer.selectedIndex.subscribe((step) => {
-			this.onStepChange(step - this.start);
+			this.onStepChange(step);
 		});
 	}
 
@@ -62,67 +60,52 @@ export class EarthRender extends ThreeRenderAbstract {
 	}
 
 	onStepChange(progress: number) {
-		if (progress === 0) {
+		if (progress === 1) {
 			this.setRealistic();
-			gsap.to(this.renderer.camera.position, {
-				x: 0,
-				y: this.size * 1.04,
-				z: this.size * 1.04,
-				duration: 3,
-				ease: "power2.out",
-				onUpdate: () => {
-					this.renderer.camera.lookAt(0, 0, 0);
-				}
-			});
-		} else if (progress === 1) {
-			this.setDotted();
-			gsap.to(this.renderer.camera.position, {
-				x: 0,
-				y: this.size * 1.3,
-				z: this.size * 1.3,
-				duration: 3,
-				ease: "power2.out",
-				onUpdate: () => {
-					this.renderer.camera.lookAt(0, 0, 0);
-				}
+			animateCamera({
+				position: new THREE.Vector3(-this.size * 0.8, this.size, this.size * 1.24), 
+				lookAt: new THREE.Vector3(-this.size * 0.8, 0, 0), 
+				camera: this.renderer.camera,
+				duration: 4
 			});
 		} else if (progress === 2) {
 			this.setDotted();
-			gsap.to(this.renderer.camera.position, {
-				x: 0,
-				y: this.size * 1.5,
-				z: this.size * 1.5,
-				duration: 3,
-				ease: "power2.out",
-				onUpdate: () => {
-					this.renderer.camera.lookAt(0, 0, 0);
-				}
+			animateCamera({
+				position: new THREE.Vector3(-this.size * 0.8, this.size * 0.5, this.size * 1.5), 
+				lookAt: new THREE.Vector3(-this.size * 0.6, 0, 0), 
+				camera: this.renderer.camera,
+				duration: 2
 			});
 		} else if (progress === 3) {
+			this.setDotted();
+			animateCamera({
+				position: new THREE.Vector3(-this.size * 0.8, this.size * 0.8, this.size * 1.9), 
+				lookAt: new THREE.Vector3(-this.size * 0.9, 0, 0), 
+				camera: this.renderer.camera,
+				duration: 1
+			});
+		} else if (progress === 4) {
 			this.setSpiral();
-			gsap.to(this.renderer.camera.position, {
-				x: 0,
-				y: 0,
-				z: this.size *1.5,
-				duration: 3,
-				ease: "power2.out",
-				onUpdate: () => {
-					this.renderer.camera.lookAt(-this.size * 1.2, 0, 0);
-				}
+			animateCamera({
+				position: new THREE.Vector3(0, 0, this.size * 1.5), 
+				lookAt: new THREE.Vector3(-this.size * 1.2, 0, 0), 
+				camera: this.renderer.camera,
+				duration: 3
 			});
 		}
+		if (progress > 0 || progress < 5) {
+			gsap.to(this.dotsMaterial.uniforms.u_opacity, {
+				value: progress === 2 || progress === 3 ? 1.0 : 0.0,
+				duration: 3,
+				ease: "power2.out"
+			});
 
-		gsap.to(this.dotsMaterial.uniforms.u_opacity, {
-			value: progress === 1 || progress === 2 ? 1.0 : 0.0,
-			duration: 3,
-			ease: "power2.out"
-		});
-
-		gsap.to(this.wireframeMaterial.uniforms.u_opacity, {
-			value: progress === 1 || progress === 2 ? 1.0 : 0.0,
-			duration: 3,
-			ease: "power2.out"
-		});
+			gsap.to(this.wireframeMaterial.uniforms.u_opacity, {
+				value: progress === 2 || progress === 3 ? 1.0 : 0.0,
+				duration: 3,
+				ease: "power2.out"
+			});
+		}
 	}
 
 
@@ -300,7 +283,8 @@ export class EarthRender extends ThreeRenderAbstract {
 	render() {
 		this.renderer.pivot.rotation.y += 0.0001;
 		this.earth.rotation.y -= 0.0002;
-		this.dottedSurface.rotation.y += 0.001;
+		this.dottedSurface.rotation.y += 0.0003;
+		if (!this.wireframe.visible) this.dottedSurface.rotation.y += 0.0008; // --> Spiral
 
 		this.clouds.rotation.x -= 0.00005;
 		this.clouds.rotation.y -= 0.00005;

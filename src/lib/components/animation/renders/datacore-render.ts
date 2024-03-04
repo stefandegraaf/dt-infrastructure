@@ -4,6 +4,7 @@ import gsap from 'gsap';
 import type { RenderHandler } from '../render-handler';
 import { ThreeRenderAbstract } from './render-base';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { animateCamera, gsapAddLight, gsapRemoveLight } from '../gsap-helpers';
 
 
 export class DataCore extends ThreeRenderAbstract {
@@ -42,28 +43,75 @@ export class DataCore extends ThreeRenderAbstract {
 		this.renderer.scene.add(this.ambientLight);
 		this.renderer.scene.add(this.spotLight);
 		this.renderer.scene.add(this.spotLight.target);
+
+		gsapAddLight(this.renderer.scene, this.ambientLight, 1);
+		gsapAddLight(this.renderer.scene, this.spotLight, 200);
 	}
 
 	disposeFromScene() {
 		this.renderer.scene.remove(this.instancedMesh);
 		this.renderer.scene.remove(this.ambientLight);
-		this.renderer.scene.remove(this.spotLight);
-		this.renderer.scene.remove(this.spotLight.target);
+		
+		gsapRemoveLight(this.renderer.scene, this.ambientLight);
+		gsapRemoveLight(this.renderer.scene, this.spotLight);
 	}
 
-	onStepChange(progress: number) {
-		if (progress === 5) {
-			gsap.to(this.renderer.camera.position, {
-				x: -35,
-				y: 40,
-				z: 50,
-				duration: 2,
-				ease: "power2.out",
-				onUpdate: () => {
-					this.renderer.camera.lookAt(-35, 0, 30);
-				}
+	onStepChange(step: number) {
+		// 5. Data Storage
+		if (step === 5) {
+			animateCamera({
+				position: new THREE.Vector3(-20, 15, 15), 
+				lookAt: new THREE.Vector3(-15, 0, -10), 
+				camera: this.renderer.camera,
+				duration: 3
 			});
-		} else if (progress > 9 && progress < 9.2) {
+		}
+		// 6. Data Management 
+		else if (step === 6) {
+			animateCamera({
+				position: new THREE.Vector3(-25, 20, 20), 
+				lookAt: new THREE.Vector3(-20, 0, -5), 
+				camera: this.renderer.camera,
+				duration: 3
+			});
+		} 
+		// 7. Data Processing
+		else if (step === 7) {
+			animateCamera({
+				position: new THREE.Vector3(-35, 25, 30), 
+				lookAt: new THREE.Vector3(-25, 0, 0), 
+				camera: this.renderer.camera,
+				duration: 3
+			});
+		} 
+		// 8. ETL
+		else if (step === 8) {
+			animateCamera({
+				position: new THREE.Vector3(-35, 35, 40), 
+				lookAt: new THREE.Vector3(-30, 0, 0), 
+				camera: this.renderer.camera,
+				duration: 3
+			});
+		}
+		// 9. APIs and Services
+		else if (step === 9) {
+			animateCamera({
+				position: new THREE.Vector3(-35, 30, 50), 
+				lookAt: new THREE.Vector3(-35, 0, 0), 
+				camera: this.renderer.camera,
+				duration: 3
+			});
+			gsap.to(this.uniforms.transitionProgress, { value: 0, duration: 3, easing: "power3.out" });
+		} 
+		// 10. Map Viewer
+		else if (step === 10) {
+			animateCamera({
+				position: new THREE.Vector3(-35, 30, 50), 
+				lookAt: new THREE.Vector3(-45, 0, 0), 
+				camera: this.renderer.camera,
+				duration: 3
+			});
+			gsap.to(this.uniforms.transitionProgress, { value: 0.5, duration: 2, easing: "power3.out" });
 			this.renderer.clock.oldTime -= this.renderer.clock.getElapsedTime() * 1000;
 		}
 	}
@@ -84,7 +132,9 @@ export class DataCore extends ThreeRenderAbstract {
 		this.uniforms = {
 			cluster: { value: 0 },
 			u_cycle: { value: 0 },
+			u_time: { value: 0 },
 			u_progress: { value: 0 },
+			transitionProgress: { value: 0 },
 			uFBO: { value: null },
 			aoMap: { value: aoTexture },
 			light_color: { value: new THREE.Color(0xffe9e9) },
@@ -105,52 +155,55 @@ export class DataCore extends ThreeRenderAbstract {
 		const fboMaterial = new THREE.ShaderMaterial({
 			uniforms: {
 				u_progress: this.uniforms.u_progress,
+				transitionProgress: this.uniforms.transitionProgress,
 				u_cycle: this.uniforms.u_cycle,
 				uState1: { value: fboTextureSquare },
 				uState2: { value: fboTextureEurope },
 				uFBO: { value: null }
 			},
 			vertexShader: `
-				uniform float u_progress;
+				uniform float transitionProgress;
 				varying vec2 vUv;
-				varying float vAnimationProgress;
+
 				void main() {
 					vUv = uv;
-					vAnimationProgress = u_progress - 9.0;
-
 					gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 				}
 			`,
 			fragmentShader: `
 				uniform float u_progress;
+				uniform float transitionProgress;
 				uniform sampler2D uState1;
 				uniform sampler2D uState2;
 				varying vec2 vUv;
-				varying float vAnimationProgress;
+
 				void main() {
-					//vec4 color1 = texture2D(uState1, vUv);
-					if (u_progress > 9.0) {
+					float currentStep = (u_progress - 5.0) / 5.0;
+					vec2 sampleTarget = mix(vUv, vec2(0.5, 0.5), sqrt(currentStep * 0.9));
+					vec4 color1 = texture2D(uState1, sampleTarget);
+					float attached = color1.b;
+
+					if (u_progress > 8.0) {
 						vec4 color2 = vec4(1.0, 1.0, 1.0, 0.0) - texture2D(uState2, vUv);
-						if (u_progress > 10.0) {
-							color2 *= (1.0 - smoothstep(10.0, 11.0, u_progress));
-						}
 
 						float dist = distance(vUv, vec2(0.5));
 						float radius = 1.8;
-						//float outer_progress = clamp(1.1*u_cycle, 0.0, 1.0);
-						//float inner_progress = clamp(1.1*u_cycle - 0.05, 0.0, 1.0);
-						float outer_progress = smoothstep(0.0, 1.0, 1.1*vAnimationProgress);
-						float inner_progress = smoothstep(0.0, 1.0, 1.1*vAnimationProgress - 0.05);
-					
+
+						float outer_progress = smoothstep(0.0, 1.0, 1.1 * transitionProgress);
+						float inner_progress = smoothstep(0.0, 1.0, 1.1 * transitionProgress - 0.05);
 						float innerCircle = 1.0 - smoothstep((inner_progress-0.1)*radius, inner_progress*radius, dist);
 						float outerCircle = 1.0 - smoothstep((outer_progress-0.1)*radius, outer_progress*radius, dist);
 
 						float displacement = outerCircle - innerCircle;
 						float scale = mix(1.0, color2.r, innerCircle);
 
-						gl_FragColor = vec4(vec3(displacement, scale, scale), 1.0);
+						if (u_progress > 10.0) {
+							scale *= (1.0 - (u_progress - 10.0));
+						}
+
+						gl_FragColor = vec4(vec3(displacement, scale, attached), 1.0);
 					} else {
-						gl_FragColor = vec4(0.0, 1.0, 1.0, 1.0);
+						gl_FragColor = vec4(0.0, 1.0, attached, 1.0);
 					}
 				}
 			`
@@ -177,9 +230,10 @@ export class DataCore extends ThreeRenderAbstract {
 
 				uniform sampler2D uFBO;
 				uniform float u_progress;
+				uniform float u_time;
+				uniform float u_cycle;
 				attribute vec2 instanceUV;
-				attribute float stepNumber;
-				varying float vStepNumber;
+				attribute float randoms;
 				varying float vHeight;
 				varying float vHeightUV;
 				${noise}
@@ -190,19 +244,20 @@ export class DataCore extends ThreeRenderAbstract {
 				`
 				#include <begin_vertex>
 
-				vStepNumber = stepNumber;
-				
-				if (vStepNumber < u_progress) {
-					if (transformed.y > 0.0) {
-						transformed.y += 2.0 * clamp(u_progress - vStepNumber, 0.0, 1.0);
-					}
-				} 
-
-				//float n = cnoise(vec3(instanceUV.x*5.0, instanceUV.y*5.0, u_cycle*5.0));
-				//transformed.y += n*0.25;
-				//transformed.y += 0.4 * sin(3.14159 * (u_cycle * 5.0 - instanceUV.x * 13.0));
-				
 				vec4 transition = texture2D(uFBO, instanceUV);
+				
+				transformed.y += 2.0 * transition.b;
+
+				vec2 disp = instanceUV - vec2(0.5);
+				float len = length(disp);
+				float erraticness = 1.0 - transition.b;
+				transformed.x += erraticness * pow(len, 3.0) * disp.x * 500.0;
+				transformed.z -= erraticness * pow(len, 3.0) * disp.y * 500.0;
+
+				transformed.x += erraticness* 0.1 * sin(3.14159 * randoms * u_time);
+				transformed.z += erraticness* 0.1 * sin(3.14159 * randoms * u_time);
+				transformed.y += erraticness* 1.8 * sin(3.14159 * 0.3 * (u_time / 2.0 - instanceUV.x * 8.0));
+				
 				transformed *= transition.g;
 				transformed.y += transition.r*8.0;
 				
@@ -221,7 +276,6 @@ export class DataCore extends ThreeRenderAbstract {
 				uniform vec3 ramp_color_four;
 				varying float vHeight;
 				varying float vHeightUV;
-				varying float vStepNumber;
 				`
 			);
 			shader.fragmentShader = shader.fragmentShader.replace(
@@ -233,7 +287,6 @@ export class DataCore extends ThreeRenderAbstract {
 				diffuseColor.rgb = ramp_color_two;
 				diffuseColor.rgb = mix(diffuseColor.rgb, ramp_color_three, vHeight);
 				diffuseColor.rgb = mix(diffuseColor.rgb, highlight, clamp(vHeight/10.0 - 3.0, 0.0, 1.0));
-				//diffuseColor.rgb = mix(diffuseColor.rgb, light_color, vStepNumber);
 				`		
 			);
 		}
@@ -249,7 +302,7 @@ export class DataCore extends ThreeRenderAbstract {
 			this.instancedMesh = new THREE.InstancedMesh(geometry, this.material, instances);
 			let dummy = new THREE.Object3D();
 			let width = 1.6;
-			let stepNumber = new Float32Array(instances);
+			let randoms = new Float32Array(instances);
 			let instanceUV = new Float32Array(instances * 2);
 			for (let i=0; i<size; i++) {
 				for (let j=0; j<size; j++) {
@@ -262,11 +315,12 @@ export class DataCore extends ThreeRenderAbstract {
 					);
 					dummy.updateMatrix();
 					this.instancedMesh.setMatrixAt(i*size+j, dummy.matrix);
-					stepNumber[i*size+j] = getStepNumber(j/size) + this.start - 1;
+					//stepNumber[i*size+j] = getStepNumber(j/size) + this.start - 1;
+					randoms[i*size+j] = Math.random();
 				}
 			}
 			geometry.setAttribute("instanceUV", new THREE.InstancedBufferAttribute(instanceUV, 2));
-			geometry.setAttribute("stepNumber", new THREE.InstancedBufferAttribute(stepNumber, 1));
+			geometry.setAttribute("randoms", new THREE.InstancedBufferAttribute(randoms, 1));
 
 		});
 
@@ -307,8 +361,9 @@ export class DataCore extends ThreeRenderAbstract {
 
 		this.uniforms.u_progress.value = this.renderer.progress.value;
 		const elapsedTime = this.renderer.clock.getElapsedTime();
-		this.uniforms.u_cycle.value = Math.abs(Math.sin(elapsedTime / 3));
-		
+		this.uniforms.u_cycle.value = Math.sin(elapsedTime / 3);
+		this.uniforms.u_time.value = elapsedTime;
+
 		this.renderer.renderer.setRenderTarget(this.fbo);
 		this.renderer.renderer.render(this.fboScene, this.fboCamera);
 		this.renderer.renderer.setRenderTarget(null);

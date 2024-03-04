@@ -19,7 +19,8 @@ export abstract class ThreeRenderAbstract {
 	}
 
 	public init(): void {
-		this.onStepChange(get(this.renderer.selectedIndex) - this.start);	
+
+		this.onStepChange(get(this.renderer.selectedIndex));	
 	}
 
 	public destroy(): void {

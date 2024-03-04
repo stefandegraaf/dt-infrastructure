@@ -7,11 +7,13 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import type { BatchedGLBRender, GLBRender } from './renders/glb-render';
 import type { ThreeDeeTilesRender } from './renders/tiles3D-render';
 import type { MeshRender } from './renders/mesh-render';
-import type { TerrainRender } from './renders/terrain-render';
 
+
+import { DigiTwinRender } from './renders/digitwin-render';
+import { TerrainRender } from './renders/terrain-render';
 import { EarthRender } from './renders/earth-render';
 import { DataCore } from './renders/datacore-render';
-import { DigiTwinRender } from './renders/digitwin-render';
+import { addCameraControls } from './render-helpers';
 
 export class RenderHandler {
 
@@ -31,6 +33,7 @@ export class RenderHandler {
 	public pivot: THREE.Object3D = new THREE.Object3D();
 
 	private digiTwin!: DigiTwinRender;
+	private terrain!: TerrainRender;
 	private earth!: EarthRender;
 	private dataCore!: DataCore;
 
@@ -38,7 +41,8 @@ export class RenderHandler {
 	private bim!: BatchedGLBRender;
 	private spiral!: MeshRender;
 	private sogelinkOffice!: ThreeDeeTilesRender;
-	private terrain!: TerrainRender;
+
+	private datgui: any;
 
 	constructor(selectedIndex: Writable<number>) {
 		this.scene = new THREE.Scene();
@@ -53,13 +57,14 @@ export class RenderHandler {
 		this.renderer = new THREE.WebGLRenderer({alpha: true, canvas: this.canvas, antialias: true});
 		this.renderer.setPixelRatio(window.devicePixelRatio * 0.8);
 		this.renderer.outputColorSpace = THREE.SRGBColorSpace;
-
-		new OrbitControls(this.camera, this.canvas);
+		this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+		this.renderer.toneMappingExposure = 1.0;
 
 		this.setRendererSize();
 		window.addEventListener('resize', () => this.setRendererSize());
 
-		this.pivot.add(this.camera);
+		this.pivot.position.set(0, 0, 0);
+		//this.pivot.add(this.camera);
 		this.scene.add(this.pivot);
 
 		this.progress = { value: get(this.selectedIndex) };
@@ -69,13 +74,20 @@ export class RenderHandler {
 		});
 
 		if (!this.digiTwin) this.digiTwin = new DigiTwinRender(this, 0, 1);
+		if (!this.terrain) this.terrain = new TerrainRender(this, 0, 1);
 		if (!this.earth) this.earth = new EarthRender(this, 1, 5);
 		if (!this.dataCore) this.dataCore = new DataCore(this, 5, 11);
 		this.digiTwin.init();
+		this.terrain.init();
 		this.earth.init();
 		this.dataCore.init();
 
 		this.render();
+		
+		new OrbitControls(this.camera, this.canvas);
+		addCameraControls(this.camera).then((gui: any) => this.datgui = gui);
+		//const axesHelper = new THREE.AxesHelper(25);
+		//this.scene.add(axesHelper);
 	}
 
 	public detach(): void {
@@ -85,6 +97,8 @@ export class RenderHandler {
 		this.renderer.dispose();
 		window.removeEventListener('resize', () => this.setRendererSize());
 		if (this.selectedIndexUnsubscriber) this.selectedIndexUnsubscriber();
+
+		this.datgui.destroy();
 	}
 
 
@@ -137,105 +151,11 @@ export class RenderHandler {
 		if (index !== undefined) {
 			gsap.to(this.progress, { 
 				value: index, 
-				duration: 1, 
+				duration: 1,
+				easing: "none",
 				onUpdate: () => this.progressWritable.set(this.progress.value) 
 			});
 		}
-		/*
-		switch (index) {
-			case 0:
-				if (!this.digiTwin) this.digiTwin = new DigiTwinRender(this, 0, 1);
-			case 1:
-				if (!this.earth) this.earth = new EarthRender(this, 1, 4);
-			/*
-			case 0:
-				this.earth ? this.earth.add() : this.earth = new EarthRender(this, './src/lib/files/textures/8k_earth_daymap.jpg', 6);
-				this.earth.setRealistic();
-				break;
-			case 1:
-				this.earth ? this.earth.add() : this.earth = new EarthRender(this, './src/lib/files/textures/8k_earth_daymap.jpg', 6);
-				this.earth.setRealistic();
-				/*
-				if (!this.particles) {
-					this.particles = new Particles(this);
-				} else {
-					this.particles.add();
-				}
-				/
-				break;
-			case 2:
-				this.earth ? this.earth.add() : this.earth = new EarthRender(this, './src/lib/files/textures/8k_earth_daymap.jpg', 6);
-				this.earth.setDotted();
-				break;
-			case 3:
-				this.earth?.dispose();
-				break;
-			case 4:
-				this.windmills?.dispose();
-				break;
-			case 5:
-				this.windmills ? this.windmills.add() : this.windmills = new GLBRender(this, 'https://storage.googleapis.com/ahp-research/maquette/models/sm_windturbine.glb', true);
-				break;
-			case 6:
-				this.windmills?.dispose();
-				this.bim?.dispose();
-				break;
-			case 7:
-				this.bim ? this.bim.add() : this.bim = new BatchedGLBRender(this, [
-					"https://storage.googleapis.com/ahp-research/projects/circulaire_grondstromen/uwdh/3dtiles/dtb_uwdh_geul_nl_1_8/content/1_1_0.glb",
-					"https://storage.googleapis.com/ahp-research/projects/circulaire_grondstromen/uwdh/3dtiles/dtb_uwdh_geul_nl_1_8/content/1_1_1.glb",/*
-					"https://storage.googleapis.com/ahp-research/projects/circulaire_grondstromen/uwdh/3dtiles/dtb_uwdh_old/content/2_0_0.glb",
-					"https://storage.googleapis.com/ahp-research/projects/circulaire_grondstromen/uwdh/3dtiles/dtb_uwdh_old/content/2_0_1.glb",
-					"https://storage.googleapis.com/ahp-research/projects/circulaire_grondstromen/uwdh/3dtiles/dtb_uwdh_old/content/2_0_2.glb",
-					"https://storage.googleapis.com/ahp-research/projects/circulaire_grondstromen/uwdh/3dtiles/dtb_uwdh_old/content/2_1_0.glb",
-					"https://storage.googleapis.com/ahp-research/projects/circulaire_grondstromen/uwdh/3dtiles/dtb_uwdh_old/content/2_1_3.glb",
-					"https://storage.googleapis.com/ahp-research/projects/circulaire_grondstromen/uwdh/3dtiles/dtb_uwdh_old/content/2_2_0.glb",
-					"https://storage.googleapis.com/ahp-research/projects/circulaire_grondstromen/uwdh/3dtiles/dtb_uwdh_old/content/2_2_3.glb"/
-				], true);
-				break;
-			case 8:
-				this.bim?.dispose();
-				break;
-			case 9:
-				this.spiral?.dispose();
-				break;
-			case 10:
-				this.spiral ? this.spiral.add() : this.spiral = new MeshRender(this);
-				break;
-			case 11:
-				this.spiral?.dispose();
-				this.sogelinkOffice?.dispose();
-				break;
-			case 12:
-				this.sogelinkOffice ? this.sogelinkOffice.add() : this.sogelinkOffice = new ThreeDeeTilesRender(this, "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/ifc/existing_building/tileset.json");
-				break;
-			case 13:
-				this.sogelinkOffice?.dispose();
-				this.terrain?.dispose();
-				break;
-			case 14:
-				this.terrain ? this.terrain.add() : this.terrain = new TerrainRender(this);
-				break;
-			case 15:
-				this.terrain?.dispose();
-				this.dataCore?.dispose();
-				break;
-			case 16:
-				this.dataCore ? this.dataCore.add() : this.dataCore = new DataCore(this);
-				break;
-			case 17:
-				this.dataCore?.dispose();
-				this.digiTwin?.dispose();
-				break;
-			case 18:
-				this.digiTwin ? this.digiTwin.add() : this.digiTwin = new DigiTwinRender(this);
-				break;
-			default:
-				break;
-		
-
-		}*/
 	}
 
 }
-

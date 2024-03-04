@@ -30,13 +30,18 @@
 
 
 <style>
+	#module-canvas {
+		display: block;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		left: 0;
+		top: 0;
+	}
+	
+	/* .dg.ac is the dat.gui class */
+	:global(.dg.ac) {
+		z-index: 1000 !important;
+	}
 
-  #module-canvas {
-	display: block;
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	left: 0;
-	top: 0;
-  }
 </style>

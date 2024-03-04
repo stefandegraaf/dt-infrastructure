@@ -195,7 +195,7 @@
 				"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/data-processing-geoinformatie.jpg"
 			},
 			{
-				"title": "Data Processing Tools",
+				"title": "Analytical Tools",
 				"content": "We have our technical platform ready and gathered a bunch of data. Now it is time to shape the data to feed the Digital Twin. A data-driven approach is all about getting as much value from the data as possible. One way to do this is by combining existing data sources to create new datasets. Also, it is possible to apply modelling and machine learning techniques to extract new information from exisiting data. Reworking data in a smart way can provide enhanced insights into the available data.",
 				"components": [
 					{
@@ -219,7 +219,7 @@
 			},
 			
 			{
-				"title": "Extract, Transform, Load",
+				"title": "Data Processing Pipelines",
 				"content": "Within the Digital Twin infrastructure, there is a lot of data exchange between the storage locations and processing tools. Often, datasets are subject to multiple data processing steps. The entire data processing pipeline is referred to as ETL: Extract, Transform, Load. We want the ETL-process to be as smooth as possible.",
 				"components": [
 					{

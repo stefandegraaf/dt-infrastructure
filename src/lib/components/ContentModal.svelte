@@ -271,7 +271,7 @@
 		position: absolute;
 		top: -1px;
 		right: -1px;
-		z-index: 2;
+		z-index: 5;
 	}
 
 	.modal-body {

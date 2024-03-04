@@ -30,7 +30,7 @@ export function geodeticToCartesian(lat: number, lon: number, height = 0) {
 }
 
 
-export function lookAtCartesian3(camera: THREE.Camera, point: THREE.Vector3, distance: number, angle: number): void {
+export function lookAtCartesian3(camera: THREE.Camera, point: THREE.Vector3, distance: number, angle: number): any {
 	const normal = point.clone().normalize();
 
 	const axis = new THREE.Vector3(1, 1, 1);
@@ -42,3 +42,75 @@ export function lookAtCartesian3(camera: THREE.Camera, point: THREE.Vector3, dis
 	camera.position.set(viewPoint.x, viewPoint.y, viewPoint.z );
 	camera.lookAt(0, 0, 0);
 }
+
+
+export async function addCameraControls(camera: THREE.PerspectiveCamera): Promise<any> {
+	return import('dat.gui').then((dat) => {
+
+		// Create an object with properties for the camera position and lookAt point
+		let cameraControls = {
+			/*posX: camera.position.x,
+			posY: camera.position.y,
+			posZ: camera.position.z,
+			lookAtX: 0,
+			lookAtY: 0,
+			lookAtZ: 0,*/
+			currentPosX: 0,
+			currentPosY: 0,
+			currentPosZ: 0,
+			currentLookAtX: 0,
+			currentLookAtY: 0,
+			currentLookAtZ: 0,
+			getCoordinates: function() {
+				// Update the current coordinates with the camera position and lookAt point
+				this.currentPosX = camera.position.x;
+				this.currentPosY = camera.position.y;
+				this.currentPosZ = camera.position.z;
+				let vector = new THREE.Vector3(0, 0, -1);
+				vector.applyQuaternion(camera.quaternion);
+				let lookAtPoint = vector.multiplyScalar(100).add(camera.position);
+				this.currentLookAtX = lookAtPoint.x;
+				this.currentLookAtY = lookAtPoint.y;
+				this.currentLookAtZ = lookAtPoint.z;
+			}
+		};
+
+		// Create a new dat.GUI instance
+		let gui = new dat.GUI();
+
+		// Add controls for the camera position
+		/*
+		gui.add(cameraControls, 'posX').onChange((value) => {
+			camera.position.x = value;
+		});
+		gui.add(cameraControls, 'posY').onChange((value) => {
+			camera.position.y = value;
+		});
+		gui.add(cameraControls, 'posZ').onChange((value) => {
+			camera.position.z = value;
+		});
+
+		// Add controls for the lookAt point
+		gui.add(cameraControls, 'lookAtX').onChange((value) => {
+			camera.lookAt(new THREE.Vector3(value, cameraControls.lookAtY, cameraControls.lookAtZ));
+		});
+		gui.add(cameraControls, 'lookAtY').onChange((value) => {
+			camera.lookAt(new THREE.Vector3(cameraControls.lookAtX, value, cameraControls.lookAtZ));
+		});
+		gui.add(cameraControls, 'lookAtZ').onChange((value) => {
+			camera.lookAt(new THREE.Vector3(cameraControls.lookAtX, cameraControls.lookAtY, value));
+		});
+		*/
+
+		gui.add(cameraControls, 'currentPosX').listen().name('Current Pos X');
+		gui.add(cameraControls, 'currentPosY').listen().name('Current Pos Y');
+		gui.add(cameraControls, 'currentPosZ').listen().name('Current Pos Z');
+		gui.add(cameraControls, 'currentLookAtX').listen().name('Current LookAt X');
+		gui.add(cameraControls, 'currentLookAtY').listen().name('Current LookAt Y');
+		gui.add(cameraControls, 'currentLookAtZ').listen().name('Current LookAt Z');
+		gui.add(cameraControls, 'getCoordinates').name('Get Camera Coordinates');
+
+		return gui;
+	});
+}
+

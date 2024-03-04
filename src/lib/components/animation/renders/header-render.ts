@@ -59,7 +59,6 @@ export class HeaderRender {
 		this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 		this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true });
 		this.renderer.setSize(window.innerWidth, window.innerHeight);
-		this.renderer.setClearColor(0x000000, 0);
 		this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
 		this.renderer.toneMappingExposure = 1.0;
 		
@@ -222,8 +221,6 @@ export class HeaderRender {
 		wireframeMesh.visible = false;
 		this.scene.add(wireframeMesh);
 
-
-
 		const setState = (newState: number) => {
 			this.state = newState;
 			const duration = 1.0;
@@ -280,6 +277,7 @@ export class HeaderRender {
 				value: this.state === 1 ? 1.0 : 0.0,
 				duration: duration,
 				ease: "power2.out",
+				overwrite: true,
 				onUpdate: () => {
 					dotsMaterial.needsUpdate = true;
 				},
@@ -293,6 +291,11 @@ export class HeaderRender {
 				value: this.state === 1 ? 1.0 : 0.0,
 				duration: duration,
 				ease: "power2.out",
+				overwrite: true,
+				onUpdate: () => {
+					console.log(wireframeShaderMaterial.uniforms.u_opacity.value)
+					//wireframeShaderMaterial.needsUpdate = true;
+				},
 				onComplete: () => {
 					wireframeMesh.visible = this.state === 1;
 				}
