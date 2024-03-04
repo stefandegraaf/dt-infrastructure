@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { DRACOLoader } from 'three/addons/loaders/DRACOLoader';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 
 import type { RenderHandler } from '../render-handler';
 import { createNoise2D } from 'simplex-noise';
