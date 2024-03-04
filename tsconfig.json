@@ -9,11 +9,11 @@
 		"skipLibCheck": true,
 		"sourceMap": true,
 		"strict": true,
-		"baseUrl": ".",
+		//"baseUrl": ".",
 		"paths": {
 			"$lib": ["./src/lib"],
 			"$lib/*": ["./src/lib/*"],
-			"three/addons/*": ["node_modules/@types/three/examples/jsm/*"]
+			//"three/addons/*": ["node_modules/@types/three/examples/jsm/*"]
 		},
 		"types": [
 			"vite-plugin-glsl/ext"
