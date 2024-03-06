@@ -53,12 +53,16 @@ export class HeaderRender {
 	private ready: boolean = false;
 	private state: number = 0;
 
-	constructor(canvas: HTMLElement, startAnimationProgress: Writable<number>) {
+	constructor(header: HTMLElement, canvas: HTMLElement, startAnimationProgress: Writable<number>) {
 		this.canvas = canvas;
 		this.scene = new THREE.Scene();
 		this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 		this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true });
-		this.renderer.setSize(window.innerWidth, window.innerHeight);
+
+		this.renderer.setSize(header.clientWidth, header.clientHeight);
+		this.camera.aspect = header.clientWidth / header.clientHeight;
+		this.camera.updateProjectionMatrix();
+		
 		this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
 		this.renderer.toneMappingExposure = 1.0;
 		
@@ -103,8 +107,8 @@ export class HeaderRender {
 
 		const geometry = new THREE.IcosahedronGeometry(size, 12);
 		const loader = new THREE.TextureLoader();
-		const normalMap = loader.load("./src/lib/files/textures/earth_normal_1080x540.png");
-		const earthTexture = loader.load("./src/lib/files/textures/8k_earth_daymap.jpg");
+		const normalMap = loader.load("https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/texture-maps/earth_normal_1080x540.png");
+		const earthTexture = loader.load("https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/texture-maps/8k_earth_daymap.jpg");
 		earthTexture.colorSpace = THREE.SRGBColorSpace;
 		const material = new THREE.MeshStandardMaterial({
 			map: earthTexture,
@@ -117,8 +121,8 @@ export class HeaderRender {
 		// Create the moon
 		const segments = size * 5;
         const moonGeometry = new THREE.SphereGeometry(size / 4, segments, segments);
-        const moonTexture = new THREE.TextureLoader().load("https://www.shutterstock.com/image-photo/textured-surface-moon-earths-satellite-260nw-1701426850.jpg");
-		const moonNormalMap = new THREE.TextureLoader().load("https://static.turbosquid.com/Preview/2020/02/10__12_15_26/The_Moon_Normal_Map_Cover_000.jpg3B67A625-1ED4-42EC-89CF-71DBFF106E25Large.jpg");
+        const moonTexture = loader.load("https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/texture-maps/2k_moon.jpg");
+		const moonNormalMap = loader.load("https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/texture-maps/moon_normal_map.jpg");
         const moonMaterial = new THREE.MeshStandardMaterial({
 			map: moonTexture,
 			normalMap: moonNormalMap
@@ -136,12 +140,12 @@ export class HeaderRender {
 
 		/*
 		const lightsMa2t = new THREE.MeshBasicMaterial({ 
-			map: loader.load('./src/lib/files/textures/8k_earth_nightmap.jpg'),
+			map: loader.load('https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/texture-maps/2k_earth_nightmap.jpg'),
 			blending: THREE.AdditiveBlending,
 			transparent: true,
 			opacity: 1
 		});
-		const nightTexture = loader.load('./src/lib/files/textures/8k_earth_nightmap.jpg');
+		const nightTexture = loader.load('https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/texture-maps/2k_earth_nightmap.jpg');
 		nightTexture.colorSpace = THREE.SRGBColorSpace;
 		const lightsMat = new THREE.ShaderMaterial({
 			uniforms: {
@@ -180,10 +184,10 @@ export class HeaderRender {
 		//this.earth.add(helper);
 		*/
 
-		const cloudTexture = loader.load('./src/lib/files/textures/8k_earth_clouds.jpg');
+		const cloudTexture = loader.load('https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/texture-maps/2k_earth_clouds.jpg');
 		cloudTexture.colorSpace = THREE.SRGBColorSpace;
 		const cloudMat = new THREE.MeshStandardMaterial({
-			map: loader.load('./src/lib/files/textures/8k_earth_clouds.jpg'),
+			map: cloudTexture,
 			blending: THREE.AdditiveBlending,
 			transparent: true
 		});
@@ -278,9 +282,6 @@ export class HeaderRender {
 				duration: duration,
 				ease: "power2.out",
 				overwrite: true,
-				onUpdate: () => {
-					dotsMaterial.needsUpdate = true;
-				},
 				onComplete: () => {
 					dots.visible = this.state === 1;
 				}
@@ -292,10 +293,6 @@ export class HeaderRender {
 				duration: duration,
 				ease: "power2.out",
 				overwrite: true,
-				onUpdate: () => {
-					console.log(wireframeShaderMaterial.uniforms.u_opacity.value)
-					//wireframeShaderMaterial.needsUpdate = true;
-				},
 				onComplete: () => {
 					wireframeMesh.visible = this.state === 1;
 				}

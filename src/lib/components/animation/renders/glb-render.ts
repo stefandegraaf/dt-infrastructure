@@ -48,9 +48,8 @@ export class ThreeGLBModel {
 					}
 				});
 				const height = boundingBox.max.z - boundingBox.min.z;
-				const offset = height * this.options.verticalOffset;
-			
-				glb.scene.position.y = offset;
+				offset = height * this.options.verticalOffset;
+				//glb.scene.position.y = offset;
 				//const helper = new THREE.Box3Helper(boundingBox, 0xffff00);
 				//this.scene.add(helper);
 			}
@@ -168,6 +167,9 @@ export class GLBRender extends ThreeRenderAbstract {
 		if (this.animated) this.clock = new THREE.Clock();
 	}
 
+	protected onStepChange(step: number): void {
+	}
+
 	addToScene() {
 		this.models.forEach(model => {
 			console.log(model.model)
@@ -249,6 +251,9 @@ export class BatchedGLBRender extends ThreeRenderAbstract {
 		this.urls = urls;
 		this.animated = animated;
 		if (this.animated) this.clock = new THREE.Clock();
+	}
+
+	protected onStepChange(step: number): void {
 	}
 
 	addToScene() {

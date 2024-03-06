@@ -55,7 +55,7 @@ export class TerrainRender extends ThreeRenderAbstract {
 				camera: this.renderer.camera,
 				duration: 3
 			});
-			this.showTexture();
+			this.showWireframe();
 		}
 		else if (step === 10) {
 			this.wireframeMaterial.opacity = 1;
@@ -133,8 +133,8 @@ export class TerrainRender extends ThreeRenderAbstract {
 		const geometry = new THREE.PlaneGeometry(250, 250, 100, 100);
 		geometry.rotateX(-Math.PI / 2);
 		const loader = new THREE.TextureLoader();
-		const textureMountain = loader.load('src/lib/files/textures/mountain-texture.jpg');
-		const textureLowland = loader.load('src/lib/files/textures/grass-texture.jpg');
+		const textureMountain = loader.load('src/lib/files-gitignore/textures/mountain-texture.jpg');
+		const textureLowland = loader.load('src/lib/files-gitignore/textures/grass-texture.jpg');
 		const displacementMap = loader.load('https://blenderartists.org/uploads/default/original/4X/5/0/5/505f9cafccb6e5c00bba9da7be24478b69186cb4.jpeg');
 		const alphaMap = loader.load('src/lib/files/textures/alpha-map-round.jpg');
 
@@ -151,12 +151,15 @@ export class TerrainRender extends ThreeRenderAbstract {
 			depthTest: true
 		});*/
 
+		const normalMap = loader.load('src/lib/files-gitignore/textures/istockphoto-1396946488-612x612.jpg');
+
 		this.textureMaterial = new THREE.ShaderMaterial({
 			uniforms: {
 				texture1: { value: textureLowland },
 				texture2: { value: textureMountain },
 				displacementMap: { value: displacementMap },
 				alphaMap: { value: alphaMap },
+				normalMap: { value: normalMap },
 				u_opacity: { value: 1.0 },
 				displacementScale: { value: displacementScale.value },
 				height: { value: 0.5 } // Adjust this value to control the height at which the textures are mixed
@@ -181,6 +184,7 @@ export class TerrainRender extends ThreeRenderAbstract {
 				uniform sampler2D texture1;
 				uniform sampler2D texture2;
 				uniform sampler2D alphaMap;
+				uniform sampler2D normalMap;
 				uniform float u_opacity;
 
 				void main() {
@@ -189,11 +193,19 @@ export class TerrainRender extends ThreeRenderAbstract {
 					float alpha = texture2D(alphaMap, vUv).r;
 					float mixFactor = smoothstep(1.0, 3.9, height);
 					vec4 color = mix(color1, color2, mixFactor);
-					gl_FragColor = vec4(color.rgb, alpha * u_opacity);
+
+					vec3 normal = texture2D(normalMap, vUv).xyz * 2.0 - 1.0;
+      				normal.y = -normal.y; // Invert Y axis if needed
+					vec3 lightDirection = normalize(vec3(0.0, 1.0, 1.0)); // Example light direction
+					float intensity = max(dot(normal, lightDirection), 0.0);
+				  
+
+					gl_FragColor = vec4(color.rgb * intensity , alpha * u_opacity);
 				}
 			`,
 			transparent: true,
-			depthTest: true
+			depthTest: true,
+			//side: THREE.DoubleSide
 		});
 		this.textureMesh = new THREE.Mesh(geometry, this.textureMaterial);
 
@@ -211,14 +223,14 @@ export class TerrainRender extends ThreeRenderAbstract {
 		this.wireframeMesh.position.y += 0.1;
 		
 		const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
-		const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-		directionalLight.position.set(0, 1, 0); // set the direction of the light
+		const directionalLight = new THREE.DirectionalLight(0xffffff, 5);
+		directionalLight.position.set(1, 1, 1); // set the direction of the light
 		this.lights = [ambientLight, directionalLight];
 		
 	}
 
 	render() {
-		this.renderer.pivot.rotation.y += 0.0004;
+		//this.renderer.pivot.rotation.y += 0.0024;
 		const step = get(this.renderer.selectedIndex);
 		
 		if (step === 12) {

@@ -127,7 +127,7 @@ export class DataCore extends ThreeRenderAbstract {
 
 	construct() {		
 		const textureLoader = new THREE.TextureLoader();
-		const aoTexture = textureLoader.load("src/lib/files/textures/cube-ambient-occlusion-texture.png");
+		const aoTexture = textureLoader.load("https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/texture-maps/cube-ambient-occlusion-texture.png");
 		aoTexture.flipY = false;
 
 		this.uniforms = {
@@ -138,16 +138,16 @@ export class DataCore extends ThreeRenderAbstract {
 			transitionProgress: { value: 0 },
 			uFBO: { value: null },
 			aoMap: { value: aoTexture },
-			light_color: { value: new THREE.Color(0xffe9e9) },
 			ramp_color_one: { value: new THREE.Color(0x06082D) },
 			ramp_color_two: { value: new THREE.Color(0x020284) },
 			ramp_color_three: { value: new THREE.Color(0x0000ff) },
-			ramp_color_four: { value: new THREE.Color(0x71c7f5) }
+			ramp_color_four: { value: new THREE.Color(0x71c7f5) },
+			light_color: { value: new THREE.Color(0xe9fffe) }
 		};
 
-		const fboTextureSquare = textureLoader.load("src/lib/files/textures/fbo-square.png");
+		const fboTextureSquare = textureLoader.load("https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/texture-maps/fbo-square.png");
 		fboTextureSquare.flipY = false;
-		const fboTextureEurope = textureLoader.load("src/lib/files/textures/fbo-europe.png");
+		const fboTextureEurope = textureLoader.load("https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/texture-maps/fbo-europe.png");
 		//fboTextureEurope.flipY = false;
 
 		this.fbo = new THREE.WebGLRenderTarget(this.renderer.canvas.clientWidth, this.renderer.canvas.clientHeight);
@@ -179,10 +179,20 @@ export class DataCore extends ThreeRenderAbstract {
 				varying vec2 vUv;
 
 				void main() {
-					float currentStep = (u_progress - 5.0) / 5.0;
-					vec2 sampleTarget = mix(vUv, vec2(0.5, 0.5), sqrt(currentStep * 0.9));
-					vec4 color1 = texture2D(uState1, sampleTarget);
-					float attached = color1.b;
+					//float currentStep = (u_progress - 5.0) / 5.0;
+					//vec2 sampleTarget = mix(vUv, vec2(0.5, 0.5), sqrt(currentStep * 0.9));
+					//vec4 color1 = texture2D(uState1, sampleTarget);
+					//float attached = color1.b;
+
+					float nextStep = (u_progress - fract(u_progress)) / 5.0 + 0.2;
+					float prog = (fract(u_progress) - 5.0) /5.0;
+					float attached = smoothstep(prog, nextStep, vUv.x);
+					//float lowerX = smoothstep(1.0 - u_progress, 1.0 - currentStep, vUv.x);
+					//float resX = min(upperX, lowerX);
+					//float upperY = smoothstep(currentStep, u_progress, vUv.y);
+					//float lowerY = smoothstep(1.0 - u_progress, 1.0 - currentStep, vUv.y);
+					//float resY = min(upperY, lowerY);
+					//float attached = min(upperX, upperY);
 
 					if (u_progress > 8.0) {
 						vec4 color2 = vec4(1.0, 1.0, 1.0, 0.0) - texture2D(uState2, vUv);
@@ -237,7 +247,6 @@ export class DataCore extends ThreeRenderAbstract {
 				attribute float randoms;
 				varying float vHeight;
 				varying float vHeightUV;
-				${noise}
 				`
 			);
 			shader.vertexShader = shader.vertexShader.replace(
@@ -245,22 +254,25 @@ export class DataCore extends ThreeRenderAbstract {
 				`
 				#include <begin_vertex>
 
+				vHeightUV = clamp(position.y*2.0, 0.0, 1.0);
 				vec4 transition = texture2D(uFBO, instanceUV);
 				
-				transformed.y += 2.0 * transition.b;
+				if (transformed.y > 0.0) {
+					transformed.y += 3.0 * transition.b;
+				}
 
-				vec2 disp = instanceUV - vec2(0.5);
+ 				vec2 disp = instanceUV - vec2(0.5);
 				float len = length(disp);
 				float erraticness = 1.0 - transition.b;
-				transformed.x += erraticness * pow(len, 3.0) * disp.x * 500.0;
-				transformed.z -= erraticness * pow(len, 3.0) * disp.y * 500.0;
+				//transformed.x += erraticness * pow(len, 3.0) * disp.x * 500.0;
+				//transformed.z -= erraticness * pow(len, 3.0) * disp.y * 500.0;
 
-				transformed.x += erraticness* 0.1 * sin(3.14159 * randoms * u_time);
-				transformed.z += erraticness* 0.1 * sin(3.14159 * randoms * u_time);
+				//transformed.x += erraticness* 0.1 * sin(3.14159 * randoms * u_time);
+				//transformed.z += erraticness* 0.1 * sin(3.14159 * randoms * u_time);
 				transformed.y += erraticness* 1.8 * sin(3.14159 * 0.3 * (u_time / 2.0 - instanceUV.x * 8.0));
 				
 				transformed *= transition.g;
-				transformed.y += transition.r*8.0;
+				transformed.y += transition.r*5.0;
 				
 				vHeight = transformed.y;
 				
@@ -285,16 +297,15 @@ export class DataCore extends ThreeRenderAbstract {
 				#include <color_fragment>
 
 				vec3 highlight = mix(ramp_color_three, ramp_color_four, vHeightUV);
-				diffuseColor.rgb = ramp_color_two;
-				diffuseColor.rgb = mix(diffuseColor.rgb, ramp_color_three, vHeight);
-				diffuseColor.rgb = mix(diffuseColor.rgb, highlight, clamp(vHeight/10.0 - 3.0, 0.0, 1.0));
+				diffuseColor.rgb = mix(ramp_color_two, ramp_color_three, vHeightUV);
+				diffuseColor.rgb = mix(diffuseColor.rgb, highlight, clamp(vHeight/2.0 - 1.34, 0.0, 1.0));
 				`		
 			);
 		}
 
 
 		const loader = new GLTFLoader();
-		loader.load("src/lib/files/glb/bar.glb", (gltf) => {
+		loader.load("https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/glb/building-block.glb", (gltf) => {
 			const model = gltf.scene.children[0] as THREE.Mesh;
 			const geometry = model.geometry;
 

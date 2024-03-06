@@ -152,8 +152,8 @@ export class EarthRender extends ThreeRenderAbstract {
 		
 		const geometry = new THREE.IcosahedronGeometry(this.size, 12);
 		const loader = new THREE.TextureLoader();
-		const normalMap = loader.load("https://raw.githubusercontent.com/8bittree/normal_heights/d7f1ed36457a9861464c5a937913173ac3e20b4d/samples/gebco_08_rev_elev_1080x540_normal.png");
-		const earthTexture = loader.load("./src/lib/files/textures/8k_earth_daymap.jpg");
+		const normalMap = loader.load("https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/texture-maps/earth_normal_1080x540.png");
+		const earthTexture = loader.load("https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/texture-maps/2k_earth_daymap.jpg");
 		earthTexture.colorSpace = THREE.SRGBColorSpace;
 		const material = new THREE.MeshStandardMaterial({
 			map: earthTexture,
@@ -164,8 +164,8 @@ export class EarthRender extends ThreeRenderAbstract {
 
 		// Create the moon
         const moonGeometry = new THREE.SphereGeometry(this.size / 4, 32, 32);
-        const moonTexture = new THREE.TextureLoader().load("https://www.shutterstock.com/image-photo/textured-surface-moon-earths-satellite-260nw-1701426850.jpg");
-		const moonNormalMap = new THREE.TextureLoader().load("https://static.turbosquid.com/Preview/2020/02/10__12_15_26/The_Moon_Normal_Map_Cover_000.jpg3B67A625-1ED4-42EC-89CF-71DBFF106E25Large.jpg");
+        const moonTexture = loader.load("https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/texture-maps/2k_moon.jpg");
+		const moonNormalMap = loader.load("https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/texture-maps/moon_normal_map.jpg");
         const moonMaterial = new THREE.MeshStandardMaterial({
 			map: moonTexture,
 			normalMap: moonNormalMap
@@ -179,13 +179,8 @@ export class EarthRender extends ThreeRenderAbstract {
 		this.light = new THREE.DirectionalLight(0xffffff, 1.0);
 		this.light.position.set(sunPosition.x, sunPosition.y, sunPosition.z);
 
-		const lightsMa2t = new THREE.MeshBasicMaterial({ 
-			map: loader.load('./src/lib/files/textures/8k_earth_nightmap.jpg'),
-			blending: THREE.AdditiveBlending,
-			transparent: true,
-			opacity: 1
-		});
-		const nightTexture = loader.load('./src/lib/files/textures/8k_earth_nightmap.jpg');
+		
+		const nightTexture = loader.load('https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/texture-maps/2k_earth_nightmap.jpg');
 		nightTexture.colorSpace = THREE.SRGBColorSpace;
 		/*
 		const lightsMat = new THREE.ShaderMaterial({
@@ -224,10 +219,10 @@ export class EarthRender extends ThreeRenderAbstract {
 		//let helper = new VertexNormalsHelper(lightsMesh, 2, 0x00ff00);
 		//this.earth.add(helper);
 
-		const cloudTexture = loader.load('./src/lib/files/textures/8k_earth_clouds.jpg');
+		const cloudTexture = loader.load('https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/texture-maps/2k_earth_clouds.jpg');
 		cloudTexture.colorSpace = THREE.SRGBColorSpace;
 		const cloudMat = new THREE.MeshStandardMaterial({
-			map: loader.load('./src/lib/files/textures/8k_earth_clouds.jpg'),
+			map: cloudTexture,
 			blending: THREE.AdditiveBlending
 		});
 		this.clouds = new THREE.Mesh(new THREE.IcosahedronGeometry(this.size * 1.004, 12), cloudMat);

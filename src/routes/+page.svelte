@@ -48,46 +48,48 @@
 	$: if ($selectedIndex !== undefined) selectedIndexNumber.set($selectedIndex);
 	const renderer = new RenderHandler(selectedIndexNumber);
 
-</script>
 
+	function scrollDown(): void {
+		const canvasHeight = document.getElementById('header-canvas')?.clientHeight ?? window.innerHeight;
+		const scrollY = Math.max(window.scrollY, canvasHeight + 70); 
+		window.scroll({
+			top: scrollY,
+			//behavior: 'smooth'
+		});
+	}
+
+</script>
 
 
 
 <div id="dt-concept-body">
 	
 	<HeaderThree on:select={() => {
-		if (window.scrollY < window.innerHeight) {
-			window.scroll({
-				top: window.innerHeight + 50,
-				//behavior: 'smooth'
-			});
-		}
+		scrollDown();
 		selectedItem.set(config.phases[0].blocks[0])
 	}} />
 
-
-	{#if config && config.phases}
-		{#each config.phases as phase, i}
-			{#if i !== 0}
-				<div class="phase-header">
-					<div class="phase-header-title">{phase.phase}</div>
-					<CaretDown size={32} />
-				</div>
-				<div class="block-overview">
-					{#each phase.blocks as item }
-						<Item {item} on:select={() => {
-							window.scroll({
-								top: Math.max(window.scrollY, window.innerHeight + 50)
-								//behavior: 'smooth'
-							});
-							selectedItem.set(item)
-							}}/>
-					{/each}
-				</div>
-			{/if}
-		{/each}
-		<ContentModal bind:selectedItem {config} {renderer} />
-	{/if}
+	<div class="phases">
+		{#if config && config.phases}
+			{#each config.phases as phase, i}
+				{#if i !== 0}
+					<div class="phase-header">
+						<div class="phase-header-title">{phase.phase}</div>
+						<CaretDown size={32} />
+					</div>
+					<div class="block-overview">
+						{#each phase.blocks as item }
+							<Item {item} on:select={() => {
+								scrollDown();
+								selectedItem.set(item)
+								}}/>
+						{/each}
+					</div>
+				{/if}
+			{/each}
+			<ContentModal bind:selectedItem {config} {renderer} />
+		{/if}
+	</div>
 <!--
 	<div class="phase-header">
 		<div class="phase-header-title">Result</div>
@@ -115,6 +117,9 @@
 		position: relative;
 	}
 
+	.phases {
+		padding-top: 40px;
+	}
 	.phase-header {
 		display: flex;
 		flex-direction: column;
