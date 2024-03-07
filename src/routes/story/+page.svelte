@@ -1,9 +1,8 @@
 <script lang="ts">
 
 	import ThreeDeeTilesRender from "$lib/components/animation/trash/ThreeDeeTilesRenderTest.svelte";
-import CustomStyle from "$lib/style/CustomStyle.svelte";
+	import CustomStyle from "$lib/style/CustomStyle.svelte";
 
-	import appears from "../../lib/files/appears.gif";
 
 </script>
 
@@ -32,9 +31,6 @@ import CustomStyle from "$lib/style/CustomStyle.svelte";
 		<embed src="https://sogelink.beta.geodan.nl/" id="embedded-viewer">
 	</div>
 	
-	<div id="gif">
-	<img src={appears} alt="This is an animated gif image, but it does not move" width="950" />
-	</div>
 
 	<div class="content" id="content-4">
 	</div>
