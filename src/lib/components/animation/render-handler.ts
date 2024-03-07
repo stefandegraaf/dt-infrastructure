@@ -84,8 +84,8 @@ export class RenderHandler {
 
 		this.render();
 		
-		new OrbitControls(this.camera, this.canvas);
-		addCameraControls(this.camera).then((gui: any) => this.datgui = gui);
+		//new OrbitControls(this.camera, this.canvas);
+		//addCameraControls(this.camera).then((gui: any) => this.datgui = gui);
 		//const axesHelper = new THREE.AxesHelper(25);
 		//this.scene.add(axesHelper);
 	}
@@ -98,7 +98,7 @@ export class RenderHandler {
 		window.removeEventListener('resize', () => this.setRendererSize());
 		if (this.selectedIndexUnsubscriber) this.selectedIndexUnsubscriber();
 
-		this.datgui.destroy();
+		this.datgui?.destroy();
 	}
 
 

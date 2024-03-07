@@ -5,21 +5,21 @@
 			"blocks": [
 				{
 					"title": "Digital Twin",
-					"content": "The concept of a Digital Twin is broad — many definitions co-exist. When developing a new Digital Twin application, the first step is always to define the user stories. Which processes and which users does the Digital Twin need to support?",
+					"content": "The concept of a Digital Twin is broad — many definitions co-exist. What is our vision on a Digital Twin?",
 					"components": [
 						{
-							"subtitle": "As-Is Situation",
-							"text": "Big Data integration. Models to predict or shape parts that are not covered.",
+							"subtitle": "Digital Replica",
+							"text": "Digital Twins are a virtual representation of a physical object or area. A Digital Twin integrates large quanities of (big) data from various sources to mirror the real-world in a digital environment.",
 							"icon": ""
 						},
 						{
 							"subtitle": "Real-time Insights",
-							"text": "Live view of what is happening right now. Monitoring",
+							"text": "Digital Twins provide real-time insights through data collected by (IoT) sensors. The live view of what is happening right now allows to monitor the current performance and detect issues timely.",
 							"icon": ""
 						},
 						{
 							"subtitle": "Behavioural Modelling",
-							"text": "Modelling and Simulation.",
+							"text": "Digital Twins enable modelling and simulation of scenarios to experiment with changes in the virtual environment. This helps in predicting outcomes and testing modifications before implementing them in the real world.",
 							"icon": ""
 						}
 					],

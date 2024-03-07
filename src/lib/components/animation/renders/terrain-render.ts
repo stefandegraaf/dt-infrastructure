@@ -55,6 +55,8 @@ export class TerrainRender extends ThreeRenderAbstract {
 				camera: this.renderer.camera,
 				duration: 3
 			});
+			gsap.to(this.wireframeMaterial, { opacity: 1, duration: 1 });
+			gsap.to(this.textureMaterial.uniforms.u_opacity, { value: 0, duration: 2 });
 			this.showWireframe();
 		}
 		else if (step === 10) {
@@ -230,7 +232,7 @@ export class TerrainRender extends ThreeRenderAbstract {
 	}
 
 	render() {
-		//this.renderer.pivot.rotation.y += 0.0024;
+		this.renderer.pivot.rotation.y += 0.0015;
 		const step = get(this.renderer.selectedIndex);
 		
 		if (step === 12) {

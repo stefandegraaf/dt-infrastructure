@@ -102,7 +102,7 @@ export class DigiTwinRender extends ThreeRenderAbstract {
 		let sogelink_5mb = 'https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/glb/sogelink-office-simplified-draco.glb';
 		let sogelink_1mb = 'https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/glb/sogelink-office-simplified-no-windows-draco.glb';
 		//let slURL = 'src/lib/files/glb/01_batiment_v_6.glb';
-		this.sogelinkOffice = new ThreeGLBModel(sogelink_5mb, [new THREE.Vector3(10, 0, 0)], this.renderer.scene, {
+		this.sogelinkOffice = new ThreeGLBModel(sogelink_1mb, [new THREE.Vector3(10, 0, 0)], this.renderer.scene, {
 			useDraco: true,
 			animated: false,
 			verticalOffset: 0.5

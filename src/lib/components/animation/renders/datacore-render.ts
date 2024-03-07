@@ -179,14 +179,14 @@ export class DataCore extends ThreeRenderAbstract {
 				varying vec2 vUv;
 
 				void main() {
-					//float currentStep = (u_progress - 5.0) / 5.0;
-					//vec2 sampleTarget = mix(vUv, vec2(0.5, 0.5), sqrt(currentStep * 0.9));
-					//vec4 color1 = texture2D(uState1, sampleTarget);
-					//float attached = color1.b;
+					float currentStep = (u_progress - 5.0) / 5.0;
+					vec2 sampleTarget = mix(vUv, vec2(0.5, 0.5), sqrt(currentStep * 0.9));
+					vec4 color1 = texture2D(uState1, sampleTarget);
+					float attached = color1.b;
 
-					float nextStep = (u_progress - fract(u_progress)) / 5.0 + 0.2;
-					float prog = (fract(u_progress) - 5.0) /5.0;
-					float attached = smoothstep(prog, nextStep, vUv.x);
+					//float nextStep = (u_progress - fract(u_progress)) / 5.0 + 0.2;
+					//float prog = (fract(u_progress) - 5.0) /5.0;
+					//float attached = smoothstep(prog, nextStep, vUv.x);
 					//float lowerX = smoothstep(1.0 - u_progress, 1.0 - currentStep, vUv.x);
 					//float resX = min(upperX, lowerX);
 					//float upperY = smoothstep(currentStep, u_progress, vUv.y);

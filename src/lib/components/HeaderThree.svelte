@@ -103,7 +103,7 @@
 	#header-button {
 		background-color: rgb(0, 17, 43, 0.7);
 		color: #fff;
-		border: 1px solid rgba(0, 225, 255, 0.3);
+		border: 3px solid rgba(0, 225, 255, 0.3);
 		font-weight: 400;
 		padding: 15px 30px;
 		border-radius: 50px;

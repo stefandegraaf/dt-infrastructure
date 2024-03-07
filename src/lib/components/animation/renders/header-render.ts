@@ -14,7 +14,7 @@ class RaycasterBase {
 	private mouseIsOnCanvas: boolean = false;
 
 	constructor(canvas: HTMLElement) {
-		const rect = canvas.getBoundingClientRect();
+		let rect = canvas.getBoundingClientRect();
 		canvas.addEventListener('mousemove', (event) => {
 			if (!this.mouseIsOnCanvas) return;
 			this.mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -27,11 +27,15 @@ class RaycasterBase {
 		canvas.addEventListener('mouseleave', () => {
 			this.mouseIsOnCanvas = false;
 		});
+		window.addEventListener('scroll', (event) => {
+			rect = canvas.getBoundingClientRect();
+		});
 	}
 
 	public checkIntersection(object: THREE.Object3D, camera: THREE.PerspectiveCamera): boolean {
 		if (!this.mouseIsOnCanvas) return false;
 		this.raycaster.setFromCamera(this.mouse, camera);
+		console.log(this.mouse, camera, object, this.raycaster);
 		const intersects = this.raycaster.intersectObject(object, true);
 		return intersects.length > 0;
 	}

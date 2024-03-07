@@ -64,7 +64,7 @@
 		<div class="modal modal-text">
 			<div class="modal-inner">
 
-				<div class="modal-content" class:has-render={render}>
+				<div class="modal-content" class:has-render={$rendererProgress < 13.5}>
 					
 					<div class="modal-body" style="transform:translateX({progress * 300}%)">
 						<div class="progress-bar">
@@ -234,7 +234,7 @@
 		overflow: hidden;
 	}
 	.modal-inner {
-		padding: 100px 50px 1000px;
+		padding: 100px 50px 400px;
 		height: 100%;
 		overflow-x: hidden;
 		-ms-overflow-style: none;  /* IE and Edge */
