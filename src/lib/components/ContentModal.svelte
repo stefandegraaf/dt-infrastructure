@@ -261,7 +261,7 @@
 		height: 100%;
 		opacity: 0.65;
 		z-index: 1;
-		background-image: url('https://storage.googleapis.com/ahp-research/projects/communicatie/images/render_6-2mb.png');
+		/*background-image: url('https://storage.googleapis.com/ahp-research/projects/communicatie/images/render_6-2mb.png');*/
 		background-size: cover;
 		background-position: center;
 		border-radius: 3px;

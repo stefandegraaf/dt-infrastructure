@@ -11,18 +11,22 @@ import { ThreeRenderAbstract } from './render-base';
 interface glbLoadOptions {
 	useDraco?: boolean;
 	animated?: boolean;
+	scale?: number;
 	verticalOffset?: number;
+	material?: THREE.Material;
+	onBeforeCompile?: (shader: THREE.WebGLProgramParametersWithUniforms) => void;
 }
+
 
 export class ThreeGLBModel {
 
 	private scene: THREE.Scene;
 	private positions: Array<THREE.Vector3>;
-	private options: any;
+	private options: glbLoadOptions;
 
 	public model!: THREE.Object3D;
 	public modelInstances: Array<THREE.Object3D> = [];
-	private mixers!: Array<THREE.AnimationMixer>;
+	private mixers: Array<THREE.AnimationMixer> = [];
 
 	public loaded: boolean = false;
 
@@ -44,6 +48,7 @@ export class ThreeGLBModel {
 				const boundingBox = new THREE.Box3();
 				glb.scene.traverse(function(node) {
 					if (node instanceof THREE.Mesh) {
+						node.material = new THREE.MeshBasicMaterial({ wireframe: true });
 						boundingBox.expandByObject(node);
 					}
 				});
@@ -54,14 +59,43 @@ export class ThreeGLBModel {
 				//this.scene.add(helper);
 			}
 
+			if (this.options.material) {
+				glb.scene.traverse((node) => {
+					if (node instanceof THREE.Mesh) {
+						node.material = this.options.material;
+					}
+				});
+			}
+			if (this.options.onBeforeCompile) {
+				glb.scene.traverse((node) => {
+					if (node instanceof THREE.Mesh) {
+						node.material.onBeforeCompile = this.options.onBeforeCompile;
+					}
+				});
+			}
+
+			glb.scene.traverse((node) => {
+				if (node instanceof THREE.Mesh) {
+					node.castShadow = true;
+					node.receiveShadow = true;
+					//if (node.material instanceof THREE.MeshBasicMaterial) {
+				//		node.material = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
+				//	}
+				}
+			});
+
 			for (let i = 0; i < this.positions.length; i++) {
 				const instance = this.model.clone();
 				instance.position.set(this.positions[i].x, this.positions[i].y, this.positions[i].z);
 				instance.position.y += offset
 				this.modelInstances.push(instance);
 
+				if (this.options.scale) {
+					instance.scale.set(this.options.scale, this.options.scale, this.options.scale);
+				}
+
 				if (this.options.animated) {
-					const mixer = new THREE.AnimationMixer(this.model);
+					const mixer = new THREE.AnimationMixer(instance);
 					this.mixers.push(mixer);
 					const clips = glb.animations;
 					if (clips.length > 0) {
@@ -88,7 +122,9 @@ export class ThreeGLBModel {
 	}
 
 	public updateAnimation(delta: number): void {
-		if (this.options.animated && this.mixers) this.mixers.forEach(mixer => mixer.update(delta));
+		if (this.options.animated && this.mixers) {
+			this.mixers.forEach(mixer => mixer.update(delta));
+		}
 	}
 }
 

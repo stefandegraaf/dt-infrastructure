@@ -114,3 +114,15 @@ export async function addCameraControls(camera: THREE.PerspectiveCamera): Promis
 	});
 }
 
+
+
+
+export function generateRandomPositions(count: number, minX: number, maxX: number, minZ: number, maxZ: number): THREE.Vector3[] {
+    const positions = [];
+    for (let i = 0; i < count; i++) {
+        const x = Math.random() * (maxX - minX) + minX;
+        const z = Math.random() * (maxZ - minZ) + minZ;
+        positions.push(new THREE.Vector3(x, 0, z));
+    }
+    return positions;
+}

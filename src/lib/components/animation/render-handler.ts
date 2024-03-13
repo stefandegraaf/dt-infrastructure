@@ -55,10 +55,12 @@ export class RenderHandler {
 		this.canvas = canvas;
 		this.camera = new THREE.PerspectiveCamera(70, this.canvas.clientWidth / this.canvas.clientHeight, 0.1, 10000);
 		this.renderer = new THREE.WebGLRenderer({alpha: true, canvas: this.canvas, antialias: true});
-		this.renderer.setPixelRatio(window.devicePixelRatio * 0.8);
+		//this.renderer.setPixelRatio(window.devicePixelRatio * 0.8);
 		this.renderer.outputColorSpace = THREE.SRGBColorSpace;
 		this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
 		this.renderer.toneMappingExposure = 1.0;
+
+		this.renderer.shadowMap.enabled = true;
 
 		this.setRendererSize();
 		window.addEventListener('resize', () => this.setRendererSize());
@@ -84,10 +86,11 @@ export class RenderHandler {
 
 		this.render();
 		
-		//new OrbitControls(this.camera, this.canvas);
-		//addCameraControls(this.camera).then((gui: any) => this.datgui = gui);
+		new OrbitControls(this.camera, this.canvas);
+		addCameraControls(this.camera).then((gui: any) => this.datgui = gui);
 		//const axesHelper = new THREE.AxesHelper(25);
 		//this.scene.add(axesHelper);
+		
 	}
 
 	public detach(): void {

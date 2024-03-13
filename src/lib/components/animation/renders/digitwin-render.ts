@@ -5,12 +5,14 @@ import type { RenderHandler } from '../render-handler';
 import { ThreeRenderAbstract } from './render-base';
 import { ThreeGLBModel } from './glb-render';
 import { animateCamera } from '../gsap-helpers';
+import { generateRandomPositions } from '../render-helpers';
 
 
 export class DigiTwinRender extends ThreeRenderAbstract {
 
-	private sogelinkOffice!: ThreeGLBModel;
+	private buildings!: ThreeGLBModel;
 	private trees!: ThreeGLBModel;
+	private windmills!: ThreeGLBModel;
 
 	constructor(renderer: RenderHandler, start: number, end: number) {
 		super(renderer, start, end);
@@ -37,21 +39,33 @@ export class DigiTwinRender extends ThreeRenderAbstract {
 
 	addToScene() {
 		/* DIRTY GLB LOAD FIX */
-		if (!this.sogelinkOffice.loaded || !this.trees.loaded){ setTimeout(() => this.addToScene(), 10); return; }
+		if (!this.buildings.loaded || !this.trees.loaded){ setTimeout(() => this.addToScene(), 10); return; }
 		/* DIRTY GLB LOAD FIX */
-		this.sogelinkOffice.modelInstances.forEach(model => {
+		this.buildings.modelInstances.forEach(model => {
+			//this.renderer.scene.add(model);
 			this.renderer.pivot.add(model);
 		});
 		this.trees.modelInstances.forEach(model => {
+			//this.renderer.scene.add(model);
+			this.renderer.pivot.add(model);
+		});
+		this.windmills.modelInstances.forEach(model => {
+			//this.renderer.scene.add(model);
 			this.renderer.pivot.add(model);
 		});
 	}
 
 	disposeFromScene() {
-		this.sogelinkOffice.modelInstances.forEach(model => {
+		this.buildings.modelInstances.forEach(model => {
+			//this.renderer.scene.remove(model);
 			this.renderer.pivot.remove(model);
 		});
 		this.trees.modelInstances.forEach(model => {
+			//this.renderer.scene.remove(model);
+			this.renderer.pivot.remove(model);
+		});
+		this.windmills.modelInstances.forEach(model => {
+			//this.renderer.scene.remove(model);
 			this.renderer.pivot.remove(model);
 		});
 	}
@@ -99,6 +113,7 @@ export class DigiTwinRender extends ThreeRenderAbstract {
 
 	construct() {
 
+		/*
 		let sogelink_5mb = 'https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/glb/sogelink-office-simplified-draco.glb';
 		let sogelink_1mb = 'https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/glb/sogelink-office-simplified-no-windows-draco.glb';
 		//let slURL = 'src/lib/files/glb/01_batiment_v_6.glb';
@@ -107,22 +122,74 @@ export class DigiTwinRender extends ThreeRenderAbstract {
 			animated: false,
 			verticalOffset: 0.5
 		});
+		*/
 		
-		const treePositions = [
-			new THREE.Vector3(40, 0, 0),
-			new THREE.Vector3(35, 0, 40),
-			new THREE.Vector3(-30, 0, -40),
-			new THREE.Vector3(-40, 0, 30),
-			new THREE.Vector3(35, 0, -30),
-		]
+		const buildings = "https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/glb/buildings-tile-1.glb";
+		const buildingOnBeforeCompile = (shader: THREE.WebGLProgramParametersWithUniforms) => {
+				shader.vertexShader = shader.vertexShader.replace(
+					"#include <common>",
+					`
+					#include <common>
+					varying float vY;
+					`
+				),
+				shader.vertexShader = shader.vertexShader.replace(
+					"#include <begin_vertex>",
+					`
+					#include <begin_vertex>
+					vY = position.y * -1.;
+					`
+				),
+				shader.fragmentShader = shader.fragmentShader.replace(
+					"#include <common>",
+					`
+					#include <common>
+					varying float vY;
+					`
+				),
+				shader.fragmentShader = shader.fragmentShader.replace(
+					"#include <color_fragment>",
+					`
+					#include <color_fragment>
+					float y = clamp((vY - 0.0) / (10.0 - 0.0), 0.0, 1.0);
+					vec3 col_bottom = vec3(0.2, 0.2, 0.2);
+					vec3 col_top = vec3(0.9, 0.9, 1.0);
+					diffuseColor.rgb = mix(col_bottom, col_top, y);
+					`
+				)
+			}
+		this.buildings = new ThreeGLBModel(buildings, [new THREE.Vector3(0, 0, 0)], this.renderer.scene, {
+			useDraco: false,
+			animated: false,
+			onBeforeCompile: buildingOnBeforeCompile
+		});
+
+		const s = 200;
+		const treePositions = generateRandomPositions(20, -s, s, -s, s);
 		this.trees = new ThreeGLBModel('https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/glb/tree.glb', treePositions, this.renderer.scene, {
 			useDraco: true,
 			animated: false,
 			verticalOffset: undefined
 		});
+
+		const windmillPositions = [
+			new THREE.Vector3(-s * 0.8, 0, -s  * 0.7),
+			new THREE.Vector3(-s * 0.4, 0, -s * 0.8),
+			new THREE.Vector3(-s * 0, 0, -s * 0.9),
+			new THREE.Vector3(s * 0.4, 0, -s * 1.0),
+			new THREE.Vector3(150, 0, 20),
+			new THREE.Vector3(0, 0, 20),
+		]
+		this.windmills = new ThreeGLBModel('https://storage.googleapis.com/ahp-research/maquette/models/sm_windturbine.glb', windmillPositions, this.renderer.scene, {
+			useDraco: false,
+			animated: true,
+			scale: 0.5
+		});
+
 	}
 
 	render() {
-		
+		const delta = this.renderer.clock.getDelta();
+		this.windmills.updateAnimation(delta);
 	}
 }
