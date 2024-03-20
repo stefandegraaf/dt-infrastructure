@@ -153,11 +153,11 @@ export class TerrainRender extends ThreeRenderAbstract {
 		geometry.rotateX(-Math.PI / 2);
 		const loader = new THREE.TextureLoader();
 		this.uniforms.u_texture1.value = loader.load('https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/texture-maps/basemap-texture.png');
-		this.uniforms.u_texture2.value = loader.load('src/lib/files-gitignore/textures/mountain-texture.jpg');
+		this.uniforms.u_texture2.value = loader.load('src/lib/files/textures/mountain-texture.jpg');
 		this.uniforms.u_displacementMap.value = loader.load('https://blenderartists.org/uploads/default/original/4X/5/0/5/505f9cafccb6e5c00bba9da7be24478b69186cb4.jpeg');
 		this.uniforms.u_alphaMap.value = loader.load('src/lib/files/textures/alpha-map-round.jpg');
 
-		this.uniforms.u_normalMap.value = loader.load('src/lib/files-gitignore/textures/istockphoto-1396946488-612x612.jpg');
+		this.uniforms.u_normalMap.value = loader.load('src/lib/files/textures/istockphoto-1396946488-612x612.jpg');
 
 		/*const XtextureMaterial = new THREE.MeshStandardMaterial({ 
 			color: 0x00e1ff,
@@ -171,7 +171,7 @@ export class TerrainRender extends ThreeRenderAbstract {
 			depthTest: true
 		});*/
 
-		const normalMap = loader.load('src/lib/files-gitignore/textures/istockphoto-1396946488-612x612.jpg');
+		const normalMap = loader.load('src/lib/files/textures/istockphoto-1396946488-612x612.jpg');
 /*
 		this.textureMaterial = new THREE.ShaderMaterial({
 			uniforms: {
