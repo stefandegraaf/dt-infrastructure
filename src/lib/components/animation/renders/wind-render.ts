@@ -84,7 +84,6 @@ export class WindRender extends ThreeRenderAbstract {
 			},
 			vertexShader: vertexShaderSource,
 			fragmentShader: fragmentShaderSource,
-			linewidth: 5,
 			transparent: true,
 			depthWrite: false,
 			depthTest: true,

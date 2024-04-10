@@ -4,7 +4,6 @@ import gsap from 'gsap';
 import type { RenderHandler } from '../render-handler';
 import { ThreeRenderAbstract } from './render-base';
 import { ThreeGLBModel } from './glb-render';
-import { animateCamera } from '../gsap-helpers';
 import { generateRandomPositions } from '../render-helpers';
 
 

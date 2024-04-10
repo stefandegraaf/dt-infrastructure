@@ -35,7 +35,7 @@ export class TerrainRender extends ThreeRenderAbstract {
 		this.renderer.progressWritable.subscribe((progress) => {
 			if (
 				(progress >= this.start - 0.99 && progress < this.end - 0.01) ||
-				(progress >= 11 - 0.99 && progress < 15 - 0.01)
+				(progress >= 11 - 0.99 && progress < 17 - 0.01)
 			) {			
 				if (!this.added) this.add();
 			} else {
@@ -109,8 +109,8 @@ export class TerrainRender extends ThreeRenderAbstract {
 			gsap.to(this.wireframeMaterial, { opacity: 1, duration: 1 });
 			gsap.to(this.uniforms.u_opacity, { value: 1, duration: 2 });
 		} 
-		// 13. Physical Living Environment & 14. Real-time Insights
-		if (step === 13 || step === 14) {
+		// 13. Physical Living Environmen
+		if (step === 13) {
 			this.showTexture();
 			animateCamera({
 				position: new THREE.Vector3(-60, 50, 100), 
@@ -119,14 +119,24 @@ export class TerrainRender extends ThreeRenderAbstract {
 				duration: 3
 			});
 			gsap.to(this.wireframeMaterial, { opacity: 0, displacementScale: 0, duration: 1 });
-			gsap.to(this.uniforms.u_opacity, { value: 1, duration: 2 });
 			gsap.to(this.uniforms.u_displacementScale, { value: 0, duration: 2 });
 		} 
-		// 15. Real-time Insights
-		else if (step === 15) {
+		// 14. Real-time Insights
+		else if (step === 14) {
 			animateCamera({
 				position: new THREE.Vector3(-60, 50, 100), 
 				lookAt: new THREE.Vector3(-60, 0, 0), 
+				camera: this.renderer.camera,
+				duration: 3
+			});
+			gsap.to(this.wireframeMaterial, { opacity: 0, duration: 1 });
+			gsap.to(this.uniforms.u_opacity, { value: 1, duration: 2 });
+		}
+		// 15. Prediction and simulation
+		else if (step === 15) {
+			animateCamera({
+				position: new THREE.Vector3(-300, 100, -350), 
+				lookAt: new THREE.Vector3(-220, 50, -330), 
 				camera: this.renderer.camera,
 				duration: 3
 			});
@@ -366,9 +376,8 @@ export class TerrainRender extends ThreeRenderAbstract {
 
 		//this.renderer.pivot.rotation.y += 0.001;
 
-		this.flightPath.updateCamera(this.renderer.camera);
-
 		const step = get(this.renderer.selectedIndex);
+		if (step < 15) this.flightPath.updateCamera(this.renderer.camera);
 		if (step === 12) {
 			const t = Math.abs(Math.sin(this.renderer.clock.getElapsedTime() / 5));
 			const displacement = t * 40;
