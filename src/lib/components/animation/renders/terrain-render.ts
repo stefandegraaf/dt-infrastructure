@@ -35,7 +35,7 @@ export class TerrainRender extends ThreeRenderAbstract {
 		this.renderer.progressWritable.subscribe((progress) => {
 			if (
 				(progress >= this.start - 0.99 && progress < this.end - 0.01) ||
-				(progress >= 11 - 0.99 && progress < 14 - 0.01)
+				(progress >= 11 - 0.99 && progress < 15 - 0.01)
 			) {			
 				if (!this.added) this.add();
 			} else {
@@ -109,8 +109,8 @@ export class TerrainRender extends ThreeRenderAbstract {
 			gsap.to(this.wireframeMaterial, { opacity: 1, duration: 1 });
 			gsap.to(this.uniforms.u_opacity, { value: 1, duration: 2 });
 		} 
-		// 13. Physical Living Environment
-		if (step === 13) {
+		// 13. Physical Living Environment & 14. Real-time Insights
+		if (step === 13 || step === 14) {
 			this.showTexture();
 			animateCamera({
 				position: new THREE.Vector3(-60, 50, 100), 
@@ -122,8 +122,8 @@ export class TerrainRender extends ThreeRenderAbstract {
 			gsap.to(this.uniforms.u_opacity, { value: 1, duration: 2 });
 			gsap.to(this.uniforms.u_displacementScale, { value: 0, duration: 2 });
 		} 
-		// 14. Real-time Insights
-		else if (step === 14) {
+		// 15. Real-time Insights
+		else if (step === 15) {
 			animateCamera({
 				position: new THREE.Vector3(-60, 50, 100), 
 				lookAt: new THREE.Vector3(-60, 0, 0), 

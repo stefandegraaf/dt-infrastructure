@@ -21,7 +21,7 @@ export class DigiTwinRender extends ThreeRenderAbstract {
 			if (
 				(progress >= this.start - 0.99 && progress < this.end - 0.01) ||
 				(progress >= 11 - 0.99 && progress < 12 - 0.01) ||
-				(progress >= 13 - 0.99 && progress < 14 - 0.01)
+				(progress >= 13 - 0.99 && progress < 16 - 0.01)
 			) {
 				if (!this.added) this.add();
 			} else {
@@ -80,16 +80,16 @@ export class DigiTwinRender extends ThreeRenderAbstract {
 			this.objectsIn();
 		} else if (step === 12) {
 			this.objectsOut();
-		} else if (step === 13) {
+		} else if (step === 13 || step === 14 || step === 15) {
 			this.objectsIn();
-		} else if (step === 14) {
+		} else if (step === 16) {
 			this.objectsOut();
 		}
 	}
 
 	private objectsIn(): void {
 		this.trees.modelInstances.forEach(object => {
-			object.position.y = 200;
+			//object.position.y = 200;
 			gsap.to(object.position, {
 				duration: Math.random() * 2 + 2,
 				y: 0,

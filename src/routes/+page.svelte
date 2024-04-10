@@ -101,7 +101,11 @@
 -->
 
 	<div id="footer">
-		Copyright © {new Date().getFullYear()} | Created by Sogelink Group
+		<a href="https://www.sogelink.com/" target="_blank">
+			<img id="footer-logo" src="https://bim-w.com/wp-content/uploads/SOGELINK_Logo_Responsive_01_Bleu.png" alt="Sogelink" />
+		</a>
+		<span>Copyright © {new Date().getFullYear()} | Created by Sogelink Group</span>
+		<a href="https://www.geodan.com/cookie-privacy-policy/" target="_blank">Privacy, liability and copyright</a>
 	</div>
 </div>
 
@@ -158,10 +162,15 @@
 	#footer {
 		background-color: var(--dark-main);
 		color: #fff;
-		height: 100px;
 		display: flex;
-		justify-content: center;
+		justify-content: space-evenly;
 		align-items: center;
+		
+	}
+	#footer-logo {
+		filter: grayscale(1) invert(1);
+		width: 200px;
+		margin-right: 20px;
 	}
 
 </style>

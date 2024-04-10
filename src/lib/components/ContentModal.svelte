@@ -64,7 +64,7 @@
 		<div class="modal modal-text">
 			<div class="modal-inner">
 
-				<div class="modal-content" class:has-render={$rendererProgress < 13.5}>
+				<div class="modal-content" class:has-render={$rendererProgress < 16.5}>
 					
 					<div class="modal-body" style="transform:translateX({progress * 300}%)">
 						<div class="progress-bar">
@@ -279,6 +279,7 @@
 		backdrop-filter: blur(8px);
 		position: relative;
 		z-index: 4;
+		max-width: 58vw;
 	}
 	.modal-header {
 		display: flex;
