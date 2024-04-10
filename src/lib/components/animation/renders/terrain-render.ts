@@ -5,6 +5,7 @@ import type { RenderHandler } from '../render-handler';
 import { ThreeRenderAbstract } from './render-base';
 import { animateCamera, gsapAddLight, gsapRemoveLight } from '../gsap-helpers';
 import { get } from 'svelte/store';
+import { FlightPathCenter } from '../objects/flight-path';
 
 
 export class TerrainRender extends ThreeRenderAbstract {
@@ -142,6 +143,10 @@ export class TerrainRender extends ThreeRenderAbstract {
 			});
 			gsap.to(this.wireframeMaterial, { opacity: 0, duration: 1 });
 			gsap.to(this.uniforms.u_opacity, { value: 0, duration: 2 });
+		}
+		// 16. Integration BIM-GIS
+		else if (step === 16) {
+			gsap.to(this.uniforms.u_opacity, { value: 1, duration: 2 });
 		}
 	}
 
@@ -410,77 +415,5 @@ function getLookAt(camera: THREE.PerspectiveCamera): THREE.Vector3 {
 	const previousX = point.x * Math.cos(angleInRadians) + point.z * Math.sin(angleInRadians);
 	const previousZ = -point.x * Math.sin(angleInRadians) + point.z * Math.cos(angleInRadians);
 	return new THREE.Vector3(previousX, 0, previousZ).multiplyScalar(-50);
-}
-
-
-
-
-
-class FlightPath {
-
-    private curve: THREE.CatmullRomCurve3;
-    private time: number;
-	private deltaTime: number;
-    private speed: number;
-
-    constructor(points: Array<THREE.Vector3>, speed: number) {
-        this.curve = new THREE.CatmullRomCurve3(points);
-        this.time = performance.now();
-		this.deltaTime = 0;
-        this.speed = speed ?? 0.0001;
-    }
-
-   // public getPoint(): THREE.Vector3 {
-    //    return this.curve.getPoint(this.time % 1);
-    //}
-
-    public getTangent(): THREE.Vector3 {
-        return this.curve.getTangent(this.deltaTime % 1);
-    }
-
-    public updateCamera(camera: THREE.PerspectiveCamera): void {
-		let currentTime = performance.now();
-		let deltaTime = (currentTime - this.time);
-        this.time = currentTime; // Update the time to the current time
-    	this.deltaTime += deltaTime * this.speed 
-        const position = this.curve.getPoint(this.deltaTime % 1);
-        camera.position.copy(position);
-        const lookAt = position.clone().add(this.getTangent());
-        camera.lookAt(lookAt);
-    }
-}
-
-class FlightPathCenter {
-
-    private curve: THREE.CatmullRomCurve3;
-    private time: number;
-	private deltaTime: number;
-    private speed: number;
-
-    constructor(points: Array<THREE.Vector3>, speed: number) {
-        this.curve = new THREE.CatmullRomCurve3(points);
-        this.time = performance.now();
-		this.deltaTime = 0;
-        this.speed = speed ?? 0.0001;
-    }
-
-   // public getPoint(): THREE.Vector3 {
-    //    return this.curve.getPoint(this.time % 1);
-    //}
-
-    public getTangent(): THREE.Vector3 {
-        return this.curve.getTangent(this.deltaTime % 1);
-    }
-
-    public updateCamera(camera: THREE.PerspectiveCamera): void {
-		let currentTime = performance.now();
-		let deltaTime = (currentTime - this.time);
-        this.time = currentTime; // Update the time to the current time
-    	this.deltaTime += deltaTime * this.speed 
-        const position = this.curve.getPoint(this.deltaTime % 1);
-        camera.position.copy(position);
-        //const lookAt = position.clone().add(this.getTangent());
-        camera.lookAt(0, 2, 0);
-    }
 }
 

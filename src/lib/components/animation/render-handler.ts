@@ -16,6 +16,7 @@ import { DataCore } from './renders/datacore-render';
 import { addCameraControls } from './render-helpers';
 import { WindRender } from './renders/wind-render';
 import { SubsurfaceRender } from './renders/subsurface-render';
+import { BIMRender } from './renders/bim-render';
 
 export class RenderHandler {
 
@@ -40,11 +41,7 @@ export class RenderHandler {
 	private dataCore!: DataCore;
 	private wind!: WindRender;
 	private subsurface!: SubsurfaceRender;
-
-	private windmills!: GLBRender;
-	private bim!: BatchedGLBRender;
-	private spiral!: MeshRender;
-	private sogelinkOffice!: ThreeDeeTilesRender;
+	private bim!: BIMRender;
 
 	private datgui: any;
 
@@ -85,17 +82,19 @@ export class RenderHandler {
 		if (!this.dataCore) this.dataCore = new DataCore(this, 5, 11);
 		if (!this.wind) this.wind = new WindRender(this, 14, 15);
 		if (!this.subsurface) this.subsurface = new SubsurfaceRender(this, 15, 16);
+		if  (!this.bim) this.bim = new BIMRender(this, 16, 17);
 		this.digiTwin.init();
 		this.terrain.init();
 		this.earth.init();
 		this.dataCore.init();
 		this.wind.init();
 		this.subsurface.init();
+		this.bim.init();
 
 		this.render();
 		
 		new OrbitControls(this.camera, this.canvas);
-		//addCameraControls(this.camera).then((gui: any) => this.datgui = gui);
+		addCameraControls(this.camera).then((gui: any) => this.datgui = gui);
 		//const axesHelper = new THREE.AxesHelper(25);
 		//this.scene.add(axesHelper);
 		

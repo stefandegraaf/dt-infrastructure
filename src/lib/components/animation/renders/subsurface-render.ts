@@ -128,11 +128,9 @@ export class SubsurfaceRender extends ThreeRenderAbstract {
 					acceleration[instanceIndex] = 1 + Math.random();
 					dispersion[instanceIndex] = 0.3 + Math.random();
 
-					const centerPosXZ = (gridWidth * voxelSize) / 2;
-					const centerPosZ = (gridDepth * voxelSize) / 2;
-					const distanceFromCenter = Math.sqrt(Math.pow(posX - centerPosXZ, 2) + Math.pow(posZ - centerPosZ, 2));
-					distanceFromOrigin[instanceIndex] = distanceFromCenter / Math.sqrt(Math.pow(centerPosXZ, 2) + Math.pow(centerPosZ, 2));
-					
+					const distanceFromCenter = Math.sqrt(Math.pow(posX, 2) + Math.pow(posZ, 2));
+					const maxDistanceFromCenter = Math.sqrt(Math.pow(gridWidth/2 * voxelSize, 2) + Math.pow(gridDepth/2 * voxelSize, 2));
+					distanceFromOrigin[instanceIndex] = distanceFromCenter / maxDistanceFromCenter;
 					instanceIndex++;
 				}
 			}

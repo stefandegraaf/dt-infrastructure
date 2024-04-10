@@ -9,7 +9,8 @@ export class WindRender extends ThreeRenderAbstract {
 	private windMesh!: THREE.Line;
 	private direction: THREE.Vector3 = new THREE.Vector3(1, 0, 1);
 	private uniforms: any = {
-		u_cycle: { value: 0 }
+		u_cycle: { value: 0 },
+		u_transition: { value: 0 }
 	};
 
 	constructor(renderer: RenderHandler, start: number, end: number) {
@@ -35,7 +36,12 @@ export class WindRender extends ThreeRenderAbstract {
 		this.renderer.scene.remove(this.windMesh);
 	}
 
-	onStepChange(progress: number) {
+	onStepChange(step: number) {
+		if (step === 13 || step === 15) {
+			gsap.to(this.uniforms.u_transition, { value: 0, duration: 2 });
+		} else if (step === 14) {
+			gsap.to(this.uniforms.u_transition, { value: 1, duration: 2 });
+		}
 	}
 
 
@@ -46,6 +52,7 @@ export class WindRender extends ThreeRenderAbstract {
 			attribute float opacity;
 			varying float vOpacity;
 
+			uniform float u_transition;
 			uniform float u_cycle;
 			varying float cycleOpacity;
 
@@ -64,7 +71,7 @@ export class WindRender extends ThreeRenderAbstract {
 
 				float lower = smoothstep(0.0, 0.6, cycleOffset);
 				float upper = 1.0 - smoothstep(0.8, 1.0, cycleOffset);
-       			cycleOpacity = clamp(min(lower, upper), 0.0, 1.0);
+       			cycleOpacity = clamp(min(lower, upper), 0.0, 1.0) * u_transition;
 
 				vOpacity = opacity * cycleOpacity;
 			}
@@ -80,7 +87,8 @@ export class WindRender extends ThreeRenderAbstract {
 		`;
 		const shaderMaterial = new THREE.ShaderMaterial({
 			uniforms: {
-				u_cycle: this.uniforms.u_cycle
+				u_cycle: this.uniforms.u_cycle,
+				u_transition: this.uniforms.u_transition
 			},
 			vertexShader: vertexShaderSource,
 			fragmentShader: fragmentShaderSource,
@@ -141,7 +149,6 @@ export class WindRender extends ThreeRenderAbstract {
 		geometry.setAttribute('offset', new THREE.BufferAttribute(offsetArray, 1));
 
 		this.windMesh = new THREE.LineSegments(geometry, shaderMaterial);
-		this.renderer.scene.add(this.windMesh);
 	}
 
 

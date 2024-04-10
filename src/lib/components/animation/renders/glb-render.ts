@@ -48,7 +48,6 @@ export class ThreeGLBModel {
 				const boundingBox = new THREE.Box3();
 				glb.scene.traverse(function(node) {
 					if (node instanceof THREE.Mesh) {
-						node.material = new THREE.MeshBasicMaterial({ wireframe: true });
 						boundingBox.expandByObject(node);
 					}
 				});
@@ -208,7 +207,6 @@ export class GLBRender extends ThreeRenderAbstract {
 
 	addToScene() {
 		this.models.forEach(model => {
-			console.log(model.model)
 			if (model.model instanceof THREE.Object3D) this.renderer.scene.add(model.model)
 		});
 		this.renderer.scene.add(this.terrain.wireframe);
@@ -294,7 +292,6 @@ export class BatchedGLBRender extends ThreeRenderAbstract {
 
 	addToScene() {
 		this.models.forEach(model => {
-			console.log(model.model)
 			if (model.model instanceof THREE.Object3D) this.renderer.scene.add(model.model)
 		});
 		//this.renderer.scene.add(this.terrain.wireframe);
