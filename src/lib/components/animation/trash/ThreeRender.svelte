@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
 	import * as THREE from 'three';
-    import { ThreeRender, ThreeDeeTilesRender, GLBRender, EarthRender } from "../render";
+    import { ThreeRender, ThreeDeeTilesRender, GLBRender, EarthRender } from "./render-old";
 
 	const glbs = [
 		"https://storage.googleapis.com/ahp-research/projects/communicatie/images/tree.glb",

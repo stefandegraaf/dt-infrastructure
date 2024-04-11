@@ -38,12 +38,13 @@
 		height: 260px;
 		width: 100%;
 		cursor: pointer;
-		filter: grayscale(0.7);
+		filter: grayscale(0.75) saturate(1.0);
 		transition: 0.4s;
+		will-change: filter;
 	}
 
 	.step-image:hover {
-		filter: grayscale(0) saturate(1.1);
+		filter: grayscale(0) saturate(1.2);
 	}
 
 	.step-title {

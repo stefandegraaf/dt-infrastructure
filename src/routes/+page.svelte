@@ -90,15 +90,13 @@
 			<ContentModal bind:selectedItem {config} {renderer} />
 		{/if}
 	</div>
-<!--
 	<div class="phase-header">
 		<div class="phase-header-title">Result</div>
 		<CaretDown size={32} />
 	</div>
 	<div id="embedded-viewer-container">
-		<embed src="https://sogelink.beta.geodan.nl/" id="embedded-viewer">
+		<embed src="https://sogelink.beta.geodan.nlx/" id="embedded-viewer">
 	</div>
--->
 
 	<div id="footer">
 		<a href="https://www.sogelink.com/" target="_blank">

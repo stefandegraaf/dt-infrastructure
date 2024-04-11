@@ -50,18 +50,14 @@ export class TerrainRender extends ThreeRenderAbstract {
 
 	addToScene() {
 		this.lights.forEach((light, i) => gsapAddLight(this.renderer.scene, light, this.lightIntensities[i]));
-		//this.renderer.scene.add(this.textureMesh);
-		//this.renderer.scene.add(this.wireframeMesh);
-		this.renderer.pivot.add(this.textureMesh);
-		this.renderer.pivot.add(this.wireframeMesh);
+		this.renderer.scene.add(this.textureMesh);
+		this.renderer.scene.add(this.wireframeMesh);
 	}
 
 	disposeFromScene() {
 		this.lights.forEach(light => gsapRemoveLight(this.renderer.scene, light));
-		//this.renderer.scene.remove(this.textureMesh);
-		//this.renderer.scene.remove(this.wireframeMesh);
-		this.renderer.pivot.remove(this.textureMesh);
-		this.renderer.pivot.remove(this.wireframeMesh);
+		this.renderer.scene.remove(this.textureMesh);
+		this.renderer.scene.remove(this.wireframeMesh);
 	}
 
 	onStepChange(step: number) {
@@ -331,7 +327,6 @@ export class TerrainRender extends ThreeRenderAbstract {
 		this.textureMesh = new THREE.Mesh(geometry, this.textureMaterial);
 		this.textureMesh.renderOrder = 1;
 		this.textureMesh.receiveShadow = true
-		this.renderer.scene.add(this.textureMesh);
 
 		this.wireframeMaterial = new THREE.MeshStandardMaterial({
 			color: 0x00e1ff,
@@ -363,8 +358,6 @@ export class TerrainRender extends ThreeRenderAbstract {
 		directionalLight.shadow.camera.top = v;
 		directionalLight.shadow.camera.bottom = -v;
 		directionalLight.shadow.camera.updateProjectionMatrix();
-
-		this.renderer.scene.add(directionalLight);
 
 		this.lights = [ambientLight, directionalLight];
 		this.lightIntensities = [ambientLight.intensity, directionalLight.intensity];
