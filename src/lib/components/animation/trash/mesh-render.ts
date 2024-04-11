@@ -13,7 +13,7 @@ import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { AberrationShader } from '../shaders/aberration-shader.js';
 
 import type { ThreeRenderComplete } from '../render-handler.js';
-import { ThreeRenderAbstract } from './render-base';
+import { ThreeRenderAbstract } from '../renders/render-base.js';
 import { createParticles } from '../objects/erratic-points.js';
 
 

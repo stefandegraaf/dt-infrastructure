@@ -4,10 +4,6 @@ import gsap from 'gsap';
 
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-import type { BatchedGLBRender, GLBRender } from './renders/glb-render';
-import type { ThreeDeeTilesRender } from './renders/tiles3D-render';
-import type { MeshRender } from './renders/mesh-render';
-
 
 import { DigiTwinRender } from './renders/digitwin-render';
 import { TerrainRender } from './renders/terrain-render';

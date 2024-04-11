@@ -1,7 +1,7 @@
 import { TilesRenderer, B3DMLoader } from '3d-tiles-renderer';
 import * as THREE from 'three';
 import type { ThreeRenderComplete } from '../render-handler';
-import { ThreeRenderAbstract } from './render-base';
+import { ThreeRenderAbstract } from '../renders/render-base';
 
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader';

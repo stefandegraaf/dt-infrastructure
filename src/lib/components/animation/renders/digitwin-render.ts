@@ -3,7 +3,7 @@ import gsap from 'gsap';
 
 import type { RenderHandler } from '../render-handler';
 import { ThreeRenderAbstract } from './render-base';
-import { ThreeGLBModel } from './glb-render';
+import { ThreeGLBModel } from '../objects/glb-model';
 import { generateRandomPositions } from '../render-helpers';
 
 
