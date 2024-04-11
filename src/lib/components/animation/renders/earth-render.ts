@@ -6,6 +6,7 @@ import { getFresnelMaterial } from '../materials/fresnel-material.js';
 import { ThreeRenderAbstract } from './render-base';
 import { earthSpiralDots, earthWireFrame } from '../objects/earth-objects';
 import { animateCamera } from '../gsap-helpers';
+import { VertexNormalsHelper } from 'three/addons/helpers/VertexNormalsHelper.js';
 
 
 
@@ -180,26 +181,27 @@ export class EarthRender extends ThreeRenderAbstract {
 		this.light.position.set(sunPosition.x, sunPosition.y, sunPosition.z);
 
 		
+
 		const nightTexture = loader.load('https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/texture-maps/2k_earth_nightmap.jpg');
 		nightTexture.colorSpace = THREE.SRGBColorSpace;
-		/*
+		
 		const lightsMat = new THREE.ShaderMaterial({
 			uniforms: {
 				textureMap: { value: nightTexture },
-				sunDirection: { value: sunPosition }, // Adjust this to the actual sun direction
-				cameraPosition: { value: this.renderer.camera.position } // Pass the camera position
+				sunPosition: { value: this.light.position },
+				cameraPosition: { value: this.renderer.camera.position } 
 			},
 			vertexShader: `
 				varying vec2 vUv;
 				varying vec3 vSunDirection;
 				varying float vOpacity;
 				uniform vec3 sunPosition;
+
 				void main() {
 					vUv = uv;
-					vec3 vNormal = normalize(normalMatrix * normal);
 					vec4 worldPosition = modelMatrix * vec4(position, 1.0);
-					vSunDirection = normalize(sunPosition - worldPosition.xyz); // Calculate the sun direction
-					vOpacity = max(dot(vNormal, vSunDirection), 0.0);
+					vOpacity = dot(normalize(worldPosition.xyz), normalize(sunPosition)) * -1.0;
+					vOpacity = smoothstep(-0.4, 0.2, vOpacity);
 					gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 				}
 			`,
@@ -215,9 +217,11 @@ export class EarthRender extends ThreeRenderAbstract {
 			blending: THREE.AdditiveBlending
 		});
 		const lightsMesh = new THREE.Mesh(new THREE.IcosahedronGeometry(this.size * 1.001, 12), lightsMat);
-		this.earth.add(lightsMesh);*/
-		//let helper = new VertexNormalsHelper(lightsMesh, 2, 0x00ff00);
+		this.earth.add(lightsMesh);
+		//let helper = new VertexNormalsHelper(lightsMesh, 20, 0x00ff00);
 		//this.earth.add(helper);
+
+
 
 		const cloudTexture = loader.load('https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/texture-maps/2k_earth_clouds.jpg');
 		cloudTexture.colorSpace = THREE.SRGBColorSpace;
@@ -277,7 +281,7 @@ export class EarthRender extends ThreeRenderAbstract {
 
 	render() {
 		this.renderer.pivot.rotation.y += 0.0001;
-		this.earth.rotation.y -= 0.0002;
+		this.earth.rotation.y -= 0.0004;
 		this.dottedSurface.rotation.y += 0.0003;
 		if (!this.wireframe.visible) this.dottedSurface.rotation.y += 0.0008; // --> Spiral
 

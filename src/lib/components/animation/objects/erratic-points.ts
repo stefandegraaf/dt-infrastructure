@@ -20,9 +20,11 @@ export function createParticles(count: number = 100, particleSize: number = 0.01
 
 			void main() {
 				vec3 newPos = position;
-				newPos.x += velocity * cos(newPos.x * progress);
-				newPos.y += velocity * sin(newPos.x * progress) + velocity * sin(newPos.y * progress);
-				newPos.z -= velocity * cos(newPos.z * progress);
+				
+				// Eratic movements:
+				//newPos.x += velocity * cos(newPos.x * progress);
+				//newPos.y += velocity * sin(newPos.x * progress); // + velocity * sin(newPos.y * progress);
+				//newPos.z -= velocity * cos(newPos.z * progress);
 
 				vec4 mvPosition = modelViewMatrix * vec4(newPos, 1.0);
 				gl_PointSize = size * (300.0 / - mvPosition.z);
@@ -50,9 +52,9 @@ export function createParticles(count: number = 100, particleSize: number = 0.01
 			z = (Math.random() - 0.5) * radius * 2;
 		} while (Math.sqrt(x * x + y * y + z * z ) < coreRadius);
 
-		positions[i] = x;
-		positions[i + 1] = y;
-		positions[i + 2] = z;
+		positions[i * 3] = x;
+		positions[i * 3 + 1] = y;
+		positions[i * 3 + 2] = z;
 
 		velocities[i] = (Math.random() - 0.5) * 1.1; // Random velocities
 		randoms[i] = Math.random();

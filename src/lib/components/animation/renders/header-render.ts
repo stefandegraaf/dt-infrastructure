@@ -104,7 +104,7 @@ export class HeaderRender {
 	public render(size: number): void {
 		//new OrbitControls(this.camera, this.canvas);
 
-		const stars = createParticles(300, 0.6, 60, 40);
+		const stars = createParticles(4000, 0.9, 110, 70);
 		const starsMaterial = stars.particleMaterial;
 		this.scene.add(stars.particles);
 
@@ -141,51 +141,6 @@ export class HeaderRender {
 		light.position.set(sunPosition.x, sunPosition.y, sunPosition.z);
 		this.scene.add(light);
 
-		/*
-		const lightsMa2t = new THREE.MeshBasicMaterial({ 
-			map: loader.load('https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/texture-maps/2k_earth_nightmap.jpg'),
-			blending: THREE.AdditiveBlending,
-			transparent: true,
-			opacity: 1
-		});
-		const nightTexture = loader.load('https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/texture-maps/2k_earth_nightmap.jpg');
-		nightTexture.colorSpace = THREE.SRGBColorSpace;
-		const lightsMat = new THREE.ShaderMaterial({
-			uniforms: {
-				textureMap: { value: nightTexture },
-				sunDirection: { value: sunPosition }, // Adjust this to the actual sun direction
-				cameraPosition: { value: this.camera.position } // Pass the camera position
-			},
-			vertexShader: `
-				varying vec2 vUv;
-				varying vec3 vSunDirection;
-				varying float vOpacity;
-				uniform vec3 sunPosition;
-				void main() {
-					vUv = uv;
-					vec3 vNormal = normalize(normalMatrix * normal);
-					vec4 worldPosition = modelMatrix * vec4(position, 1.0);
-					vSunDirection = normalize(sunPosition - worldPosition.xyz); // Calculate the sun direction
-					vOpacity = max(dot(vNormal, vSunDirection), 0.0);
-					gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-				}
-			`,
-			fragmentShader: `
-				uniform sampler2D textureMap;
-				varying vec2 vUv;
-				varying float vOpacity;
-				void main() {
-					vec4 texColor = texture2D(textureMap, vUv);
-					gl_FragColor = vec4(texColor.rgb, vOpacity);
-				}
-			`,
-			blending: THREE.AdditiveBlending
-		});
-		const lightsMesh = new THREE.Mesh(new THREE.IcosahedronGeometry(size + 0.01, 12), lightsMat);
-		this.scene.add(lightsMesh);
-		//let helper = new VertexNormalsHelper(lightsMesh, 2, 0x00ff00);
-		//this.earth.add(helper);
-		*/
 
 		const cloudTexture = loader.load('https://storage.googleapis.com/ahp-research/projects/communicatie/three-js/texture-maps/2k_earth_clouds.jpg');
 		cloudTexture.colorSpace = THREE.SRGBColorSpace;

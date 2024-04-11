@@ -228,7 +228,7 @@
 		overflow: hidden;
 	}
 	.modal-scrollbox {
-		padding: 100px 50px 400px;
+		padding: 100px 50px 400px 80px;
 		height: 100%;
 		overflow-x: hidden;
 		-ms-overflow-style: none;  /* IE and Edge */
