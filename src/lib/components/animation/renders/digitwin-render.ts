@@ -16,11 +16,15 @@ export class DigiTwinRender extends ThreeRenderAbstract {
 	constructor(renderer: RenderHandler, start: number, end: number) {
 		super(renderer, start, end);
 		this.construct();
+	}
+
+	private addSubribers(): void {
 		this.renderer.progressWritable.subscribe((progress) => {
 			if (
 				(progress >= this.start - 0.99 && progress < this.end - 0.01) ||
 				(progress >= 11 - 0.99 && progress < 12 - 0.01) ||
-				(progress >= 13 - 0.99 && progress < 16 - 0.01)
+				(progress >= 13 - 0.99 && progress < 16 - 0.01) ||
+				(progress >= 17 - 0.99)
 			) {
 				if (!this.added) this.add();
 			} else {
@@ -37,36 +41,15 @@ export class DigiTwinRender extends ThreeRenderAbstract {
 	}
 
 	addToScene() {
-		/* DIRTY GLB LOAD FIX */
-		if (!this.buildings.loaded || !this.trees.loaded){ setTimeout(() => this.addToScene(), 10); return; }
-		/* DIRTY GLB LOAD FIX */
-		this.buildings.modelInstances.forEach(model => {
-			//this.renderer.scene.add(model);
-			this.renderer.pivot.add(model);
-		});
-		this.trees.modelInstances.forEach(model => {
-			//this.renderer.scene.add(model);
-			this.renderer.pivot.add(model);
-		});
-		this.windmills.modelInstances.forEach(model => {
-			//this.renderer.scene.add(model);
-			this.renderer.pivot.add(model);
-		});
+		this.buildings.modelInstances.forEach(model => this.renderer.scene.add(model));
+		this.trees.modelInstances.forEach(model => this.renderer.scene.add(model));
+		this.windmills.modelInstances.forEach(model => this.renderer.scene.add(model));
 	}
 
 	disposeFromScene() {
-		this.buildings.modelInstances.forEach(model => {
-			//this.renderer.scene.remove(model);
-			this.renderer.pivot.remove(model);
-		});
-		this.trees.modelInstances.forEach(model => {
-			//this.renderer.scene.remove(model);
-			this.renderer.pivot.remove(model);
-		});
-		this.windmills.modelInstances.forEach(model => {
-			//this.renderer.scene.remove(model);
-			this.renderer.pivot.remove(model);
-		});
+		this.buildings.modelInstances.forEach(model => this.renderer.scene.remove(model));
+		this.trees.modelInstances.forEach(model => this.renderer.scene.remove(model));
+		this.windmills.modelInstances.forEach(model => this.renderer.scene.remove(model));
 	}
 
 	onStepChange(step: number) {
@@ -83,6 +66,8 @@ export class DigiTwinRender extends ThreeRenderAbstract {
 			this.objectsIn();
 		} else if (step === 16) {
 			this.objectsOut();
+		} else if (step === 17) {
+			this.objectsIn();
 		}
 	}
 
@@ -174,6 +159,13 @@ export class DigiTwinRender extends ThreeRenderAbstract {
 			scale: 0.5
 		});
 
+		const buildingsPromise = this.buildings.loaded;
+		const treesPromise = this.trees.loaded;
+		const windmillsPromise = this.windmills.loaded;
+
+		Promise.all([buildingsPromise, treesPromise, windmillsPromise]).then(() => {
+			this.addSubribers();
+		});
 	}
 
 	render() {

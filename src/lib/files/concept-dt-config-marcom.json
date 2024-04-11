@@ -426,6 +426,11 @@
 						"subtitle": "Flood Barrier Stability",
 						"text": "Water safety is a major concern due to rising sea levels. The Digital Twin can be used to simulate the impact of different scenarios on the stability of flood barriers. For doing so, we have coupled the Digital Twin with custom AI models of Deltares. These behavorial models can predict various failure mechanisms, such as sliding, fracturing and piping.<br><img class='module-img' src='https://storage.googleapis.com/ahp-research/projects/communicatie/images/tki-purmer-modelling-visualized.png'/>",
 						"icon": ""
+					},
+					{
+						"subtitle": "Construction Life-Cycle Prediction",
+						"text": "Management of infrastructural assets and construction depends on thorough understanding of the stability through time. The DREAM-tool is an interface, where users can assess the stability of their assets through time through a coupling with calculation tooling based on the FMECA method (Failure mode, effects, and criticality analysis).<br><img class='module-img' src='https://storage.googleapis.com/ahp-research/projects/communicatie/images/tki-purmer-modelling-visualized.png'/>",
+						"icon": ""
 					}
 				],
 				"persons": ["Front-end Developer", "Data analyst", "Information analist"],
@@ -451,7 +456,7 @@
 			},
 			{
 				"title": "Spatial Planning",
-				"content": "Spatial planning typically requires the integration of lots of different datasets. Digital Twins are able to provide such a holistic overview of the environment and support decision-making. For example, the Digital Twin can be used to compare different design options or tweak parameters.",
+				"content": "Spatial planning typically requires the integration of lots of different datasets. Digital Twins are able to provide a holistic overview of the environment and support decision-making. For example, the Digital Twin can be used to compare different design options or tweak parameters.<br>Since the Digital Twin infrastructure adheres to open standards, it is not limited to 3D visualization applications. A Digital Twin is not equal to a 3D viewer. Other analytical applications such as interactive dashboards can be connected to the Digital Twin infrastructure for complex data analyses. Multiple applications can also be used in parallel to support different user stories.",
 				"components": [
 					{
 						"subtitle": "Multi-Criteria Analysis (NOVEX)",
@@ -462,23 +467,11 @@
 						"subtitle": "Geodesign",
 						"text": "The Digital Twin features drawing tools to create and edit spatial plans. Based on all available data, users can design spatial plans in a targeted and informed way. Designs can be exported from the Digital Twin directly to the <a href='https://www.geodesignhub.com/' target='_blank'>Geodesign Hub</a> platform. Geodesign Hub is a web-based platform for collaborative spatial planning.",
 						"icon": ""
-					}
-				],
-				"image": "https://storage.googleapis.com/ahp-research/projects/sogelink/hackathon/images/data-processing-geoinformatie.jpg"
-			},
-			{
-				"title": "Dashboards",
-				"content": "Since the Digital Twin infrastructure adheres to open standards, it is not limited to 3D visualization applications. A Digital Twin is not equal to a 3D viewer. Other analytical applications such as interactive dashboards can be connected to the Digital Twin infrastructure for complex data analyses. Multiple applications can also be used in parallel to support different user stories.",	
-				"components": [
-					{
-						"subtitle": "Smart City Monitor",
-						"text": "Jupyter Notebooks are an interactive environment for running code and showing the results. Such analytical notebooks were used extensively in the Smart City project in Den Bosch and Breda.",
-						"icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Jupyter_logo.svg/800px-Jupyter_logo.svg.png"
 					},
 					{
-						"subtitle": "Cousteau",
-						"text": "Cousteau is a dashboarding tool that is used to visualize and analyze data in the Digital Twin. Cousteau provides a user-friendly interface to create and manage dashboards. The dashboards can be used to visualize complex data and facilitate interactive analyses.",
-						"icon": ""
+						"subtitle": "Smart Cities",
+						"text": "Smart Cities manage their urban administration using real-time data. Analytical notebooks were used extensively in the Smart City project in Den Bosch and Breda. Notebook applications - such as Jupyter Notebooks or the custom Research tool Cousteau - allow for interactively running code blocks and showing the results in charts or embedded maps.",
+						"icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Jupyter_logo.svg/800px-Jupyter_logo.svg.png"
 					}
 				],
 				"image": "https://storage.googleapis.com/ahp-research/projects/communicatie/images/circulaire-grondstromen-dashboard.png"

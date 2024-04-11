@@ -304,7 +304,6 @@
 		line-height: 1.5;
 	}
 	.modal-content {
-		max-width: 1100px;
 		margin: auto;
 	}
 	.modal-content.has-render  {

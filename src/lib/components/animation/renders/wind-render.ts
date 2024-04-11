@@ -66,6 +66,7 @@ export class WindRender extends ThreeRenderAbstract {
 				float c = cos(angle);
 				mat2 rotation = mat2(c, -s, s, c);
 				pos.xz = rotation * pos.xz;
+				//pos.y *= 1.0 + 0.1 * sin(  cycleOffset * 3.14159265358979323846 );
 
 				gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
 
@@ -81,7 +82,7 @@ export class WindRender extends ThreeRenderAbstract {
 			varying float vOpacity;
 
 			void main() {
-				gl_FragColor = vec4(1.0, 1.0, 1.0, vOpacity);
+				gl_FragColor = vec4(1., 1.0, 1.0, vOpacity);
 
 			}
 		`;
@@ -100,7 +101,7 @@ export class WindRender extends ThreeRenderAbstract {
 
 		const numLines= 5000;
 		const fieldSize = 500;
-		const travelDistance = 20;
+		const travelDistance = 40;
 		const direction = new THREE.Vector3(0.1, 0, -1);
 		const geometry = new THREE.BufferGeometry();
 
@@ -115,7 +116,7 @@ export class WindRender extends ThreeRenderAbstract {
 				Math.random() * 80 + 3, 
 				(Math.random() - 0.5) * fieldSize
 			);
-			let lineLength = Math.random() * 4 + 2;
+			let lineLength = Math.random() * 8 + 1;
 			let endPos = startPos.clone().add(direction.clone().multiplyScalar(lineLength));
 			const offset = Math.random();
 

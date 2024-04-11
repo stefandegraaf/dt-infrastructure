@@ -9,7 +9,7 @@ import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeom
 export class SubsurfaceRender extends ThreeRenderAbstract {
 
 	private voxels!: THREE.InstancedMesh;
-	private progress = { value: 0 };
+	private voxelTransition = { value: 0 };
 
 	constructor(renderer: RenderHandler, start: number, end: number) {
 		super(renderer, start, end);
@@ -27,15 +27,28 @@ export class SubsurfaceRender extends ThreeRenderAbstract {
 	}
 
 	addToScene() {
-		this.renderer.scene.add(this.voxels);
+		// --> through onStepChange()
 	}
 
 	disposeFromScene() {
-		this.renderer.scene.remove(this.voxels);
+		// --> through onStepChange()
 	}
 
 	onStepChange(progress: number) {
-
+		if (progress === 15) {
+			gsap.killTweensOf(this.voxelTransition);
+			this.renderer.scene.add(this.voxels);
+			gsap.to(this.voxelTransition, { value: 1, duration: 6 });
+		}
+		else if (progress === 14 || progress === 16) {
+			gsap.to(this.voxelTransition, { 
+				value: 0, 
+				duration: 3.5,
+				onComplete: () => {
+					this.renderer.scene.remove(this.voxels);
+				}
+			});
+		}
 	}
 
 
@@ -48,11 +61,13 @@ export class SubsurfaceRender extends ThreeRenderAbstract {
 		const voxelGeometry = new RoundedBoxGeometry(voxelSize, voxelSize/2, voxelSize, 2, voxelSize * 0.05);
 
 		const voxelShaderMaterial = new THREE.MeshPhysicalMaterial({
-			roughness: 0.65
+			roughness: 0.65,
+			transparent: true,
+			depthTest: true
 		});
 		voxelShaderMaterial.onBeforeCompile = (shader) => {
 			shader.uniforms = Object.assign(shader.uniforms, {
-				u_progress: this.progress
+				u_voxelTransition: this.voxelTransition
 			});
 			shader.vertexShader = shader.vertexShader.replace(
 				"#include <common>",
@@ -64,7 +79,7 @@ export class SubsurfaceRender extends ThreeRenderAbstract {
 				attribute float distanceFromOrigin;
 				attribute vec3 instanceColor;
 				varying vec3 vColor;
-				uniform float u_progress;
+				uniform float u_voxelTransition;
 				`
 			);
 			shader.vertexShader = shader.vertexShader.replace(
@@ -73,10 +88,10 @@ export class SubsurfaceRender extends ThreeRenderAbstract {
 				#include <begin_vertex>
 
 				vColor = instanceColor;
-				float progress = clamp(u_progress * acceleration, 0.0, 1.0);
+				float progress = clamp(u_voxelTransition * acceleration, 0.0, 1.0);
 				progress = 1.0 - pow(1.0 - progress, 3.0);
-				float dist = 150.0 * dispersion;
-				vec3 pos = position + ((1.0 - progress) * vec3(instanceMatrix[3][0], instanceMatrix[3][1] * 5.0 * (1.0 - distanceFromOrigin), instanceMatrix[3][2]) * dist);
+				float dist = 50.0 * dispersion;
+				vec3 pos = position + ((1.0 - progress) * vec3((0.2 - progress/5.0) * instanceMatrix[3][0] * dist, instanceMatrix[3][1] * 5.0 * (1.0 - distanceFromOrigin) - 50., (0.5 - progress/2.0) * instanceMatrix[3][2]) * dist);
 				transformed = pos;
 				
 				`
@@ -86,7 +101,7 @@ export class SubsurfaceRender extends ThreeRenderAbstract {
 				`
 				#include <common>
 				varying vec3 vColor;
-				uniform float u_progress;
+				uniform float u_voxelTransition;
 				`
 			);
 			shader.fragmentShader = shader.fragmentShader.replace(
@@ -94,7 +109,7 @@ export class SubsurfaceRender extends ThreeRenderAbstract {
 				`
 				#include <color_fragment>
 
-				float opacity = smoothstep(0.0, 0.6, u_progress);
+				float opacity = smoothstep(0.0, 0.6, u_voxelTransition);
 				diffuseColor = vec4(vColor, opacity);
 				`		
 			);
@@ -116,7 +131,7 @@ export class SubsurfaceRender extends ThreeRenderAbstract {
 			for (let y = 0; y < gridHeight; y++) {
 				for (let z = 0; z < gridDepth; z++) {
 					const posX = (x - gridWidth/2) * voxelSize;
-					const posY = -y * voxelSize/2;
+					const posY = -y * voxelSize/2 - voxelSize/2;
 					const posZ = (z - gridDepth/2) * voxelSize;
 					matrix.setPosition(posX, posY, posZ);
 					this.voxels.setMatrixAt(instanceIndex, matrix);
@@ -125,7 +140,7 @@ export class SubsurfaceRender extends ThreeRenderAbstract {
 					colors[instanceIndex * 3] = color.r;
 					colors[instanceIndex * 3 + 1] = color.g;
 					colors[instanceIndex * 3 + 2] = color.b;
-					acceleration[instanceIndex] = 1 + Math.random();
+					acceleration[instanceIndex] = 1 + Math.random() * 2 * (1 - y / gridHeight) * (1 - Math.abs(0.5 - x / gridWidth)) * (1 - Math.abs(0.5 - z / gridDepth));
 					dispersion[instanceIndex] = 0.3 + Math.random();
 
 					const distanceFromCenter = Math.sqrt(Math.pow(posX, 2) + Math.pow(posZ, 2));
@@ -197,7 +212,7 @@ export class SubsurfaceRender extends ThreeRenderAbstract {
 
 
 	render() {
-		this.progress.value = Math.max(0, 1 - Math.abs(this.renderer.progress.value - this.start));
+		//this.progress.value = Math.max(0, 1 - Math.abs(this.renderer.progress.value - this.start));
 	}
 }
 

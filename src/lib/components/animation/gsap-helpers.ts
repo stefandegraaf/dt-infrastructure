@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import gsap from 'gsap';
+import type { FlightPathCenter } from './objects/flight-path';
 
 
 interface CameraAnimation {
@@ -8,6 +9,12 @@ interface CameraAnimation {
 	camera: THREE.PerspectiveCamera;
 	duration?: number;
 	easing?: string;
+}
+
+interface FlightPathAnimation {
+	flightPath: FlightPathCenter;
+	camera: THREE.PerspectiveCamera;
+	duration: number;
 }
 
 export function animateCamera(c: CameraAnimation): gsap.core.Tween {
@@ -34,6 +41,34 @@ export function animateCamera(c: CameraAnimation): gsap.core.Tween {
 		}
 	});
 	return a;	
+}
+
+export function animateToFlightPath(f: FlightPathAnimation): gsap.core.Tween {
+	const targetPosition = f.flightPath.getPosition(f.duration);
+
+	const dummyCamera = new THREE.PerspectiveCamera();
+	dummyCamera.position.copy(targetPosition);
+	dummyCamera.lookAt(0, 2, 0);
+	
+	const quaternion = dummyCamera.quaternion.clone();
+	const startOrientation = f.camera.quaternion.clone();
+
+	const a = gsap.to(f.camera.position, {
+		x: targetPosition.x,
+		y: targetPosition.y,
+		z: targetPosition.z,
+		duration: f.duration,
+		ease: 'power2.out',
+		overwrite: true,
+		onUpdate: () => {
+			f.camera.quaternion.copy(startOrientation).slerp(quaternion, a.ratio);
+			f.camera.updateProjectionMatrix();
+		},
+		onComplete: () => {
+			f.flightPath.active = true;
+		}
+	});
+	return a;
 }
 
 

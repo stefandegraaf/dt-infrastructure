@@ -3,7 +3,7 @@ import gsap from 'gsap';
 
 import type { RenderHandler } from '../render-handler';
 import { ThreeRenderAbstract } from './render-base';
-import { animateCamera, gsapAddLight, gsapRemoveLight } from '../gsap-helpers';
+import { animateCamera, animateToFlightPath, gsapAddLight, gsapRemoveLight } from '../gsap-helpers';
 import { get } from 'svelte/store';
 import { FlightPathCenter } from '../objects/flight-path';
 
@@ -36,7 +36,7 @@ export class TerrainRender extends ThreeRenderAbstract {
 		this.renderer.progressWritable.subscribe((progress) => {
 			if (
 				(progress >= this.start - 0.99 && progress < this.end - 0.01) ||
-				(progress >= 11 - 0.99 && progress < 17 - 0.01)
+				(progress >= 11 - 0.99 && progress < 18 - 0.01)
 			) {			
 				if (!this.added) this.add();
 			} else {
@@ -65,7 +65,6 @@ export class TerrainRender extends ThreeRenderAbstract {
 	}
 
 	onStepChange(step: number) {
-		// 10. Map viewer
 		if (step === 0) {
 			animateCamera({
 				position: new THREE.Vector3(-60, 50, 100), 
@@ -77,7 +76,9 @@ export class TerrainRender extends ThreeRenderAbstract {
 			gsap.to(this.uniforms.u_opacity, { value: 0, duration: 2 });
 			this.showWireframe();
 		}
+		// 10. Map viewer
 		else if (step === 10) {
+			this.flightPath.active = false;
 			this.wireframeMaterial.opacity = 1;
 			gsap.to(this.wireframeMaterial, { opacity: 0, duration: 1 });
 			gsap.to(this.uniforms.u_opacity, { value: 0, duration: 2 });
@@ -85,13 +86,12 @@ export class TerrainRender extends ThreeRenderAbstract {
 		} 
 		// 11. 3D Data
 		else if (step === 11) {
-			this.showBoth();
-			animateCamera({
-				position: new THREE.Vector3(0, 50, 80), 
-				lookAt: new THREE.Vector3(-10, 5, 40), 
+			animateToFlightPath({
 				camera: this.renderer.camera,
-				duration: 3
+				flightPath: this.flightPath, 
+				duration: 1.5
 			});
+			this.showBoth();
 			this.wireframeMaterial.opacity = 0;
 			gsap.to(this.wireframeMaterial, { opacity: 1, displacementScale: 0, duration: 1 });
 			gsap.to(this.uniforms.u_opacity, { value: 0, duration: 2 });
@@ -101,51 +101,60 @@ export class TerrainRender extends ThreeRenderAbstract {
 		else if (step === 12) {
 			this.renderer.clock.start(); //reset clock
 			this.showBoth();
-			animateCamera({
-				position: new THREE.Vector3(-60, 120, 120), 
-				lookAt: new THREE.Vector3(-100, 0, 0), 
-				camera: this.renderer.camera,
-				duration: 3,
-			});
 			gsap.to(this.wireframeMaterial, { opacity: 1, duration: 1 });
 			gsap.to(this.uniforms.u_opacity, { value: 1, duration: 2 });
 		} 
-		// 13. Physical Living Environmen
+		// 13. Physical Living Environment
 		if (step === 13) {
-			this.showTexture();
-			animateCamera({
-				position: new THREE.Vector3(-60, 50, 100), 
-				lookAt: new THREE.Vector3(-60, 0, 0), 
+			animateToFlightPath({
 				camera: this.renderer.camera,
-				duration: 3
+				flightPath: this.flightPath, 
+				duration: 1.5
 			});
+			this.showTexture();
 			gsap.to(this.wireframeMaterial, { opacity: 0, displacementScale: 0, duration: 1 });
 			gsap.to(this.uniforms.u_displacementScale, { value: 0, duration: 2 });
 		} 
 		// 14. Real-time Insights
 		else if (step === 14) {
+			this.flightPath.active = false;
 			animateCamera({
-				position: new THREE.Vector3(-60, 50, 100), 
-				lookAt: new THREE.Vector3(-60, 0, 0), 
+				position: new THREE.Vector3(154, 181, 216), 
+				lookAt: new THREE.Vector3(94, 107, 187), 
 				camera: this.renderer.camera,
 				duration: 3
 			});
+			this.showTexture();
 			gsap.to(this.wireframeMaterial, { opacity: 0, duration: 1 });
 			gsap.to(this.uniforms.u_opacity, { value: 1, duration: 2 });
 		}
 		// 15. Prediction and simulation
 		else if (step === 15) {
+			this.flightPath.active = false;
 			animateCamera({
-				position: new THREE.Vector3(-300, 100, -350), 
-				lookAt: new THREE.Vector3(-220, 50, -330), 
+				position: new THREE.Vector3(-344, 79, -418), 
+				lookAt: new THREE.Vector3(-257, 44, -384), 
 				camera: this.renderer.camera,
 				duration: 3
 			});
+			this.showTexture();
 			gsap.to(this.wireframeMaterial, { opacity: 0, duration: 1 });
 			gsap.to(this.uniforms.u_opacity, { value: 0, duration: 2 });
 		}
 		// 16. Integration BIM-GIS
 		else if (step === 16) {
+			this.flightPath.active = false;
+			gsap.to(this.uniforms.u_opacity, { value: 1, duration: 2 });
+			this.showTexture();
+		}
+		// 17. Spatial Planning
+		else if (step === 17) {
+			animateToFlightPath({
+				camera: this.renderer.camera,
+				flightPath: this.flightPath, 
+				duration: 1.5
+			});
+			this.showTexture();
 			gsap.to(this.uniforms.u_opacity, { value: 1, duration: 2 });
 		}
 	}
@@ -161,6 +170,10 @@ export class TerrainRender extends ThreeRenderAbstract {
 	private showBoth(): void {
 		this.textureMesh.visible = true;
 		this.wireframeMesh.visible = true;
+	}
+	private hideBoth(): void {
+		this.textureMesh.visible = false;
+		this.wireframeMesh.visible = false;
 	}
 
 	construct() {
@@ -316,6 +329,7 @@ export class TerrainRender extends ThreeRenderAbstract {
 			)
 		};
 		this.textureMesh = new THREE.Mesh(geometry, this.textureMaterial);
+		this.textureMesh.renderOrder = 1;
 		this.textureMesh.receiveShadow = true
 		this.renderer.scene.add(this.textureMesh);
 
@@ -382,7 +396,7 @@ export class TerrainRender extends ThreeRenderAbstract {
 		//this.renderer.pivot.rotation.y += 0.001;
 
 		const step = get(this.renderer.selectedIndex);
-		if (step < 15) this.flightPath.updateCamera(this.renderer.camera);
+		if (step < 14 || step === 17) this.flightPath.updateCamera(this.renderer.camera);
 		if (step === 12) {
 			const t = Math.abs(Math.sin(this.renderer.clock.getElapsedTime() / 5));
 			const displacement = t * 40;

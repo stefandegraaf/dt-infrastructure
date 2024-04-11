@@ -28,7 +28,7 @@ export class ThreeGLBModel {
 	public modelInstances: Array<THREE.Object3D> = [];
 	private mixers: Array<THREE.AnimationMixer> = [];
 
-	public loaded: boolean = false;
+	public loaded!: Promise<void>;
 
 	constructor(url: string, positions: Array<THREE.Vector3>, scene: THREE.Scene, options: glbLoadOptions) {
 		this.scene = scene;
@@ -40,70 +40,76 @@ export class ThreeGLBModel {
 	private loadModel(url: string): void {
 		const loader = new GLTFLoader();
 		if (this.options.useDraco) this.addDracoLoader(loader);
-		loader.load(url, (glb) => {
-			this.model = glb.scene;
-			// correct position
-			let offset = 0;
-			if (this.options.verticalOffset) {
-				const boundingBox = new THREE.Box3();
-				glb.scene.traverse(function(node) {
-					if (node instanceof THREE.Mesh) {
-						boundingBox.expandByObject(node);
-					}
-				});
-				const height = boundingBox.max.z - boundingBox.min.z;
-				offset = height * this.options.verticalOffset;
-				//glb.scene.position.y = offset;
-				//const helper = new THREE.Box3Helper(boundingBox, 0xffff00);
-				//this.scene.add(helper);
-			}
+		this.loaded = new Promise((resolve, reject) => {
+			loader.load(url, (glb) => {
+				this.model = glb.scene;
 
-			if (this.options.material) {
+				// correct position
+				let offset = 0;
+				if (this.options.verticalOffset) {
+					const boundingBox = new THREE.Box3();
+					glb.scene.traverse(function(node) {
+						if (node instanceof THREE.Mesh) {
+							boundingBox.expandByObject(node);
+						}
+					});
+					const height = boundingBox.max.z - boundingBox.min.z;
+					offset = height * this.options.verticalOffset;
+					//glb.scene.position.y = offset;
+					//const helper = new THREE.Box3Helper(boundingBox, 0xffff00);
+					//this.scene.add(helper);
+				}
+
+				if (this.options.material) {
+					glb.scene.traverse((node) => {
+						if (node instanceof THREE.Mesh) {
+							node.material = this.options.material;
+						}
+					});
+				}
+				if (this.options.onBeforeCompile) {
+					glb.scene.traverse((node) => {
+						if (node instanceof THREE.Mesh) {
+							node.material.onBeforeCompile = this.options.onBeforeCompile;
+						}
+					});
+				}
+
 				glb.scene.traverse((node) => {
 					if (node instanceof THREE.Mesh) {
-						node.material = this.options.material;
+						node.castShadow = true;
+						node.receiveShadow = true;
+						//if (node.material instanceof THREE.MeshBasicMaterial) {
+					//		node.material = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
+					//	}
 					}
 				});
-			}
-			if (this.options.onBeforeCompile) {
-				glb.scene.traverse((node) => {
-					if (node instanceof THREE.Mesh) {
-						node.material.onBeforeCompile = this.options.onBeforeCompile;
+
+				for (let i = 0; i < this.positions.length; i++) {
+					const instance = this.model.clone();
+					instance.position.set(this.positions[i].x, this.positions[i].y, this.positions[i].z);
+					instance.position.y += offset
+					this.modelInstances.push(instance);
+
+					if (this.options.scale) {
+						instance.scale.set(this.options.scale, this.options.scale, this.options.scale);
 					}
-				});
-			}
 
-			glb.scene.traverse((node) => {
-				if (node instanceof THREE.Mesh) {
-					node.castShadow = true;
-					node.receiveShadow = true;
-					//if (node.material instanceof THREE.MeshBasicMaterial) {
-				//		node.material = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
-				//	}
-				}
-			});
-
-			for (let i = 0; i < this.positions.length; i++) {
-				const instance = this.model.clone();
-				instance.position.set(this.positions[i].x, this.positions[i].y, this.positions[i].z);
-				instance.position.y += offset
-				this.modelInstances.push(instance);
-
-				if (this.options.scale) {
-					instance.scale.set(this.options.scale, this.options.scale, this.options.scale);
-				}
-
-				if (this.options.animated) {
-					const mixer = new THREE.AnimationMixer(instance);
-					this.mixers.push(mixer);
-					const clips = glb.animations;
-					if (clips.length > 0) {
-						const action = mixer.clipAction(clips[0]);
-						action.play();
+					if (this.options.animated) {
+						const mixer = new THREE.AnimationMixer(instance);
+						this.mixers.push(mixer);
+						const clips = glb.animations;
+						if (clips.length > 0) {
+							const action = mixer.clipAction(clips[0]);
+							action.play();
+						}
 					}
 				}
-			}
-			this.loaded = true;
+				resolve();
+			}, 
+			undefined, // onProgress
+			reject // onError
+			);
 		});
 	}
 

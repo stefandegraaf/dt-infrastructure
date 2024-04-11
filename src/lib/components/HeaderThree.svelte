@@ -50,7 +50,7 @@
 		<div id="header-text">
 			This series provides a look into the challenges and techniques for creating the Sogelink Digital Twin. Follow its journey from concept to an interactive and dynamic data environment.
 		</div>
-		<button id="header-button" on:click={() => dispatch('select')}>START THE JOURNEY</button>
+		<button id="header-button" on:click={() => dispatch('select')}>01. Digital Twin</button>
 	</div>
 </div>
 

@@ -6,6 +6,7 @@ import { ThreeRenderAbstract } from './render-base';
 import { ThreeGLBModel } from './glb-render';
 import { FlightPathCenter } from '../objects/flight-path';
 import { get } from 'svelte/store';
+import { animateToFlightPath } from '../gsap-helpers';
 
 
 export class BIMRender extends ThreeRenderAbstract {
@@ -13,17 +14,21 @@ export class BIMRender extends ThreeRenderAbstract {
 	private sogelinkOffice!: ThreeGLBModel;
 	private flightPath: FlightPathCenter = new FlightPathCenter(
 		[
-			new THREE.Vector3(-40, 20, 50),
-			new THREE.Vector3(5, 8, 5),
-			new THREE.Vector3(40, 30, -100),
-			new THREE.Vector3(5, 8, 5)
+			new THREE.Vector3(-35, 18, -20),
+			new THREE.Vector3(-2, 2, 5),
+			new THREE.Vector3(22, 20, 28),
+			new THREE.Vector3(-25, 6, 30),
+			new THREE.Vector3(-35, 18, -20)
 		], 
 		0.00004
-	);;
+	);
 
 	constructor(renderer: RenderHandler, start: number, end: number) {
 		super(renderer, start, end);
 		this.construct();
+	}
+
+	private addSubribers(): void {
 		this.renderer.progressWritable.subscribe((progress) => {
 			if (progress >= this.start - 0.99 && progress < this.end - 0.01) {
 				if (!this.added) this.add();
@@ -41,25 +46,26 @@ export class BIMRender extends ThreeRenderAbstract {
 	}
 
 	addToScene() {
-		/* DIRTY GLB LOAD FIX */
-		if (!this.sogelinkOffice.loaded){ setTimeout(() => this.addToScene(), 10); return; }
-		/* DIRTY GLB LOAD FIX */
-		this.sogelinkOffice.modelInstances.forEach(model => {
-			//this.renderer.scene.add(model);
-			this.renderer.pivot.add(model);
-		});
+		this.sogelinkOffice.modelInstances.forEach(model => this.renderer.scene.add(model));
 	}
 
 	disposeFromScene() {
-		this.sogelinkOffice.modelInstances.forEach(model => {
-			//this.renderer.scene.remove(model);
-			this.renderer.pivot.remove(model);
-		});
-		
+		this.sogelinkOffice.modelInstances.forEach(model => this.renderer.pivot.remove(model));
 	}
 
 	onStepChange(step: number) {
-	
+		if (step === 15) {
+			this.flightPath.active = false;
+		}
+		else if (step === 16) {
+			animateToFlightPath({
+				camera: this.renderer.camera,
+				flightPath: this.flightPath, 
+				duration: 1.5
+			});
+		} else if (step === 17) {
+			this.flightPath.active = false;
+		}
 	}
 
 
@@ -74,11 +80,12 @@ export class BIMRender extends ThreeRenderAbstract {
 			verticalOffset: 0.5
 		});
 		
-
+		this.sogelinkOffice.loaded.then(() => {
+			this.addSubribers();
+		});
 	}
 
 	render() {
-		const step = get(this.renderer.selectedIndex);
-		//if (step === 16) this.flightPath.updateCamera(this.renderer.camera);
+		this.flightPath.updateCamera(this.renderer.camera);
 	}
 }

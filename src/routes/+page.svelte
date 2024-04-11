@@ -34,7 +34,7 @@
 		const configFlat = rawConfig.phases.flatMap((phase: IPhase) => phase.blocks);
 		rawConfig.phases.forEach((phase: IPhase) => phase.blocks.map((block: ItemInterface) => {
 			const index = configFlat.findIndex((item: ItemInterface) => item === block);
-			block.index = index;
+			block.index = index + 1;
 			block.phase = phase.phase;
 		}));
 		return rawConfig;
