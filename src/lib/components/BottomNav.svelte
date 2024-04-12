@@ -15,7 +15,7 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class="bottom-nav">
-	<div class="bottom-nav-block-container">
+	<div class="bottom-nav-block-container" class:show={prevBlock}>
 		{#if prevBlock}
 			<div class="bottom-nav-block" on:click={() => selectedItem.set(prevBlock)}>
 				<span>
@@ -30,7 +30,7 @@
 			</div>
 		{/if}
 	</div>
-	<div class="bottom-nav-block-container"> 
+	<div class="bottom-nav-block-container" class:show={nextBlock}> 
 		{#if nextBlock}
 			<div class="bottom-nav-block next-post" on:click={() => selectedItem.set(nextBlock)}>
 				<span class="bottom-nav-block-text">
@@ -61,12 +61,13 @@
 	}
 	.bottom-nav-block-container {
 		width: calc(50% - (1px / 2));
-		cursor: pointer;
 		width: 300px;
-
 		overflow: hidden;
 	}
-	.bottom-nav-block-container:hover {
+	.bottom-nav-block-container.show {
+		cursor: pointer;
+	}
+	.bottom-nav-block-container.show:hover {
 		background-color: #577d89;
 		fill: #bae8ff;
 	}

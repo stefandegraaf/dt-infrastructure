@@ -5,7 +5,8 @@
     import { HeaderRender } from "./animation/renders/header-render";
 
 
-	let renderer: HeaderRender | undefined;
+	let renderer: HeaderRender;
+	let resizeObserver: ResizeObserver;
 
 	const startAnimationProgress: Writable<number> = writable(0);
 	$: progress = Math.min($startAnimationProgress + 0.1, 1);
@@ -16,8 +17,11 @@
 		if (!canvas || !header) {
 			throw new Error('Canvas not found');
 		}
-		renderer = new HeaderRender(header, canvas, startAnimationProgress);
-
+		renderer = new HeaderRender(canvas, startAnimationProgress);
+		resizeObserver = new ResizeObserver(() => {
+			renderer.setSize(header);
+		});
+		resizeObserver.observe(header);
 
 		const headerLogo = document.getElementById('header-logo');
 		const headerHeading = document.getElementById('header-heading');
@@ -35,6 +39,7 @@
 	
 	onDestroy(() => {
 		renderer?.destroy();
+		resizeObserver?.disconnect();
 	});
 
 	const dispatch = createEventDispatcher();

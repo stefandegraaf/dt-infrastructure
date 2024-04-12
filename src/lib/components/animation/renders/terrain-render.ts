@@ -68,9 +68,9 @@ export class TerrainRender extends ThreeRenderAbstract {
 				camera: this.renderer.camera,
 				duration: 3
 			});
-			gsap.to(this.wireframeMaterial, { opacity: 1, duration: 1 });
-			gsap.to(this.uniforms.u_opacity, { value: 0, duration: 2 });
-			this.showWireframe();
+			gsap.to(this.wireframeMaterial, { opacity: 0, duration: 1 });
+			gsap.to(this.uniforms.u_opacity, { value: 1, duration: 2 });
+			this.showTexture();
 		}
 		// 10. Map viewer
 		else if (step === 10) {
@@ -109,6 +109,7 @@ export class TerrainRender extends ThreeRenderAbstract {
 			});
 			this.showTexture();
 			gsap.to(this.wireframeMaterial, { opacity: 0, displacementScale: 0, duration: 1 });
+			gsap.to(this.uniforms.u_opacity, { value: 1, duration: 2 });
 			gsap.to(this.uniforms.u_displacementScale, { value: 0, duration: 2 });
 		} 
 		// 14. Real-time Insights
@@ -140,6 +141,7 @@ export class TerrainRender extends ThreeRenderAbstract {
 		// 16. Integration BIM-GIS
 		else if (step === 16) {
 			this.flightPath.active = false;
+			gsap.to(this.wireframeMaterial, { opacity: 0, duration: 1 });
 			gsap.to(this.uniforms.u_opacity, { value: 1, duration: 2 });
 			this.showTexture();
 		}
@@ -151,6 +153,7 @@ export class TerrainRender extends ThreeRenderAbstract {
 				duration: 1.5
 			});
 			this.showTexture();
+			gsap.to(this.wireframeMaterial, { opacity: 0, duration: 1 });
 			gsap.to(this.uniforms.u_opacity, { value: 1, duration: 2 });
 		}
 	}

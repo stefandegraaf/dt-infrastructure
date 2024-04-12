@@ -60,7 +60,6 @@ export class RenderHandler {
 		this.renderer.shadowMap.enabled = true;
 
 		this.setRendererSize();
-		window.addEventListener('resize', () => this.setRendererSize());
 
 		this.pivot.position.set(0, 0, 0);
 		//this.pivot.add(this.camera);
@@ -101,16 +100,15 @@ export class RenderHandler {
 			cancelAnimationFrame(this.animationFrame);
 		}
 		this.renderer.dispose();
-		window.removeEventListener('resize', () => this.setRendererSize());
 		if (this.selectedIndexUnsubscriber) this.selectedIndexUnsubscriber();
 
 		this.datgui?.destroy();
 	}
 
 
-	private setRendererSize(): void {
-		const width = this.canvas.clientWidth;
-		const height = this.canvas.clientHeight;
+	public setRendererSize(el: HTMLElement = this.canvas): void {
+		const width = el.clientWidth;
+		const height = el.clientHeight;
 		this.camera.aspect = width / height;
 		this.camera.updateProjectionMatrix();
 		this.renderer.setSize(width, height);

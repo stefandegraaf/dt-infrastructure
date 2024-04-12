@@ -56,14 +56,14 @@ export class HeaderRender {
 	private ready: boolean = false;
 	private state: number = 0;
 
-	constructor(header: HTMLElement, canvas: HTMLElement, startAnimationProgress: Writable<number>) {
+	constructor(canvas: HTMLElement, startAnimationProgress: Writable<number>) {
 		this.canvas = canvas;
 		this.scene = new THREE.Scene();
 		this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 		this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true });
 
-		this.renderer.setSize(header.clientWidth, header.clientHeight);
-		this.camera.aspect = header.clientWidth / header.clientHeight;
+		this.renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+		this.camera.aspect = canvas.clientWidth / canvas.clientHeight;
 		this.camera.updateProjectionMatrix();
 		
 		this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -92,6 +92,12 @@ export class HeaderRender {
 				this.ready = true;
 			}
 		});
+	}
+
+	public setSize(el: HTMLElement): void {
+		this.renderer.setSize(el.clientWidth, el.clientHeight);
+		this.camera.aspect = el.clientWidth / el.clientHeight;
+		this.camera.updateProjectionMatrix();
 	}
 
 	public destroy(): void {

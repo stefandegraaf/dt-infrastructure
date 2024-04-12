@@ -29,7 +29,7 @@ export class BIMRender extends ThreeRenderAbstract {
 
 	private addSubribers(): void {
 		this.renderer.progressWritable.subscribe((progress) => {
-			if (progress >= this.start - 0.99 && progress < this.end - 0.01) {
+			if (progress >= this.start - 0.99 && progress < this.start + 0.01) {
 				if (!this.added) this.add();
 			} else {
 				if (this.added) this.dispose();
@@ -49,7 +49,7 @@ export class BIMRender extends ThreeRenderAbstract {
 	}
 
 	disposeFromScene() {
-		this.sogelinkOffice.modelInstances.forEach(model => this.renderer.pivot.remove(model));
+		this.sogelinkOffice.modelInstances.forEach(model => this.renderer.scene.remove(model));
 	}
 
 	onStepChange(step: number) {

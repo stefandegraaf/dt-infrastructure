@@ -16,21 +16,26 @@
 	export let renderer: RenderHandler;
 
 	let unsubscriber: Unsubscriber;
-	let doc: Document;
-
 	
 	onMount(() => {
-		doc = document;
-		unsubscriber = selectedItem.subscribe((i) => i ? doc.body.classList.add("modal-open") : doc.body.classList.remove("modal-open"));
-		doc.addEventListener("keydown", processKeyEvent);
+		unsubscriber = selectedItem.subscribe((i) => i ? document.body.classList.add("modal-open") : document.body.classList.remove("modal-open"));
+		document.addEventListener("keydown", processKeyEvent);
+		window.addEventListener('resize', handleResize);
 	});
 
 	onDestroy(() => {
 		if (unsubscriber) unsubscriber();
-		doc?.body.classList.remove("modal-open");
-		doc?.removeEventListener("keydown", processKeyEvent);
+		if (typeof document === 'undefined') return;
+		document.body.classList.remove("modal-open");
+		document.removeEventListener("keydown", processKeyEvent);
+		window.removeEventListener('resize', handleResize);
 	});
 
+	function handleResize() {
+		const modal = document.getElementById("modal");
+		if (!modal) return;
+		renderer.setRendererSize(modal);
+	}
 
 	function processKeyEvent(e: KeyboardEvent): void {
 		if (e.key === "Escape") selectedItem.set(undefined);
@@ -59,14 +64,16 @@
 {#if $selectedItem}
 
 	<div class="modal-container modal-text">
-		<div class="modal">
+		<div id="modal">
 			<div class="modal-scrollbox">
 				<div class="progress-bar">
-					<div class="progress-bar-line"></div>
 					<div class="progress-bar-line-done" style="height: {100 * $rendererProgress / (flatConfig.length-1)}%"></div>
 					<div class="progress-bar-moving-dot" style="top: {100 * $rendererProgress / (flatConfig.length-1)}%"></div>
 					{#each flatConfig as item, i}
-						<div class="progress-bar-dot" title="{item.title}" class:active={i === $rendererProgress} class:done={i < $rendererProgress} on:click={() => selectedItem.set(item)}></div>
+						<div class="progress-bar-dot" title="{item.title}" class:active={i === $rendererProgress} class:done={i < $rendererProgress + 0.12} on:click={() => selectedItem.set(item)}></div>
+						{#if i < flatConfig.length - 1}
+							<div class="progress-bar-line"></div>
+						{/if}
 					{/each}
 				</div>
 				<div class="modal-body" style="transform:translateX({progress * 300}%)">
@@ -216,7 +223,7 @@
 		line-height: 1.5;
 	}
 
-	.modal {
+	#modal {
 		position: absolute;
 		top: 50%;
 		left: 50%;
@@ -278,7 +285,7 @@
 	.progress-bar-dot {
 		width: 10px;
 		height: 10px;
-		background-color: rgb(0, 17, 43);
+		background-color: transparent;
 		border: 2px solid #4cabd8;
 		border-radius: 50%;
 		margin: 0 auto;
@@ -286,13 +293,9 @@
 		cursor: pointer;
 		z-index: 1;
 	}
-	.progress-bar-dot:not(:last-child) {
-		margin-bottom: 25px;
-	}
 	.progress-bar-dot.active {
 		background-color: #4cabd8;
 		border-color: #4cabd8;
-		
 	}
 	.progress-bar-dot.done {
 		background-color: #4cabd8;
@@ -308,17 +311,14 @@
 	}
 
 	.progress-bar-line {
-		position: absolute;
 		width: 2px;
-		height: 100%;
-		top: 0;
-		left: 50%;
-		transform: translate(-50%);
+		height: 25px;
+		margin: auto;
 		background-color: rgba(255, 255, 255, 0.2);
 	}
 	.progress-bar-line-done {
 		position: absolute;
-		width: 2px;
+		width: 3px;
 		top: 0;
 		left: 50%;
 		transform: translate(-50%);
