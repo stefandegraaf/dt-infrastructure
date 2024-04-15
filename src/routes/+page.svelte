@@ -3,7 +3,6 @@
     import { CaretDown } from "carbon-icons-svelte";
 
 	import fallback from "$lib/files/concept-dt-config.json";
-	import fallbackMarcom from "$lib/files/concept-dt-config-marcom.json";
 	import Item from "$lib/components/Item.svelte";
     import CustomStyle from "$lib/style/CustomStyle.svelte";
     import ContentModal from "$lib/components/ContentModal.svelte";
@@ -17,7 +16,7 @@
 	
 	async function setConfig(): Promise<void> {
 		//config = await loadConfig();
-		const loaded = setBlockNumbers(fallbackMarcom);
+		const loaded = setBlockNumbers(fallback);
 		config = loaded;
 	}
 	async function loadConfig(): Promise<any> {
@@ -26,7 +25,7 @@
 			const response = await fileservConfig.json();
 			return response;
 		} catch (e) {
-			return fallbackMarcom;
+			return fallback;
 		}
 	}
 

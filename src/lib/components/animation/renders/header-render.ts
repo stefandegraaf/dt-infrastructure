@@ -16,7 +16,7 @@ export class HeaderRender {
 	protected renderer: THREE.WebGLRenderer;
 	protected animationFrame: number | undefined;
 
-	private observer: IntersectionObserver;
+	private observer!: IntersectionObserver;
 	private isIntersecting: boolean = true;
 
 	private raycaster: RaycasterBase;
@@ -38,11 +38,6 @@ export class HeaderRender {
 		this.renderer.toneMappingExposure = 1.0;
 		
 		this.raycaster = new RaycasterBase(this.canvas);
-
-		this.observer = new IntersectionObserver((entries) => {
-			this.isIntersecting = entries[0].isIntersecting;
-		}, {});
-		this.observer.observe(this.canvas);
 
 		this.render(6);
 
@@ -244,43 +239,53 @@ export class HeaderRender {
 
 
 		const renderLoop = () => {
-			this.animationFrame = requestAnimationFrame(renderLoop);
-			
-			if (this.isIntersecting) {
-				wireframeShaderMaterial.uniforms.u_time.value = performance.now() / 1200; // time in seconds
-				starsMaterial.uniforms.progress.value = Math.abs(Math.sin(performance.now() / 13000));
-				stars.particles.rotation.y += 0.0001;
-
-				earth.rotation.y += 0.00025;
-				clouds.rotation.y += 0.0002;
-				dots.rotation.y += 0.00025;
-				wireframeMesh.rotation.z += 0.0001;
-
-				moon.rotation.y += 0.001;
-				const angle = -Date.now() / 6000;
-				const radius = 25;
-				const incline = Math.PI / 36; // 5 degrees
-				moon.position.x = radius * Math.cos(angle);
-				moon.position.y = radius * Math.sin(incline) * Math.sin(angle);
-				moon.position.z = radius * Math.cos(incline) * Math.sin(angle);
-
-				//digitalEarthMesh.position.z += 0.003;
-				//digitalEarthMesh.position.x -= 0.001;
-				const state = this.state;
-				const mouseOnEarth = this.raycaster.checkIntersection(fresnelMesh, this.camera);
-				if (mouseOnEarth) {
-					this.state = 1;
-				} else {
-					this.state = 0;
-				}
-				if (state !== this.state) {
-					setState(this.state);
-				}
-
-				this.renderer.render(this.scene, this.camera);
-			}
+			this.isIntersecting ? startRenderLoop() : stopRenderLoop();
 		}
-		renderLoop();
+
+		const startRenderLoop = () => {
+			this.animationFrame = requestAnimationFrame(renderLoop);
+			wireframeShaderMaterial.uniforms.u_time.value = performance.now() / 1200; // time in seconds
+			starsMaterial.uniforms.progress.value = Math.abs(Math.sin(performance.now() / 13000));
+			stars.particles.rotation.y += 0.0001;
+
+			earth.rotation.y += 0.00025;
+			clouds.rotation.y += 0.0002;
+			dots.rotation.y += 0.00025;
+			wireframeMesh.rotation.z += 0.0001;
+
+			moon.rotation.y += 0.001;
+			const angle = -Date.now() / 6000;
+			const radius = 25;
+			const incline = Math.PI / 36; // 5 degrees
+			moon.position.x = radius * Math.cos(angle);
+			moon.position.y = radius * Math.sin(incline) * Math.sin(angle);
+			moon.position.z = radius * Math.cos(incline) * Math.sin(angle);
+
+			//digitalEarthMesh.position.z += 0.003;
+			//digitalEarthMesh.position.x -= 0.001;
+			const state = this.state;
+			const mouseOnEarth = this.raycaster.checkIntersection(fresnelMesh, this.camera);
+			if (mouseOnEarth) {
+				this.state = 1;
+			} else {
+				this.state = 0;
+			}
+			if (state !== this.state) {
+				setState(this.state);
+			}
+			this.renderer.render(this.scene, this.camera);
+		}
+		
+		const stopRenderLoop = () => {
+			if (this.animationFrame) cancelAnimationFrame(this.animationFrame);
+		}
+
+		this.observer = new IntersectionObserver((entries) => {
+			console.log(entries);
+			this.isIntersecting = entries[0].isIntersecting;
+			renderLoop();
+		}, {});
+		this.observer.observe(this.canvas);
 	}
 		
 }
