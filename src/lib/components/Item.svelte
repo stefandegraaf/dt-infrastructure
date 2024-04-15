@@ -44,7 +44,7 @@
 	}
 
 	.step-image:hover {
-		filter: grayscale(0) saturate(1.2);
+		filter: grayscale(0) saturate(1.1);
 	}
 
 	.step-title {

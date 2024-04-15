@@ -95,6 +95,11 @@ export class TerrainRender extends ThreeRenderAbstract {
 		} 
 		// 12. 3D Terrain
 		else if (step === 12) {
+			animateToFlightPath({
+				camera: this.renderer.camera,
+				flightPath: this.flightPath, 
+				duration: 1.5
+			});
 			this.renderer.clock.start(); //reset clock
 			this.showBoth();
 			gsap.to(this.wireframeMaterial, { opacity: 1, duration: 1 });
@@ -129,8 +134,8 @@ export class TerrainRender extends ThreeRenderAbstract {
 		else if (step === 15) {
 			this.flightPath.active = false;
 			animateCamera({
-				position: new THREE.Vector3(-344, 79, -418), 
-				lookAt: new THREE.Vector3(-257, 44, -384), 
+				position: new THREE.Vector3(344, 79, 418), 
+				lookAt: new THREE.Vector3(257, 44, 384), 
 				camera: this.renderer.camera,
 				duration: 3
 			});
@@ -176,6 +181,8 @@ export class TerrainRender extends ThreeRenderAbstract {
 	}
 
 	construct() {
+		//this.renderer.scene.fog = new THREE.FogExp2(0x00112b, 0.004);
+
 		const geometry = new THREE.PlaneGeometry(750, 750, 250, 250);
 		geometry.rotateX(-Math.PI / 2);
 		const loader = new THREE.TextureLoader();
@@ -258,7 +265,9 @@ export class TerrainRender extends ThreeRenderAbstract {
 */		
 
 		this.textureMaterial = new THREE.MeshStandardMaterial({
-			transparent: true
+			transparent: true,
+			blending: THREE.NormalBlending,
+			
 			/*
 			map: textureLowland,
 			displacementMap: displacementMap,
@@ -283,6 +292,7 @@ export class TerrainRender extends ThreeRenderAbstract {
 				varying float height;
 				uniform float u_displacementScale;
 				uniform sampler2D u_displacementMap;
+				//varying vec3 normalVecw;
 				`
 			),
 			shader.vertexShader = shader.vertexShader.replace(
@@ -293,6 +303,13 @@ export class TerrainRender extends ThreeRenderAbstract {
 				vec4 displacement = texture2D(u_displacementMap, uv);
 				height = displacement.r * u_displacementScale;
 				transformed.y += height;
+
+				//vec2 uvOffset = vec2(1.0 / u_displacementMapSize.x, 1.0 / u_displacementMapSize.y);
+				//float heightRight = texture2D(u_displacementMap, uv + vec2(uvOffset.x, 0.0)).r * u_displacementScale;
+				//float heightUp = texture2D(u_displacementMap, uv + vec2(0.0, uvOffset.y)).r * u_displacementScale;
+				//vec3 dpdx = vec3(1.0, heightRight - height, 0.0);
+				//vec3 dpdy = vec3(0.0, heightUp - height, 1.0);
+				//normalVecw = normalize(cross(dpdx, dpdy));
 				`
 			),
 			shader.fragmentShader = shader.fragmentShader.replace(
@@ -306,6 +323,7 @@ export class TerrainRender extends ThreeRenderAbstract {
 				uniform sampler2D u_alphaMap;
 				uniform sampler2D u_normalMap;
 				uniform float u_opacity;
+				//varying vec3 normalVecw;
 				`
 			),
 			shader.fragmentShader = shader.fragmentShader.replace(
@@ -318,18 +336,17 @@ export class TerrainRender extends ThreeRenderAbstract {
 				float mixFactor = smoothstep(1.0, 3.9, height);
 				vec4 color = mix(color1, color2, mixFactor);
 
-				//vec3 normal = texture2D(u_normalMap, vUv).xyz * 2.0 - 1.0;
-				//normal.y = -normal.y; // Invert Y axis if needed
-				//vec3 lightDirection = normalize(vec3(0.0, 1.0, 1.0)); // Example light direction
-				//float intensity = max(dot(normal, lightDirection), 0.0);
+				//vec3 lightDirection = normalize(vec3(0.0, 0.1, 1.0)); // Example light direction
+				//float intensity = max(dot(normalVecw, lightDirection), 0.0);
 
-				diffuseColor = vec4(color.rgb , alpha * u_opacity);
+				diffuseColor = vec4(color.rgb, alpha * u_opacity);
 				`
 			)
 		};
 		this.textureMesh = new THREE.Mesh(geometry, this.textureMaterial);
 		this.textureMesh.renderOrder = 1;
-		this.textureMesh.receiveShadow = true
+		this.textureMesh.receiveShadow = true;
+		this.textureMesh.castShadow = true;
 
 		this.wireframeMaterial = new THREE.MeshStandardMaterial({
 			color: 0x00e1ff,
@@ -339,14 +356,18 @@ export class TerrainRender extends ThreeRenderAbstract {
 			alphaMap: this.uniforms.u_alphaMap.value,
 			transparent: true,
 			wireframe: true,
-			depthTest: true
+			depthTest: true,
+			depthWrite: false,
+			blending: THREE.AdditiveBlending
 		});
 		this.wireframeMesh = new THREE.Mesh(geometry, this.wireframeMaterial);
 		this.wireframeMesh.position.y += 0.1;
+		//this.wireframeMesh.receiveShadow = true;
+		//this.wireframeMesh.castShadow = true;
 		
 		const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
 		const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
-		directionalLight.position.set(0, 450, 375); // set the direction of the light
+		directionalLight.position.set(0, 450, 375);
 		directionalLight.target.position.set(0, 0, 0);
 		directionalLight.castShadow = true;
 		directionalLight.shadow.bias = -0.001;
@@ -395,13 +416,14 @@ export class TerrainRender extends ThreeRenderAbstract {
 		if (step < 14 || step === 17) this.flightPath.updateCamera(this.renderer.camera);
 		if (step === 12) {
 			const t = Math.abs(Math.sin(this.renderer.clock.getElapsedTime() / 5));
-			const displacement = t * 40;
+			const displacement = t * 55;
+			const t_opacity = Math.min(1, t * t * 1.2);
 
 			this.uniforms.u_displacementScale.value = displacement;
-			this.uniforms.u_opacity.value = t * t;
+			this.uniforms.u_opacity.value = t_opacity;
 
 			this.wireframeMaterial.displacementScale = displacement;
-			this.wireframeMaterial.opacity = (1 - t * t);
+			this.wireframeMaterial.opacity = (1 - t_opacity);
 		}
 	}
 }

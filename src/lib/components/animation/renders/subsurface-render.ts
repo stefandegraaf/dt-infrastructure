@@ -4,12 +4,14 @@ import { ThreeRenderAbstract } from './render-base';
 import type { RenderHandler } from '../render-handler';
 import { color } from 'three/examples/jsm/nodes/shadernode/ShaderNode';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
+import { RaycasterBase } from '../objects/raycaster';
 
 
 export class SubsurfaceRender extends ThreeRenderAbstract {
 
 	private voxels!: THREE.InstancedMesh;
 	private voxelTransition = { value: 0 };
+	private raycaster: RaycasterBase = new RaycasterBase(this.renderer.canvas);
 
 	constructor(renderer: RenderHandler, start: number, end: number) {
 		super(renderer, start, end);
@@ -40,7 +42,7 @@ export class SubsurfaceRender extends ThreeRenderAbstract {
 			this.renderer.scene.add(this.voxels);
 			gsap.to(this.voxelTransition, { value: 1, duration: 6 });
 		}
-		else if (progress === 14 || progress === 16) {
+		else {
 			gsap.to(this.voxelTransition, { 
 				value: 0, 
 				duration: 3.5,
@@ -172,7 +174,7 @@ export class SubsurfaceRender extends ThreeRenderAbstract {
 		};
 	
 		// Define the inclination
-		const inclination = 0.4;
+		const inclination = 0.1;
 	
 		// Adjust y based on the inclination and x and z coordinates
 		let yAdjusted = y + inclination * (x + z);
@@ -212,6 +214,7 @@ export class SubsurfaceRender extends ThreeRenderAbstract {
 
 
 	render() {
+		//console.log(this.raycaster.checkIntersection(this.voxels, this.renderer.camera));
 		//this.progress.value = Math.max(0, 1 - Math.abs(this.renderer.progress.value - this.start));
 	}
 }

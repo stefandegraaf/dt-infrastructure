@@ -74,7 +74,7 @@ export class WindRender extends ThreeRenderAbstract {
 				float upper = 1.0 - smoothstep(0.8, 1.0, cycleOffset);
        			cycleOpacity = clamp(min(lower, upper), 0.0, 1.0) * u_transition;
 
-				vOpacity = opacity * cycleOpacity;
+				vOpacity = opacity * cycleOpacity * 0.6;
 			}
 		`;
 		const fragmentShaderSource = `
@@ -82,7 +82,7 @@ export class WindRender extends ThreeRenderAbstract {
 			varying float vOpacity;
 
 			void main() {
-				gl_FragColor = vec4(1., 1.0, 1.0, vOpacity);
+				gl_FragColor = vec4(vec3(0.8), vOpacity);
 
 			}
 		`;
@@ -154,7 +154,7 @@ export class WindRender extends ThreeRenderAbstract {
 
 
 	render() {
-		const elapsedTime = this.renderer.clock.getElapsedTime();
-		this.uniforms.u_cycle.value = (elapsedTime/4) % 1;
+		//const elapsedTime = this.renderer.clock.getElapsedTime(); // Does not work well with windmill animation which is based on this.renderer.clock.getDelta()
+		this.uniforms.u_cycle.value = (performance.now()/4000) % 1;
 	}
 }

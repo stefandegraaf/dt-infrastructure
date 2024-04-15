@@ -125,8 +125,8 @@ export class DigiTwinRender extends ThreeRenderAbstract {
 					`
 					#include <color_fragment>
 					float y = clamp((vY - 0.0) / (10.0 - 0.0), 0.0, 1.0);
-					vec3 col_bottom = vec3(0.2, 0.2, 0.2);
-					vec3 col_top = vec3(0.9, 0.9, 1.0);
+					vec3 col_bottom = vec3(0.1, 0.2, 0.3);
+					vec3 col_top = vec3(0.6, 0.8, 1.0);
 					diffuseColor.rgb = mix(col_bottom, col_top, y);
 					`
 				)

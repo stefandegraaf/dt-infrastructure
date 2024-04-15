@@ -70,7 +70,7 @@
 					<div class="progress-bar-line-done" style="height: {100 * $rendererProgress / (flatConfig.length-1)}%"></div>
 					<div class="progress-bar-moving-dot" style="top: {100 * $rendererProgress / (flatConfig.length-1)}%"></div>
 					{#each flatConfig as item, i}
-						<div class="progress-bar-dot" title="{item.title}" class:active={i === $rendererProgress} class:done={i < $rendererProgress + 0.12} on:click={() => selectedItem.set(item)}></div>
+						<div class="progress-bar-dot" data-title="{item.title}" class:active={i === $rendererProgress} class:done={i < $rendererProgress + 0.12} on:click={() => selectedItem.set(item)}></div>
 						{#if i < flatConfig.length - 1}
 							<div class="progress-bar-line"></div>
 						{/if}
@@ -193,6 +193,7 @@
 
 	:global(.bx--btn--tertiary) {
 		border-width: 0px;
+		color: #bae8ff;
 	}
 	:global(.bx--btn__icon) {
 		width: 22px !important;
@@ -213,7 +214,7 @@
 		left: 0;
 		top: 0;
 		z-index: 1;
-		background-color: rgba(0, 17, 43, 0.96);
+		background-color: rgba(0, 11, 28, 0.96);
 		backdrop-filter: blur(5px);
 	}
 	.modal-text {
@@ -243,7 +244,7 @@
 	}
 	
 	.modal-body {
-		background-color: rgba(0, 17, 43, 0.75);
+		background-color: rgba(0, 13, 34, 0.75);
 		backdrop-filter: blur(8px);
 		position: relative;
 		z-index: 4;
@@ -281,12 +282,13 @@
 		margin-top: 15px;
 		margin-left: -20px;
 		z-index: 5;
+		--progress-bar-color: #bae8ff;
 	}
 	.progress-bar-dot {
 		width: 10px;
 		height: 10px;
 		background-color: transparent;
-		border: 2px solid #4cabd8;
+		border: 2px solid var(--progress-bar-color);
 		border-radius: 50%;
 		margin: 0 auto;
 		position: relative;
@@ -294,11 +296,11 @@
 		z-index: 1;
 	}
 	.progress-bar-dot.active {
-		background-color: #4cabd8;
-		border-color: #4cabd8;
+		background-color: var(--progress-bar-color);
+		border-color: var(--progress-bar-color);
 	}
 	.progress-bar-dot.done {
-		background-color: #4cabd8;
+		background-color: var(--progress-bar-color);
 	}
 	.progress-bar-moving-dot {
 		position: absolute;
@@ -318,27 +320,30 @@
 	}
 	.progress-bar-line-done {
 		position: absolute;
-		width: 3px;
+		width: 2px;
 		top: 0;
 		left: 50%;
 		transform: translate(-50%);
-		background-color: #4cabd8;
+		background-color: var(--progress-bar-color);
 		/*transition: height 0.3s ease;*/
 	}
 	
 	.progress-bar-dot::after {
-		content: attr(title);
+		content: attr(data-title);
 		position: absolute;
 		bottom: 50%;
 		right: -10px;
 		transform: translate(100%, 50%);
-		background-color: rgba(0, 17, 43, 1);
-		color: #fff;
-		padding: 5px;
-		border-radius: 3px;
+		background-color: #bae8ff;
+		color: #000;
+		font-weight: 500;
+		letter-spacing: 0.5px;
+		padding: 2px 15px;
+		border-radius: 2px;
 		white-space: nowrap;
 		opacity: 0;
 		transition: opacity 0.3s ease;
+		font-family: Calibri, sans-serif;
 	}
 
 	.progress-bar-dot:hover::after {
