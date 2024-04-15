@@ -95,7 +95,7 @@
 		<CaretDown size={32} />
 	</div>
 	<div id="embedded-viewer-container">
-		<embed src="https://sogelink.beta.geodan.nlx/" id="embedded-viewer">
+		<embed src="https://sogelink.beta.geodan.nl/" id="embedded-viewer">
 	</div>
 
 	<div id="footer">
