@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import gsap from 'gsap';
 import { ThreeRenderAbstract } from './render-base';
 import type { RenderHandler } from '../render-handler';
-import { color } from 'three/examples/jsm/nodes/shadernode/ShaderNode';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { RaycasterBase } from '../objects/raycaster';
 
