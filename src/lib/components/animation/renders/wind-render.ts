@@ -82,7 +82,7 @@ export class WindRender extends ThreeRenderAbstract {
 			varying float vOpacity;
 
 			void main() {
-				gl_FragColor = vec4(vec3(0.8), vOpacity);
+				gl_FragColor = vec4(vec3(1.0), vOpacity);
 
 			}
 		`;
@@ -94,9 +94,9 @@ export class WindRender extends ThreeRenderAbstract {
 			vertexShader: vertexShaderSource,
 			fragmentShader: fragmentShaderSource,
 			transparent: true,
-			depthWrite: false,
 			depthTest: true,
-			blending: THREE.AdditiveBlending
+			depthWrite: false,
+			blending: THREE.NormalBlending
 		});
 
 		const numLines= 5000;
@@ -150,6 +150,8 @@ export class WindRender extends ThreeRenderAbstract {
 		geometry.setAttribute('offset', new THREE.BufferAttribute(offsetArray, 1));
 
 		this.windMesh = new THREE.LineSegments(geometry, shaderMaterial);
+		this.windMesh.renderOrder = 10;
+
 	}
 
 
