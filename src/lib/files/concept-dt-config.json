@@ -5,7 +5,7 @@
 			"blocks": [
 				{
 					"title": "Digital Twin",
-					"content": "The concept of a Digital Twin is broad — many definitions co-exist. What is our vision on a Digital Twin?",
+					"content": "<div>The concept of a Digital Twin is broad — many definitions co-exist. What is our vision on a Digital Twin?</div><div style='float:right;'><img class='module-img' src='https://storage.googleapis.com/ahp-research/projects/communicatie/images/dt-layers-futuristic.png' /></div>",
 					"components": [
 						{
 							"subtitle": "Digital Replica",
@@ -122,8 +122,13 @@
 				"components": [
 					{
 						"subtitle": "Hosting & Deployment",
-						"text": "The building blocks of the Digital Twin infrastructure are hosted on a single cloud platform. The cloud environment provides the resources and ensures the scalability of the platform — it dynamically adapts as the amount of data grows. Hosting of the Sogelink Digital Twin is organized via the Google Cloud. The building blocks are deployed in so-called indepdent containers. Containerization is a modular approach that prevents conflicts between different software components and ensures that the software runs consistently.",
+						"text": "The building blocks of the Digital Twin infrastructure are hosted on a single cloud platform. The cloud environment provides the resources and ensures the scalability of the platform — it dynamically adapts as the amount of data grows. Hosting of the Sogelink Digital Twin is organized via the Google Cloud. The building blocks are deployed in so-called independent containers. Containerization is a modular approach that prevents conflicts between different software components and ensures that the software runs consistently.",
 						"icon": "https://kubernetes.io/images/favicon.png"
+					},
+					{
+						"subtitle": "Security",
+						"text": "Protecting the data and ensuring the security and privacy of sensitive information are important. The platform includes security features to protect against cyber threats and unauthorized access. User roles can be created to manage who can access which parts of the data and infrastructure. This allows us to comply with the ISO standards for digital security.",
+						"icon": "https://services.geodan.nl/public/document/_/api/data/GEOD1593WEBS/logo/default"
 					},
 					{
 						"subtitle": "Open source",
@@ -134,11 +139,6 @@
 						"subtitle": "Open standards",
 						"text": "Data standards are an essential pillar for efficiently operating a Digital Twin. Standards allows for producing data that can be used widely and reliably. There are standards for data formats, metadata, data catalogs and data exchange. The Digital Twin infrastructure is built on open standards to ensure that the data and services are interoperable and can be used across different systems.",
 						"icon": ""
-					},
-					{
-						"subtitle": "Security",
-						"text": "Protecting the data and ensuring the security and privacy of sensitive information are important. The platform includes security features to protect against cyber threats and unauthorized access. User roles can be created to manage who can access which parts of the data and infrastructure. This allows us to comply with the ISO standards for digital security.",
-						"icon": "https://services.geodan.nl/public/document/_/api/data/GEOD1593WEBS/logo/default"
 					}
 				],
 				"contentAfter": "<img class='module-img' src='https://storage.googleapis.com/ahp-research/projects/communicatie/images/DT%20architecture.png' />",
@@ -189,6 +189,11 @@
 						"subtitle": "Metadata",
 						"text": "Metadata are data about data. Metadata describe datasets and provide information about its content, licenses, quality and structure. Metadata are essential to keep track of the data and to ensure that the data is reliable and can be used by different people. Within the INSPIRE initiative, the ISO-19115 is an important metadata standard for geospatial metadata.",
 						"icon": "https://triplydb.com/imgs/avatars/d/6000a857cbf91b03347f4fe9.png?v=1"
+					},
+					{
+						"subtitle": "Catalog Services",
+						"text": "Many catalogs follows the CSW standard (Catalog Service for the Web) to provide a standardized way to search for and retrieve metadata. These CSW services can be used to search for datasets and to retrieve metadata information. The Sogelink Digital Twin platform features a CSW connector that uses AI to facilitate searching in foreign languages.",
+						"icon": ""
 					}
 				],	
 				"persons": ["Data Steward"],
@@ -253,12 +258,12 @@
 				"components": [
 					{
 						"subtitle": "Web API",
-						"text": "Data processing software can be embedded in a web framework and made available over HTTP. In this way, for example, modelling algortihms can be accessed directly from the web so that end-users can runs simulations on-the-fly.",
+						"text": "Data processing software can be embedded in a web framework and made available over HTTP. In this way, modelling and simulation algortihms can be accessed directly through the web so that end-users can runs simulations on-the-fly.",
 						"icon": ""
 					},
 					{
 						"subtitle": "Database API",
-						"text": "Databases can also be queried directly from the web. PostGraphile and <a href='https://github.com/CrunchyData/pg_featureserv' target='_blank'>pg_featureserv</a> are APIs to communicate with PostgreSQL databases. The custom Sogelink Research tool GoParquet was developed to query Parquet files via DuckDB. Such database APIs make it possible to directly execute SQL functions on the database to retrieve data in a targeted way, for example for a specific geographic location.",
+						"text": "Databases can also be queried directly through the web. PostGraphile and <a href='https://github.com/CrunchyData/pg_featureserv' target='_blank'>pg_featureserv</a> are APIs to communicate with PostgreSQL databases. The custom Sogelink Research tool GoParquet was developed to query Parquet files via DuckDB. Such database APIs make it possible to directly execute SQL functions on the database to retrieve data in a targeted way, for example for a specific geographic location.",
 						"icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/GraphQL_Logo.svg/1200px-GraphQL_Logo.svg.png"
 					},
 					{
@@ -278,7 +283,7 @@
 					},
 					{
 						"subtitle": "Catalog APIs",
-						"text": "Data within a catalog can also be made available along with their metadata through web services. Catalog APIs can be used to integrate metadata information into the Digital Twin. Furthermore, catalog web services can make datasets available as open data to other users and platforms.",
+						"text": "Datasets within the catalog are made available along with their metadata through a web API. This catalog service is used to integrate metadata information into the Digital Twin. The catalog web API also makes the datasets available as open data to other users and platforms.",
 						"icon": ""
 					}
 				],
@@ -338,8 +343,8 @@
 						"icon": "https://avatars.githubusercontent.com/u/1655161?s=280&v=4"
 					},
 					{
-						"subtitle": "BIM models",
-						"text": "Building Information Models (BIM) are used in the construction industry to create digital representations of buildings and infrastructure. BIM models can be converted to 3D Tiles using a tool like <a href='https://github.com/Geodan/pg2b3dm', target='_blank'>pg2b3dm</a>, but often require specialized pre-processing to ensure correct georeferencing.",
+						"subtitle": "Dynamic 3D data",
+						"text": "",
 						"icon": ""
 					}
 				],
@@ -440,6 +445,11 @@
 				"title": "Integration BIM-GIS",
 				"content": "Asset management is an application where both real-time data and predictive modelling is often combined. The Digital Twin can be used to monitor and predict the stability of constructions through the integration of BIM models into the world of GIS.",
 				"components": [
+					{
+						"subtitle": "Visualization of BIM Models",
+						"text": "BIM models can be converted to 3D Tiles using a tool like <a href='https://github.com/Geodan/pg2b3dm', target='_blank'>pg2b3dm</a>, but often require specialized pre-processing to ensure correct georeferencing. The processing can be complicated due to the large variety in file formats that exist for BIM models, such as IFC, Revit, DWG, DXF, OBJ or DAE. Currently, we are also exploring the direct integration of IFC models into the Digital Twin through IFC.JS.",
+						"icon": ""
+					},
 					{
 						"subtitle": "Sensors in Infrastructural Asssets",
 						"text": "In collaboration with Rijkswaterstaat in the Netherlands, we have integrated various BIM models of infrastructural objects into the Digital Twin. Infrastructural assets are often monitored with lots of sensors, measuring for example strain, temperature and vibrations. The Digital Twin can use the sensor data to give information about maintenance needs through a set of Key Performance Indicators (KPIs).",

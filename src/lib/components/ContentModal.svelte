@@ -378,7 +378,6 @@
 		padding-bottom: 30px;
 	}
 	.content-block {
-		width: 100%;
 		display: grid;
 		grid-template-columns: 100px 1fr;
 		align-items: center;
