@@ -467,17 +467,17 @@
 				"components": [
 					{
 						"subtitle": "Multi-Criteria Analysis (NOVEX)",
-						"text": "NOVEX is a tool that is used to support spatial planning. NOVEX is used to visualize and analyze spatial data in the Digital Twin. NOVEX provides an interface to perform interactive analyses on-the-fly through an H3 analysis — a type geospatial analysis based on hexagonal grids.",
+						"text": "NOVEX is a spatial planning tool to perform interactive analyses on-the-fly through an H3 analysis — a type geospatial analysis based on hexagonal grids.<img class='module-img' src='https://storage.googleapis.com/ahp-research/projects/communicatie/images/novex-tool.png'/>",
 						"icon": ""
 					},
 					{
 						"subtitle": "Geodesign",
-						"text": "The Digital Twin features drawing tools to create and edit spatial plans. Based on all available data, users can design spatial plans in a targeted and informed way. Designs can be exported from the Digital Twin directly to the <a href='https://www.geodesignhub.com/' target='_blank'>Geodesign Hub</a> platform. Geodesign Hub is a web-based platform for collaborative spatial planning.",
+						"text": "The Digital Twin features drawing tools to create and edit spatial plans. Based on all available data, users can design spatial plans in a targeted and informed way. Designs can be exported from the Digital Twin directly to the <a href='https://www.geodesignhub.com/' target='_blank'>Geodesign Hub</a> platform. Geodesign Hub is a web-based platform for collaborative spatial planning.<img class='module-img' src='https://storage.googleapis.com/ahp-research/projects/communicatie/images/geodesign-tool.png'/>",
 						"icon": ""
 					},
 					{
 						"subtitle": "Smart Cities",
-						"text": "Smart Cities manage their urban administration using real-time data. Analytical notebooks were used extensively in the Smart City project in Den Bosch and Breda. Notebook applications — such as <a href='https://jupyter.org/' target='_blank'>Jupyter Notebooks</a>, <a href='https://observablehq.com/' target='_blank'>ObservableHQ</a> or the custom Research tool Cousteau — allow for interactively running code blocks and showing the results in charts or embedded maps.",
+						"text": "Smart Cities manage their urban administration using real-time data. Analytical notebooks were used extensively in the Smart City project in Den Bosch and Breda. Notebook applications — such as <a href='https://jupyter.org/' target='_blank'>Jupyter</a>, <a href='https://observablehq.com/' target='_blank'>ObservableHQ</a> or the custom Research tool Cousteau — allow for interactively running code blocks and showing the results in charts or embedded maps.",
 						"icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Jupyter_logo.svg/800px-Jupyter_logo.svg.png"
 					}
 				],
