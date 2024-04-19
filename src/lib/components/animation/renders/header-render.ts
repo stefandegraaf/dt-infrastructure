@@ -281,7 +281,6 @@ export class HeaderRender {
 		}
 
 		this.observer = new IntersectionObserver((entries) => {
-			console.log(entries);
 			this.isIntersecting = entries[0].isIntersecting;
 			renderLoop();
 		}, {});

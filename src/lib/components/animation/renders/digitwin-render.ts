@@ -54,6 +54,9 @@ export class DigiTwinRender extends ThreeRenderAbstract {
 
 	onStepChange(step: number) {
 		if (step === 0) {
+			this.objectsIn();
+		} else if (step === 1) {
+			this.objectsOut();
 		}
 		// Second appearance of the DigiTwin
 		 else if (step === 10) {
@@ -75,7 +78,16 @@ export class DigiTwinRender extends ThreeRenderAbstract {
 		this.trees.modelInstances.forEach(object => {
 			//object.position.y = 200;
 			gsap.to(object.position, {
-				duration: Math.random() * 2 + 2,
+				duration: Math.random() * 4 + 1,
+				y: 0,
+				ease: "power1.out",
+				overwrite: "auto"
+			});
+		});
+		this.windmills.modelInstances.forEach(object => {
+			//object.position.y = 200;
+			gsap.to(object.position, {
+				duration: Math.random() * 4 + 1,
 				y: 0,
 				ease: "power1.out",
 				overwrite: "auto"
@@ -86,13 +98,20 @@ export class DigiTwinRender extends ThreeRenderAbstract {
 	private objectsOut(): void {
 		this.trees.modelInstances.forEach(object => {
 			gsap.to(object.position, {
-				duration: Math.random() * 4 + 2,
-				y: 200,
+				duration: Math.random() * 4 + 1,
+				y: 300,
 				ease: "power1.out",
 				overwrite: "auto"
 			});
 		});
-	
+		this.windmills.modelInstances.forEach(object => {
+			gsap.to(object.position, {
+				duration: Math.random() * 4 + 1,
+				y: 300,
+				ease: "power1.out",
+				overwrite: "auto"
+			});
+		});
 	}
 
 	construct() {

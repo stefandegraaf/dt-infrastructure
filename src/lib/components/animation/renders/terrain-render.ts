@@ -70,6 +70,7 @@ export class TerrainRender extends ThreeRenderAbstract {
 			});
 			gsap.to(this.wireframeMaterial, { opacity: 0, duration: 1 });
 			gsap.to(this.uniforms.u_opacity, { value: 1, duration: 2 });
+			gsap.to(this.uniforms.u_displacementScale, { value: 0, duration: 2 });
 			this.showTexture();
 		}
 		// 10. Map viewer
